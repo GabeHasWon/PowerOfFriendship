@@ -1,0 +1,3 @@
+displayName = Power of Friendship
+author = GabeHasWon
+version = 0.1
