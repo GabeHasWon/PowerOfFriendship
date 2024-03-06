@@ -192,7 +192,7 @@ internal class DevourerCharm : ModItem
 
         private void SpawnBody()
         {
-            const int Length = 10;
+            const int Length = 3;
 
             Segment parent = null;
 
