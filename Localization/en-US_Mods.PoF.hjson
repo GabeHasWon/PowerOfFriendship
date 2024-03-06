@@ -1,2 +1,8 @@
-Projectiles.Starkid.DisplayName: Starkid
+Projectiles: {
+	Starkid.DisplayName: Starkid
+	Star.DisplayName: Star
+	Frosty.DisplayName: Frosty
+	EaterOfTreats.DisplayName: Eater Of Treats
+}
+
 DamageClasses.TalismanDamageClass.DisplayName: summon damage

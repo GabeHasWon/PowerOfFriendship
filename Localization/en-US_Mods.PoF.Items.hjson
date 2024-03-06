@@ -6,3 +6,21 @@ Starcharm: {
 		'Glistens and glows lightly'
 		'''
 }
+
+IcemanEmblem: {
+	DisplayName: Iceman Emblem
+	Tooltip:
+		'''
+		Conjures Frosty the Iceman's head to fight for you
+		'No top hat required!'
+		'''
+}
+
+DevourerCharm: {
+	DisplayName: Devourer Charm
+	Tooltip:
+		'''
+		Conjures the Eater of Treats to fight for you
+		'She's very well behaved!'
+		'''
+}

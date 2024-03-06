@@ -1,8 +1,10 @@
-﻿using Terraria.GameContent;
+﻿using System;
+using Terraria.Audio;
+using Terraria.GameContent;
 
 namespace PoF.Content.Items.Talismans;
 
-internal class Starcharm : ModItem
+internal class IcemanEmblem : ModItem
 {
     public override void SetStaticDefaults()
     {
@@ -14,35 +16,35 @@ internal class Starcharm : ModItem
     public override void SetDefaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 8;
-        Item.useTime = 16;
-        Item.useAnimation = 16;
-        Item.mana = 5;
+        Item.damage = 14;
+        Item.useTime = 15;
+        Item.useAnimation = 15;
+        Item.mana = 6;
         Item.UseSound = SoundID.Item1;
         Item.autoReuse = false;
-        Item.noUseGraphic = true;
-        Item.shoot = ModContent.ProjectileType<Star>();
+        Item.noUseGraphic = false;
+        Item.shoot = ModContent.ProjectileType<Frosty>();
         Item.shootSpeed = 5;
         Item.channel = true;
         Item.DamageType = TalismanDamageClass.Self;
-        Item.width = 34;
-        Item.height = 44;
+        Item.width = 40;
+        Item.height = 60;
         Item.useStyle = ItemUseStyleID.RaiseLamp;
     }
+
+    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddIngredient(ItemID.Star, 5)
-            .AddIngredient(ItemID.Chain, 3)
+            .AddIngredient(ItemID.SnowBlock, 20)
+            .AddIngredient(ItemID.IceBlock, 30)
+            .AddIngredient(ItemID.Star, 3)
             .AddTile(TileID.WorkBenches)
             .Register();
     }
 
-    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
-    public override void Update(ref float gravity, ref float maxFallSpeed) => Lighting.AddLight(Item.Center, new Vector3(0.1f, 0.1f, 0f));
-
-    private class Star : ModProjectile
+    private class Frosty : ModProjectile
     {
         private bool Despawning
         {
@@ -54,7 +56,7 @@ internal class Starcharm : ModItem
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Type] = 4;
+            ProjectileID.Sets.TrailCacheLength[Type] = 8;
             ProjectileID.Sets.TrailingMode[Type] = 2;
         }
 
@@ -63,8 +65,7 @@ internal class Starcharm : ModItem
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = TalismanDamageClass.Self;
-            Projectile.Size = new Vector2(34);
-            Projectile.tileCollide = false;
+            Projectile.Size = new Vector2(64);
             Projectile.minion = true;
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
@@ -77,15 +78,15 @@ internal class Starcharm : ModItem
 
         public override void AI()
         {
-            Projectile.rotation += 0.3f;
+            Projectile.rotation += 0.02f * Projectile.velocity.X;
 
             if (!Despawning)
             {
                 if (Main.myPlayer == Projectile.owner)
                 {
-                    const float Speed = 8;
+                    const float Speed = 9;
 
-                    Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld) * 0.7f;
+                    Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld) * 0.5f;
 
                     if (Projectile.velocity.LengthSquared() > Speed * Speed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
@@ -95,11 +96,6 @@ internal class Starcharm : ModItem
 
                 bool paidMana = true;
 
-                if (Utilities.CanHitLine(Projectile, Projectile.Owner()))
-                    Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
-                else
-                    Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.1f, 0.1f);
-
                 if (Time++ > Projectile.Owner().HeldItem.useTime)
                 {
                     paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
@@ -107,8 +103,8 @@ internal class Starcharm : ModItem
                     Time = 0;
                 }
 
-                if (Time % 15 == 0)
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.YellowStarDust, Projectile.velocity.X, Projectile.velocity.Y);
+                if (Time % 20 == 0)
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ChooseDust(), Projectile.velocity.X, Projectile.velocity.Y);
 
                 if (!Projectile.Owner().channel)
                     Despawning = true;
@@ -121,12 +117,38 @@ internal class Starcharm : ModItem
             }
             else
             {
-                Projectile.Opacity *= 0.85f;
-                Projectile.velocity *= 1.1f;
+                Projectile.Opacity *= 0.9f;
+                Projectile.velocity *= 0.95f;
+                Projectile.velocity.Y += 0.4f;
 
                 if (Projectile.Opacity < 0.05f)
                     Projectile.Kill();
             }
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
+
+            if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
+                Projectile.velocity.X = -oldVelocity.X * 0.95f;
+
+            if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
+                Projectile.velocity.Y = -oldVelocity.Y * 0.95f;
+
+            for (int i = 0; i < 12; ++i)
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ChooseDust(), oldVelocity.X, oldVelocity.Y);
+
+            return false;
+        }
+
+        private static int ChooseDust() => Main.rand.NextBool(3) ? DustID.Ice : DustID.Snow;
+
+        public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
+        {
+            if (Main.rand.NextBool(3))
+                target.AddBuff(BuffID.Frostburn, 120);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -137,8 +159,11 @@ internal class Starcharm : ModItem
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
+                if (k % 2 == 0)
+                    continue;
+
                 Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
+                Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * 0.5f;
                 Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 
