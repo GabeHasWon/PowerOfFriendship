@@ -14,6 +14,7 @@ internal class HemophilicHatch : Talisman
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<Crimterry>();
         Item.shootSpeed = 5;
+        Item.knockBack = 0.2f;
         Item.width = 40;
         Item.height = 60;
     }

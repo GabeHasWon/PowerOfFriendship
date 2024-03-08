@@ -16,6 +16,7 @@ internal class Starcharm : Talisman
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<Star>();
         Item.shootSpeed = 5;
+        Item.knockBack = 0.2f;
         Item.width = 34;
         Item.height = 44;
     }

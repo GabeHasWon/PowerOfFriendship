@@ -33,3 +33,21 @@ HemophilicHatch: {
 		'He'd LOVE a snack.'
 		'''
 }
+
+TwoTopTalisman: {
+	DisplayName: Two Top Talisman
+	Tooltip:
+		'''
+		Conjures a Two-Top Mushroom to fight for you
+		'Frankencap.'
+		'''
+}
+
+ArmCharm: {
+	DisplayName: Arm Charm
+	Tooltip:
+		'''
+		Conjures an arm bone to fight for you
+		'Quite humerus, isn't it?'
+		'''
+}

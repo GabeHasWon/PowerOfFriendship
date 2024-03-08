@@ -4,6 +4,9 @@ Projectiles: {
 	Frosty.DisplayName: Frosty
 	EaterOfTreats.DisplayName: Eater Of Treats
 	Crimterry.DisplayName: Crimterry
+	TwoTop.DisplayName: Two Top
+	TwoTopSpores.DisplayName: Two Top Spores
+	Humerus.DisplayName: Humerus
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage

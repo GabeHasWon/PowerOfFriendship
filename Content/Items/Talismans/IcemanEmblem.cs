@@ -18,6 +18,7 @@ internal class IcemanEmblem : Talisman
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<Frosty>();
         Item.shootSpeed = 5;
+        Item.knockBack = 1f;
         Item.width = 40;
         Item.height = 60;
     }

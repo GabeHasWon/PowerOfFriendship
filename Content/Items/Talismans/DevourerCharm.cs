@@ -17,6 +17,7 @@ internal class DevourerCharm : Talisman
         Item.mana = 7;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<EaterOfTreats>();
+        Item.knockBack = 0.8f;
         Item.shootSpeed = 5;
         Item.width = 40;
         Item.height = 60;
