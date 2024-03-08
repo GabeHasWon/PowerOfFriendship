@@ -1,4 +1,4 @@
-﻿namespace PoF.Content.Globals.ItemGlobals;
+﻿namespace PoF.Common.Globals.ItemGlobals;
 
 internal class RecipeGlobal : GlobalItem
 {

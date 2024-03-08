@@ -4,16 +4,11 @@ using Terraria.GameContent;
 
 namespace PoF.Content.Items.Talismans;
 
-internal class DevourerCharm : ModItem
+internal class DevourerCharm : Talisman
 {
-    public override void SetStaticDefaults()
-    {
-        Item.ResearchUnlockCount = 1;
+    protected override float TileRange => 25;
 
-        ItemID.Sets.StaffMinionSlotsRequired[Type] = 0;
-    }
-
-    public override void SetDefaults()
+    protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
         Item.damage = 20;
@@ -21,15 +16,10 @@ internal class DevourerCharm : ModItem
         Item.useAnimation = 13;
         Item.mana = 7;
         Item.UseSound = SoundID.Item1;
-        Item.autoReuse = false;
-        Item.noUseGraphic = false;
         Item.shoot = ModContent.ProjectileType<EaterOfTreats>();
         Item.shootSpeed = 5;
-        Item.channel = true;
-        Item.DamageType = TalismanDamageClass.Self;
         Item.width = 40;
         Item.height = 60;
-        Item.useStyle = ItemUseStyleID.RaiseLamp;
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
@@ -37,10 +27,9 @@ internal class DevourerCharm : ModItem
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddIngredient(ItemID.SnowBlock, 20)
-            .AddIngredient(ItemID.IceBlock, 30)
-            .AddIngredient(ItemID.Star, 3)
-            .AddTile(TileID.WorkBenches)
+            .AddIngredient(ItemID.DemoniteBar, 10)
+            .AddIngredient(ItemID.RottenChunk, 8)
+            .AddTile(TileID.Anvils)
             .Register();
     }
 
@@ -112,7 +101,7 @@ internal class DevourerCharm : ModItem
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 30;
+            Projectile.localNPCHitCooldown = 15;
             Projectile.tileCollide = false;
             Projectile.hide = true;
         }
@@ -129,26 +118,29 @@ internal class DevourerCharm : ModItem
 
             if (!Despawning)
             {
+                Vector2 sine = new Vector2(0, MathF.Sin(Time * 0.12f) * 60).RotatedBy(Projectile.velocity.ToRotation());
+
                 if (Main.myPlayer == Projectile.owner)
                 {
                     const float Speed = 8;
 
-                    Vector2 sine = new Vector2(MathF.Sin(Time * 0.02f) * 50, MathF.Sin(Time * 0.05f) * 60);
                     Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld + sine) * 1.2f;
 
                     if (Projectile.velocity.LengthSquared() > Speed * Speed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
+                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<IcemanEmblem>())
+                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center + sine) * 1.5f;
+
                 Projectile.timeLeft++;
 
                 bool paidMana = true;
 
-                if (Time++ > Projectile.Owner().HeldItem.useTime)
+                if (Time++ % Projectile.Owner().HeldItem.useTime == 0)
                 {
                     paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
                     Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
-                    Time = 0;
                 }
 
                 if (!Projectile.Owner().channel)

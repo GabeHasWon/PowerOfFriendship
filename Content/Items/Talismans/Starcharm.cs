@@ -2,16 +2,11 @@
 
 namespace PoF.Content.Items.Talismans;
 
-internal class Starcharm : ModItem
+internal class Starcharm : Talisman
 {
-    public override void SetStaticDefaults()
-    {
-        Item.ResearchUnlockCount = 1;
+    protected override float TileRange => 15;
 
-        ItemID.Sets.StaffMinionSlotsRequired[Type] = 0;
-    }
-
-    public override void SetDefaults()
+    protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
         Item.damage = 8;
@@ -19,15 +14,10 @@ internal class Starcharm : ModItem
         Item.useAnimation = 16;
         Item.mana = 5;
         Item.UseSound = SoundID.Item1;
-        Item.autoReuse = false;
-        Item.noUseGraphic = true;
         Item.shoot = ModContent.ProjectileType<Star>();
         Item.shootSpeed = 5;
-        Item.channel = true;
-        Item.DamageType = TalismanDamageClass.Self;
         Item.width = 34;
         Item.height = 44;
-        Item.useStyle = ItemUseStyleID.RaiseLamp;
     }
 
     public override void AddRecipes()
@@ -69,7 +59,7 @@ internal class Starcharm : ModItem
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 30;
+            Projectile.localNPCHitCooldown = 15;
         }
 
         public override bool? CanCutTiles() => false;
@@ -90,6 +80,9 @@ internal class Starcharm : ModItem
                     if (Projectile.velocity.LengthSquared() > Speed * Speed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
+
+                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<Starcharm>())
+                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 1.4f;
 
                 Projectile.timeLeft++;
 

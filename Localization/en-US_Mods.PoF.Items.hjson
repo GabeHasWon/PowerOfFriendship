@@ -24,3 +24,12 @@ DevourerCharm: {
 		'She's very well behaved!'
 		'''
 }
+
+HemophilicHatch: {
+	DisplayName: Hemophilic Hatch
+	Tooltip:
+		'''
+		Conjures Crimterry "Terry" Crimera to fight for you
+		'He'd LOVE a snack.'
+		'''
+}

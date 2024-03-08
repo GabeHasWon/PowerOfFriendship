@@ -3,6 +3,8 @@ Projectiles: {
 	Star.DisplayName: Star
 	Frosty.DisplayName: Frosty
 	EaterOfTreats.DisplayName: Eater Of Treats
+	Crimterry.DisplayName: Crimterry
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
+TileRangeTooltip: "{0} tile control range"

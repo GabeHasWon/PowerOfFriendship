@@ -10,4 +10,11 @@ internal static class Utilities
     public static Vector2 SafeDirectionTo(this Entity entity, Entity other) => Utils.SafeNormalize(other.Center - entity.Center, Vector2.Zero);
 
     public static bool CanHitLine(Entity entity, Entity other) => Collision.CanHitLine(entity.position, entity.width, entity.height, other.position, other.width, other.height);
+
+    public static int GetBobble(this Player player)
+    {
+        int playerFrame = player.bodyFrame.Y / player.bodyFrame.Height;
+        bool lowFrame = (playerFrame >= 7 && playerFrame <= 9) || (playerFrame >= 14 && playerFrame <= 16);
+        return !lowFrame ? 0 : -2;
+    }
 }
