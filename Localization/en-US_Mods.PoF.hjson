@@ -7,7 +7,14 @@ Projectiles: {
 	TwoTop.DisplayName: Two Top
 	TwoTopSpores.DisplayName: Two Top Spores
 	Humerus.DisplayName: Humerus
+	UnholyFlame.DisplayName: Unholy Flame
+	UnholyPentagram.DisplayName: Unholy Pentagram
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
 TileRangeTooltip: "{0} tile control range"
+
+SetBonuses: {
+	Comfy: Campfires give you additional life regen
+	Dungeon: Egg
+}

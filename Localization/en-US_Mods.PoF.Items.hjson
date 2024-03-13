@@ -51,3 +51,27 @@ ArmCharm: {
 		'Quite humerus, isn't it?'
 		'''
 }
+
+UnholyAmulet: {
+	DisplayName: Unholy Amulet
+	Tooltip: ""
+}
+
+ComfyPants: {
+	DisplayName: Comfy Pants
+	Tooltip:
+		'''
+
+		'Peace in pants form.'
+		'''
+}
+
+Nightcap: {
+	DisplayName: Nightcap
+	Tooltip: ""
+}
+
+ComfyBlanket: {
+	DisplayName: Comfy Blanket
+	Tooltip: "'One size fits all!'"
+}

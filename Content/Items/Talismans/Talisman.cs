@@ -54,6 +54,14 @@ internal abstract class Talisman : ModItem
     public static float GetRange<T>() where T : Talisman => (ContentSamples.ItemsByType[ModContent.ItemType<T>()].ModItem as T).RealRange;
     public static float GetRangeSq<T>() where T : Talisman => (ContentSamples.ItemsByType[ModContent.ItemType<T>()].ModItem as T).SquaredRange;
 
+    public static bool PayMana(Projectile proj)
+    {
+        Player plr = proj.Owner();
+        bool paidMana = plr.CheckMana(plr.HeldItem.mana, true);
+        plr.manaRegenDelay = (int)plr.maxRegenDelay;
+        return paidMana;
+    }
+
     public override void ModifyTooltips(List<TooltipLine> tips)
     {
         int index = tips.FindIndex(x => x.Name == "UseMana");

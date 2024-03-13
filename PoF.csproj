@@ -8,6 +8,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Content\Items\Talismans\UnholyFlame.png" />
     <None Remove="Localization\en-US_Mods.PoF.Items.hjson" />
   </ItemGroup>
   <ItemGroup>

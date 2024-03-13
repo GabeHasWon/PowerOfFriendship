@@ -18,8 +18,8 @@ internal class TalismanLayer : PlayerDrawLayer
         Player player = drawInfo.drawPlayer;
         TalismanPlayer talismanPlr = player.GetModPlayer<TalismanPlayer>();
         var talisman = talismanPlr.heldTalisman;
-
-        if (talisman is not null)
+        
+        if (talisman is not null && !player.dead)
         {
             var tex = talisman.HeldTexture.Value;
             var pos = player.Center - Main.screenPosition + new Vector2(12 * player.direction, player.GetBobble() + player.gfxOffY);
