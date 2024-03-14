@@ -75,7 +75,6 @@ internal class UnholyAmulet : Talisman
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 15;
-            Projectile.dama
         }
 
         public override bool? CanCutTiles() => false;
@@ -209,6 +208,7 @@ internal class UnholyAmulet : Talisman
             Projectile.localNPCHitCooldown = 15;
             Projectile.timeLeft = MaxTimeLeft;
             Projectile.Opacity = 0f;
+            Projectile.tileCollide = false;
         }
 
         public override void AI()

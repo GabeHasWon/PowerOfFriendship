@@ -9,6 +9,7 @@ Projectiles: {
 	Humerus.DisplayName: Humerus
 	UnholyFlame.DisplayName: Unholy Flame
 	UnholyPentagram.DisplayName: Unholy Pentagram
+	UnholyCross.DisplayName: Unholy Cross
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage

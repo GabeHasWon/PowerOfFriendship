@@ -61,17 +61,63 @@ ComfyPants: {
 	DisplayName: Comfy Pants
 	Tooltip:
 		'''
-
+		+20 max mana
 		'Peace in pants form.'
 		'''
 }
 
 Nightcap: {
 	DisplayName: Nightcap
-	Tooltip: ""
+	Tooltip:
+		'''
+		+1 flat summon damage
+		'Heaven on the head.'
+		'''
 }
 
 ComfyBlanket: {
 	DisplayName: Comfy Blanket
-	Tooltip: "'One size fits all!'"
+	Tooltip:
+		'''
+		+5% whip speed
+		'One size fits all!'
+		'''
+}
+
+Stargem: {
+	DisplayName: Stargem
+	Tooltip: Enemies killed by your minions may drop an additional mana star
+}
+
+ManaMushroom: {
+	DisplayName: Mana Mushroom
+	Tooltip:
+		'''
+		Automatically uses mana potions when out of Mana
+		Conjurations from talismans spawn spores
+		'Just how many things can we fit in this potion?'
+		'''
+}
+
+CrystalSkull: {
+	DisplayName: Crystal Skull
+	Tooltip:
+		'''
+		+7% whip damage
+		'Worth way, way less than the movies tell you.'
+		'''
+}
+
+MundaneSkull: {
+	DisplayName: Mundane Skull
+	Tooltip:
+		'''
+		+7 whip armor penetration
+		'Smells of old leather.'
+		'''
+}
+
+UnholyCrossNecklace: {
+	DisplayName: Unholy Cross Necklace
+	Tooltip: ""
 }
