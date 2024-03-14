@@ -40,7 +40,7 @@ public class Nightcap : ModItem
 
         public override void UpdateLifeRegen()
         {
-            if (hasSet)
+            if (hasSet && Player.HasBuff(BuffID.Campfire))
                 Player.lifeRegen += 10;
         }
     }

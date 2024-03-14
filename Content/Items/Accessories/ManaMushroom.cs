@@ -36,8 +36,6 @@ public class ManaMushroom : ModItem
 
     class ManaMushroomProjectile : GlobalProjectile
     {
-        public override bool InstancePerEntity => true;
-
         public override void AI(Projectile projectile)
         {
             if (!projectile.DamageType.CountsAsClass<TalismanDamageClass>() || ProjectileLoader.CanDamage(projectile) == false)

@@ -119,5 +119,20 @@ MundaneSkull: {
 
 UnholyCrossNecklace: {
 	DisplayName: Unholy Cross Necklace
-	Tooltip: ""
+	Tooltip:
+		'''
+		Increases length of invincibility after taking damage
+		Being hit creates a massive unholy symbol
+		Enemies take more damage within the unholy object's influence
+		'Reeks of brimstone and shines of pride'
+		'''
+}
+
+DaisyChain: {
+	DisplayName: Daisy Chain
+	Tooltip: 
+		'''
+		Your talisman conjurations will heal you for 10% of the damage they deal
+		'How nice!'
+		'''
 }
