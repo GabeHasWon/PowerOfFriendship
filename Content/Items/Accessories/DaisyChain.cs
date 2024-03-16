@@ -10,7 +10,7 @@ public class DaisyChain : ModItem
         Item.accessory = true;
         Item.Size = new(30, 36);
         Item.rare = ItemRarityID.Cyan;
-        Item.value = Item.sellPrice(gold: 10);
+        Item.value = Item.sellPrice(gold: 2);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<DaisyPlayer>().equipped = true;
@@ -28,10 +28,10 @@ public class DaisyChain : ModItem
         {
             if (projectile.DamageType.CountsAsClass<TalismanDamageClass>() && projectile.friendly && projectile.TryGetOwner(out var owner) && owner.GetModPlayer<DaisyPlayer>().equipped)
             {
-                if (owner.statLife >= owner.statLifeMax2)
+                if (owner.statLife >= owner.statLifeMax2 || !Main.rand.NextBool(3))
                     return;
 
-                int damage = (int)Math.Ceiling(damageDone / 10f);
+                int damage = (int)Math.Ceiling(damageDone / 8f);
 
                 if (owner.statLife + damage > owner.statLifeMax2)
                     damage = owner.statLifeMax2 - owner.statLife;

@@ -10,6 +10,9 @@ Projectiles: {
 	UnholyFlame.DisplayName: Unholy Flame
 	UnholyPentagram.DisplayName: Unholy Pentagram
 	UnholyCross.DisplayName: Unholy Cross
+	TheStingerProj.DisplayName: The Stinger Proj
+	AncientSnareProj.DisplayName: Ancient Snare Proj
+	PartyTrickBalloon.DisplayName: Party Trick Balloon
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage

@@ -12,7 +12,7 @@ public class UnholyCrossNecklace : ModItem
         Item.accessory = true;
         Item.Size = new(26, 36);
         Item.rare = ItemRarityID.Green;
-        Item.value = Item.sellPrice(silver: 5);
+        Item.value = Item.sellPrice(gold: 3);
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual)
@@ -34,7 +34,7 @@ public class UnholyCrossNecklace : ModItem
     {
         public bool equipped = false;
 
-        public override void ResetEffects() => equipped = true;
+        public override void ResetEffects() => equipped = false;
 
         public override void OnHurt(Player.HurtInfo info)
         {

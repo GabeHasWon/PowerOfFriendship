@@ -19,6 +19,7 @@ internal class ArmCharm : Talisman
         Item.shootSpeed = 5;
         Item.width = 38;
         Item.height = 46;
+        Item.value = Item.buyPrice(0, 0, 30);
     }
 
     public override void AddRecipes()

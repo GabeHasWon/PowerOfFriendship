@@ -4,40 +4,33 @@ using Terraria.GameContent;
 
 namespace PoF.Content.Items.Talismans;
 
-internal class IcemanEmblem : Talisman
+internal class PartyTrick : Talisman
 {
-    protected override float TileRange => 20;
+    protected override float TileRange => 40;
 
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 14;
-        Item.useTime = 15;
-        Item.useAnimation = 15;
+        Item.damage = 38;
+        Item.useTime = 16;
+        Item.useAnimation = 16;
         Item.mana = 6;
         Item.UseSound = SoundID.Item1;
-        Item.shoot = ModContent.ProjectileType<Frosty>();
+        Item.shoot = ModContent.ProjectileType<PartyTrickBalloon>();
         Item.shootSpeed = 5;
-        Item.knockBack = 1f;
-        Item.width = 40;
-        Item.height = 60;
-        Item.value = Item.buyPrice(0, 0, 10);
+        Item.knockBack = 0.2f;
+        Item.value = Item.buyPrice(0, 10, 0, 0);
+        Item.width = 34;
+        Item.height = 44;
     }
 
+    public override void Update(ref float gravity, ref float maxFallSpeed) => gravity *= 0.2f;
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
-    public override void AddRecipes()
+    private class PartyTrickBalloon : ModProjectile
     {
-        CreateRecipe()
-            .AddIngredient(ItemID.SnowBlock, 20)
-            .AddIngredient(ItemID.IceBlock, 30)
-            .AddIngredient(ItemID.FallenStar, 3)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
+        private static int[] BuffIds = [BuffID.OnFire, BuffID.Midas, BuffID.Poisoned, BuffID.Lovestruck, BuffID.Wet, BuffID.Venom, BuffID.Ichor, BuffID.CursedInferno, BuffID.Frostburn];
 
-    private class Frosty : ModProjectile
-    {
         private bool Despawning
         {
             get => Projectile.ai[0] == 1;
@@ -48,7 +41,7 @@ internal class IcemanEmblem : Talisman
 
         public override void SetStaticDefaults()
         {
-            ProjectileID.Sets.TrailCacheLength[Type] = 8;
+            ProjectileID.Sets.TrailCacheLength[Type] = 10;
             ProjectileID.Sets.TrailingMode[Type] = 2;
         }
 
@@ -57,7 +50,7 @@ internal class IcemanEmblem : Talisman
             Projectile.friendly = true;
             Projectile.hostile = false;
             Projectile.DamageType = TalismanDamageClass.Self;
-            Projectile.Size = new Vector2(64);
+            Projectile.Size = new Vector2(36);
             Projectile.minion = true;
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
@@ -69,23 +62,22 @@ internal class IcemanEmblem : Talisman
 
         public override void AI()
         {
-            Projectile.rotation += 0.02f * Projectile.velocity.X;
+            Projectile.rotation += 0.02f * Projectile.velocity.Length();
 
             if (!Despawning)
             {
                 if (Main.myPlayer == Projectile.owner)
                 {
-                    const float Speed = 9;
+                    const float Speed = 12;
 
-                    Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld) * 0.5f;
+                    Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld) * 0.8f;
 
                     if (Projectile.velocity.LengthSquared() > Speed * Speed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
-
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<IcemanEmblem>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 0.75f;
+                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<PartyTrick>())
+                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 1.5f;
 
                 Projectile.timeLeft++;
 
@@ -93,13 +85,12 @@ internal class IcemanEmblem : Talisman
 
                 if (Time++ > Projectile.Owner().HeldItem.useTime)
                 {
-                    paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
-                    Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
+                    PayMana(Projectile);
                     Time = 0;
                 }
 
-                if (Time % 20 == 0)
-                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ChooseDust(), Projectile.velocity.X, Projectile.velocity.Y);
+                if (Time % 15 == 0)
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.YellowStarDust, Projectile.velocity.X, Projectile.velocity.Y);
 
                 if (!Projectile.Owner().channel)
                     Despawning = true;
@@ -113,8 +104,7 @@ internal class IcemanEmblem : Talisman
             else
             {
                 Projectile.Opacity *= 0.9f;
-                Projectile.velocity *= 0.95f;
-                Projectile.velocity.Y += 0.4f;
+                Projectile.velocity = Projectile.velocity.RotatedBy(0.1f);
 
                 if (Projectile.Opacity < 0.05f)
                     Projectile.Kill();
@@ -126,24 +116,27 @@ internal class IcemanEmblem : Talisman
             Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
             SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
 
-            if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
-                Projectile.velocity.X = -oldVelocity.X * 0.95f;
+            bool x = Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon;
+            bool y = Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon;
 
-            if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
-                Projectile.velocity.Y = -oldVelocity.Y * 0.95f;
+            if (x)
+                Projectile.velocity.X = -oldVelocity.X;
 
-            for (int i = 0; i < 12; ++i)
-                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ChooseDust(), oldVelocity.X, oldVelocity.Y);
+            if (y)
+                Projectile.velocity.Y = -oldVelocity.Y;
+
+            if (x || y)
+                Projectile.velocity = Projectile.velocity.RotatedByRandom(0.3f);
 
             return false;
         }
 
-        private static int ChooseDust() => Main.rand.NextBool(3) ? DustID.Ice : DustID.Snow;
-
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (Main.rand.NextBool(3))
-                target.AddBuff(BuffID.Frostburn, 120);
+            Projectile.velocity *= -1.6f;
+            Projectile.velocity = Projectile.velocity.RotatedByRandom(0.5f);
+
+            target.AddBuff(Main.rand.Next(BuffIds), 120);
         }
 
         public override bool PreDraw(ref Color lightColor)
@@ -154,11 +147,11 @@ internal class IcemanEmblem : Talisman
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                if (k % 2 == 0)
+                if (k % 2 == 1)
                     continue;
 
                 Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
-                Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * 0.5f;
+                Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * 0.8f;
                 Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
 

@@ -32,6 +32,7 @@ internal class UnholyAmulet : Talisman
         Item.knockBack = 2f;
         Item.width = 40;
         Item.height = 56;
+        Item.value = Item.buyPrice(0, 0, 75);
     }
 
     public override void AddRecipes()
@@ -42,7 +43,34 @@ internal class UnholyAmulet : Talisman
             .Register();
     }
 
-    public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0 && player.ownedProjectileCounts[ModContent.ProjectileType<UnholyPentagram>()] <= 1;
+    public override bool CanUseItem(Player player)
+    {
+        if (player.ownedProjectileCounts[Item.shoot] > 0)
+            return false;
+
+        if (player.ownedProjectileCounts[ModContent.ProjectileType<UnholyPentagram>()] <= 1)
+            return true;
+
+        Projectile aoe = null;
+
+        for (int i = 0; i < Main.maxProjectiles; ++i)
+        {
+            Projectile proj = Main.projectile[i];
+
+            if (proj.active && proj.type == ModContent.ProjectileType<UnholyPentagram>() && proj.timeLeft > 30 && proj.owner == player.whoAmI)
+            {
+                if (aoe is null)
+                    aoe = proj;
+                else if (aoe.timeLeft > proj.timeLeft)
+                    aoe = proj;
+            }
+        }
+
+        if (aoe is not null)
+            aoe.timeLeft = 30;
+        return true;
+    }
+
     public override void Update(ref float gravity, ref float maxFallSpeed) => Lighting.AddLight(Item.Center, new Vector3(0.1f, 0.1f, 0f));
 
     private class UnholyFlame : ModProjectile
@@ -78,7 +106,7 @@ internal class UnholyAmulet : Talisman
         }
 
         public override bool? CanCutTiles() => false;
-        public override bool? CanDamage() => Utilities.CanHitLine(Projectile, Projectile.Owner()) ? null : false;
+        public override bool? CanDamage() => null;// Utilities.CanHitLine(Projectile, Projectile.Owner()) ? null : false;
 
         public override void AI()
         {

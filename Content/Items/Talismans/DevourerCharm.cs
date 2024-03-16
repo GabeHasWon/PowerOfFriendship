@@ -21,6 +21,7 @@ internal class DevourerCharm : Talisman
         Item.shootSpeed = 5;
         Item.width = 40;
         Item.height = 60;
+        Item.value = Item.buyPrice(0, 1);
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;

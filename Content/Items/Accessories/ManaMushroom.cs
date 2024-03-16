@@ -15,6 +15,7 @@ public class ManaMushroom : ModItem
     public override void UpdateAccessory(Player player, bool hideVisual)
     {
         player.manaFlower = true;
+        player.manaCost *= 0.92f;
         player.GetModPlayer<ManaMushroomPlayer>().equipped = true;
     }
 

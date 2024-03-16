@@ -1,4 +1,5 @@
 ﻿using PoF.Content.Items.Accessories;
+using PoF.Content.Items.Whips;
 using Terraria.GameContent.ItemDropRules;
 
 namespace PoF.Common.Globals.ItemGlobals;
@@ -9,5 +10,9 @@ internal class BagGlobal : GlobalItem
     {
         if (item.type == ItemID.PlanteraBossBag)
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<DaisyChain>()));
+        else if (item.type == ItemID.QueenBeeBossBag)
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<TheStinger>()));
+        else if (item.type == ItemID.GolemBossBag)
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<AncientSnare>()));
     }
 }

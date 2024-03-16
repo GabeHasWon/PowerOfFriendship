@@ -19,12 +19,13 @@ internal class Starcharm : Talisman
         Item.knockBack = 0.2f;
         Item.width = 34;
         Item.height = 44;
+        Item.value = Item.buyPrice(0, 0, 2);
     }
 
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddIngredient(ItemID.Star, 5)
+            .AddIngredient(ItemID.FallenStar, 5)
             .AddIngredient(ItemID.Chain, 3)
             .AddTile(TileID.WorkBenches)
             .Register();

@@ -1,4 +1,6 @@
-﻿namespace PoF.Content.Items.Talismans;
+﻿using Terraria.Audio;
+
+namespace PoF.Content.Items.Talismans;
 
 internal class TwoTopTalisman : Talisman
 {
@@ -16,6 +18,7 @@ internal class TwoTopTalisman : Talisman
         Item.shootSpeed = 5;
         Item.width = 38;
         Item.height = 48;
+        Item.value = Item.buyPrice(0, 0, 10);
     }
 
     public override void AddRecipes()
@@ -23,7 +26,7 @@ internal class TwoTopTalisman : Talisman
         CreateRecipe()
             .AddIngredient(ItemID.Mushroom, 8)
             .AddIngredient(ItemID.GlowingMushroom, 20)
-            .AddIngredient(ItemID.WhiteString, 6)
+            .AddIngredient(ItemID.Cobweb, 40)
             .AddTile(TileID.WorkBenches)
             .Register();
     }
@@ -88,8 +91,7 @@ internal class TwoTopTalisman : Talisman
 
                 if (Time++ > Projectile.Owner().HeldItem.useTime)
                 {
-                    paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
-                    Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
+                    PayMana(Projectile);
                     Time = 0;
 
                     SpawnProj(Projectile.GetSource_FromAI(), 1f);
@@ -109,21 +111,26 @@ internal class TwoTopTalisman : Talisman
             }
             else
             {
-                Projectile.Opacity *= 0.94f;
+                Projectile.Opacity *= 0.9f;
                 Projectile.velocity *= 0.95f;
 
                 KillTime++;
 
-                if (KillTime == 60)
+                if (KillTime == 30)
                 {
-                    for (int i = 0; i < 8; ++i)
-                        SpawnProj(Projectile.GetSource_Death(), Main.rand.NextFloat(0.2f, 1.2f));
+                    bool canPay = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana * 6, true);
+                    Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
+
+                    if (canPay)
+                        for (int i = 0; i < 8; ++i)
+                            SpawnProj(Projectile.GetSource_Death(), Main.rand.NextFloat(0.2f, 1.2f));
 
                     Projectile.scale = 0.5f;
-                }
-                else if (KillTime > 180)
                     Projectile.Kill();
 
+                    if (Main.netMode != NetmodeID.Server)
+                        SoundEngine.PlaySound(SoundID.DD2_BetsysWrathShot, Projectile.Center);
+                }
             }
         }
 

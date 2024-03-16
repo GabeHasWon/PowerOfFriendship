@@ -10,13 +10,14 @@ internal class HemophilicHatch : Talisman
         Item.damage = 18;
         Item.useTime = 10;
         Item.useAnimation = 10;
-        Item.mana = 8;
+        Item.mana = 7;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<Crimterry>();
         Item.shootSpeed = 5;
         Item.knockBack = 0.2f;
         Item.width = 40;
         Item.height = 60;
+        Item.value = Item.buyPrice(0, 1);
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
@@ -39,14 +40,10 @@ internal class HemophilicHatch : Talisman
         }
 
         private ref float Time => ref Projectile.ai[1];
-        private ref float KillTime => ref Projectile.ai[2];
 
         private Player Owner => Projectile.Owner();
 
-        public override void SetStaticDefaults()
-        {
-            Main.projFrames[Type] = 2;
-        }
+        public override void SetStaticDefaults() => Main.projFrames[Type] = 2;
 
         public override void SetDefaults()
         {
@@ -71,7 +68,7 @@ internal class HemophilicHatch : Talisman
 
             if (!Despawning)
             {
-                float moveSpeed = Projectile.velocity.Length() * 0.05f + 0.05f;
+                float moveSpeed = Projectile.velocity.Length() * 0.04f + 0.08f;
 
                 if (Main.myPlayer == Projectile.owner)
                 {
