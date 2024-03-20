@@ -1,18 +1,22 @@
 Projectiles: {
-	Starkid.DisplayName: Starkid
 	Star.DisplayName: Star
 	Frosty.DisplayName: Frosty
 	EaterOfTreats.DisplayName: Eater Of Treats
 	Crimterry.DisplayName: Crimterry
 	TwoTop.DisplayName: Two Top
-	TwoTopSpores.DisplayName: Two Top Spores
+	TwoTopSpores.DisplayName: Spores
 	Humerus.DisplayName: Humerus
 	UnholyFlame.DisplayName: Unholy Flame
 	UnholyPentagram.DisplayName: Unholy Pentagram
 	UnholyCross.DisplayName: Unholy Cross
-	TheStingerProj.DisplayName: The Stinger Proj
-	AncientSnareProj.DisplayName: Ancient Snare Proj
-	PartyTrickBalloon.DisplayName: Party Trick Balloon
+	TheStingerProj.DisplayName: The Stinger
+	AncientSnareProj.DisplayName: Ancient Snare
+	PartyTrickBalloon.DisplayName: Trick Balloon
+	RelicIceShards.DisplayName: "{$RelicOfFrosty.DisplayName}"
+	RelicOfFrosty.DisplayName: Frosty's Storm
+	RelicSnowballs.DisplayName: "{$RelicOfFrosty.DisplayName}"
+	ForlornThing.DisplayName: The Thing
+	ForlornSpit.DisplayName: Spit
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage

@@ -174,3 +174,23 @@ PartyTrick: {
 		'This balloon? 10 gold. The Demolitionist's eyes after a little trick? Priceless.'
 		'''
 }
+
+RelicOfIce: {
+	DisplayName: Relic Of Ice
+	Tooltip:
+		'''
+		Conjures Frosty the Iceman's storm to fight for you
+		The storm hits very rapidly and Frosty's image inflicts Frostburn
+		'Exalted, Frosty rose. No longer shackled to snow, He lives.'		
+		'''
+}
+
+ForlornEffigy: {
+	DisplayName: Forlorn Effigy
+	Tooltip:
+		'''
+		Conjures the Thing to fight for you
+		The Thing will spit out globs of flesh that are on cursed flames, are coated in ichor, or inflict Frostburn
+		'What is it? I don't know! Go have fun!'
+		'''
+}
