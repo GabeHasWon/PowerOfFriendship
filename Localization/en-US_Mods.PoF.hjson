@@ -17,6 +17,7 @@ Projectiles: {
 	RelicSnowballs.DisplayName: "{$RelicOfFrosty.DisplayName}"
 	ForlornThing.DisplayName: The Thing
 	ForlornSpit.DisplayName: Spit
+	ToothCreature.DisplayName: Tooth Creature
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage

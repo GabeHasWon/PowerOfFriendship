@@ -194,3 +194,14 @@ ForlornEffigy: {
 		'What is it? I don't know! Go have fun!'
 		'''
 }
+
+ToothTalisman: {
+	DisplayName: Tooth Talisman
+	Tooltip:
+		'''
+		Conjures various Creatures to fight for You
+		The big Creature does full damage
+		Each smaller Creature does 1/4th of full damage, but applies either cursed flames, on fire, or Frostburn
+		'Their dance is almost graceful, their flight captivating, their smiles gorgeous...'
+		'''
+}

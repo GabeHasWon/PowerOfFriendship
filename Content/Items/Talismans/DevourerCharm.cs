@@ -132,7 +132,7 @@ internal class DevourerCharm : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<IcemanEmblem>())
+                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<DevourerCharm>())
                     Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center + sine) * 1.5f;
 
                 Projectile.timeLeft++;
