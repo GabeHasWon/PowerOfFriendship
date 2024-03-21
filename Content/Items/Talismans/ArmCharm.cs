@@ -77,28 +77,7 @@ internal class ArmCharm : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<ArmCharm>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 0.45f;
-
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
-
-                if (Time++ > Projectile.Owner().HeldItem.useTime)
-                {
-                    paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
-                    Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
-                    Time = 0;
-                }
-
-                if (!Projectile.Owner().channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Projectile.Owner().channel = false;
-                    Despawning = true;
-                }
+                Despawning = HandleBasicFunctions<ArmCharm>(Projectile, ref Time, 0.45f);
             }
             else
             {

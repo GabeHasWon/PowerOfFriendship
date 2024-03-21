@@ -73,6 +73,8 @@ internal class Starcharm : Talisman
 
             if (!Despawning)
             {
+                Projectile.Owner().SetDummyItemTime(2);
+
                 if (Main.myPlayer == Projectile.owner)
                 {
                     const float Speed = 8;
@@ -83,36 +85,15 @@ internal class Starcharm : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<Starcharm>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 1.4f;
-
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
+                Despawning = HandleBasicFunctions<Starcharm>(Projectile, ref Time, 1.4f);
 
                 if (Utilities.CanHitLine(Projectile, Projectile.Owner()))
                     Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
                 else
                     Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.1f, 0.1f);
 
-                if (Time++ > Projectile.Owner().HeldItem.useTime)
-                {
-                    paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
-                    Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
-                    Time = 0;
-                }
-
                 if (Time % 15 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.YellowStarDust, Projectile.velocity.X, Projectile.velocity.Y);
-
-                if (!Projectile.Owner().channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Projectile.Owner().channel = false;
-                    Despawning = true;
-                }
             }
             else
             {

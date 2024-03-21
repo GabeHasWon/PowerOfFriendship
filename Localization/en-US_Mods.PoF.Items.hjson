@@ -199,9 +199,41 @@ ToothTalisman: {
 	DisplayName: Tooth Talisman
 	Tooltip:
 		'''
-		Conjures various Creatures to fight for You
+		Conjures various Creatures to fight for you
 		The big Creature does full damage
 		Each smaller Creature does 1/4th of full damage, but applies either cursed flames, on fire, or Frostburn
 		'Their dance is almost graceful, their flight captivating, their smiles gorgeous...'
+		'''
+}
+
+ShortswordOnAString: {
+	DisplayName: Shortsword On A String
+	Tooltip:
+		'''
+		Conjures a special Copper Shortsword to fight for you
+		The shortsword is blindingly fast
+		'Why couldn't you make this earlier? Well, did you try?'
+		'''
+}
+
+Flagellator: {
+	DisplayName: Flagellator
+	Tooltip:
+		'''
+		Conjures a Flagellator to fight for you
+		The Flagellator will automatically aim at and whip nearby enemies
+		This whip counts as a talisman instead of a normal whip
+		'Imagine finding this in a decrepit castle? A jumpscare of ages.'
+		'''
+}
+
+Catgrass: {
+	DisplayName: Catgrass
+	Tooltip:
+		'''
+		Conjures Catgrass to fight for you
+		Catgrass slowly fires a bubble, which you can control
+		These bubbles do massive damage and explode on death
+		'Technically, isn't this a Stray Cat? Weird.'
 		'''
 }

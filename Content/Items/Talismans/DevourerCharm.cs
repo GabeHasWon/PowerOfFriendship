@@ -132,27 +132,7 @@ internal class DevourerCharm : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<DevourerCharm>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center + sine) * 1.5f;
-
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
-
-                if (Time++ % Projectile.Owner().HeldItem.useTime == 0)
-                {
-                    paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
-                    Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
-                }
-
-                if (!Projectile.Owner().channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Projectile.Owner().channel = false;
-                    Despawning = true;
-                }
+                Despawning = HandleBasicFunctions<DevourerCharm>(Projectile, ref Time, 1.5f);
             }
             else
             {

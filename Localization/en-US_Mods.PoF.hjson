@@ -18,6 +18,11 @@ Projectiles: {
 	ForlornThing.DisplayName: The Thing
 	ForlornSpit.DisplayName: Spit
 	ToothCreature.DisplayName: Tooth Creature
+	ShortswordOnAStringProj.DisplayName: Shortsword On A String Proj
+	FlagellatorHandle.DisplayName: Flagellator Handle
+	FlagellatorWhip.DisplayName: Flagellator Whip
+	CatgrassBubble.DisplayName: Catgrass Bubble
+	CatgrassProj.DisplayName: Catgrass Proj
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage

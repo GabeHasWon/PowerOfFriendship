@@ -114,30 +114,10 @@ internal class ForlornEffigy : Talisman
                     ProjectileTime = 0;
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<ForlornEffigy>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 1.3f;
-
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
-
-                if (Time++ > Projectile.Owner().HeldItem.useTime)
-                {
-                    PayMana(Projectile);
-                    Time = 0;
-                }
+                Despawning = HandleBasicFunctions<ForlornEffigy>(Projectile, ref Time, 1.3f);
 
                 if (Time % 6 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ChooseDust(), Projectile.velocity.X, Projectile.velocity.Y);
-
-                if (!Projectile.Owner().channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Projectile.Owner().channel = false;
-                    Despawning = true;
-                }
             }
             else
             {

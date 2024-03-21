@@ -1,4 +1,5 @@
 ﻿using PoF.Content.Items.Accessories;
+using PoF.Content.Items.Talismans;
 using PoF.Content.Items.Whips;
 using Terraria.GameContent.ItemDropRules;
 
@@ -9,7 +10,7 @@ internal class LootGlobal : GlobalNPC
     public override void ModifyNPCLoot(NPC npc, NPCLoot npcLoot)
     {
         if (npc.type == NPCID.Plantera)
-            AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<DaisyChain>()));
+            AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<DaisyChain>()), ItemDropRule.Common(ModContent.ItemType<Catgrass>()));
         else if (npc.type == NPCID.QueenBee)
             AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<TheStinger>()));
         else if (npc.type == NPCID.Golem)

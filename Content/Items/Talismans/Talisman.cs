@@ -62,6 +62,34 @@ internal abstract class Talisman : ModItem
         return paidMana;
     }
 
+    public static bool HandleBasicFunctions<T>(Projectile projectile, ref float time, float? returnVelocity, bool autoPayMana = true) where T : Talisman
+    {
+        bool paidMana = true;
+
+        projectile.Owner().SetDummyItemTime(2);
+        projectile.timeLeft++;
+
+        if (returnVelocity.HasValue && projectile.DistanceSQ(projectile.Owner().Center) > GetRangeSq<T>())
+            projectile.velocity += projectile.DirectionTo(projectile.Owner().Center) * 1.2f;
+
+        if (time++ > projectile.Owner().HeldItem.useTime && autoPayMana)
+        {
+            paidMana = PayMana(projectile);
+            time = 0;
+        }
+
+        if (!projectile.Owner().channel)
+            return true;
+
+        if (!paidMana)
+        {
+            projectile.Owner().channel = false;
+            return true;
+        }
+
+        return false;
+    }
+
     public override void ModifyTooltips(List<TooltipLine> tips)
     {
         int index = tips.FindIndex(x => x.Name == "UseMana");

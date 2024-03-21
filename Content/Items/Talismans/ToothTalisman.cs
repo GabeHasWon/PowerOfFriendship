@@ -145,6 +145,7 @@ internal class ToothTalisman : Talisman
             {
                 const float Speed = 10;
 
+                Projectile.Owner().SetDummyItemTime(2);
                 Vector2 sine = new Vector2(0, MathF.Sin(Time * 0.16f) * 90).RotatedBy(Projectile.velocity.ToRotation());
 
                 if (_childId <= 0)
@@ -157,25 +158,7 @@ internal class ToothTalisman : Talisman
                             Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                     }
 
-                    if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<ToothTalisman>())
-                        Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center + sine) * 1.5f;
-
-                    bool paidMana = true;
-
-                    if (Time++ % Projectile.Owner().HeldItem.useTime == 0)
-                    {
-                        paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
-                        Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
-                    }
-
-                    if (!Projectile.Owner().channel)
-                        Despawning = true;
-
-                    if (!paidMana)
-                    {
-                        Projectile.Owner().channel = false;
-                        Despawning = true;
-                    }
+                    Despawning = HandleBasicFunctions<ToothTalisman>(Projectile, ref Time, 1.5f);
                 }
                 else
                 {

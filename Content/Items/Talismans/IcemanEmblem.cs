@@ -81,34 +81,12 @@ internal class IcemanEmblem : Talisman
 
                     if (Projectile.velocity.LengthSquared() > Speed * Speed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
-
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<IcemanEmblem>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 0.75f;
-
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
-
-                if (Time++ > Projectile.Owner().HeldItem.useTime)
-                {
-                    paidMana = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana, true);
-                    Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
-                    Time = 0;
-                }
+                Despawning = HandleBasicFunctions<IcemanEmblem>(Projectile, ref Time, 0.75f);
 
                 if (Time % 20 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ChooseDust(), Projectile.velocity.X, Projectile.velocity.Y);
-
-                if (!Projectile.Owner().channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Projectile.Owner().channel = false;
-                    Despawning = true;
-                }
             }
             else
             {

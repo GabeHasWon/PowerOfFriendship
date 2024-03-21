@@ -80,29 +80,12 @@ internal class HemophilicHatch : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
+                Despawning = HandleBasicFunctions<HemophilicHatch>(Projectile, ref Time, null);
+
                 if (Projectile.DistanceSQ(Owner.Center) > GetRangeSq<HemophilicHatch>() || !Utilities.CanHitLine(Projectile, Owner))
                     Projectile.velocity += Projectile.DirectionTo(Owner.Center) * 1.5f * moveSpeed;
 
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
-
-                if (Time++ % Owner.HeldItem.useTime == 0)
-                {
-                    paidMana = Owner.CheckMana(Projectile.Owner().HeldItem.mana, true);
-                    Owner.manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
-                }
-
                 Projectile.frame = (int)(Time / 5f % 2);
-
-                if (!Owner.channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Owner.channel = false;
-                    Despawning = true;
-                }
             }
             else
             {

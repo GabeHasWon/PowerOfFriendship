@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Terraria.GameContent;
-
-namespace PoF.Content.Items.Whips;
+﻿namespace PoF.Content.Items.Whips;
 
 public class AncientSnare : ModItem
 {
@@ -55,58 +52,6 @@ public class AncientSnare : ModItem
             Projectile.damage = (int)(Projectile.damage * 0.6f);
         }
 
-        public override bool PreDraw(ref Color lightColor)
-        {
-            List<Vector2> whipPoints = [];
-            Projectile.FillWhipControlPoints(Projectile, whipPoints);
-            Main.instance.LoadProjectile(Type);
-
-            SpriteEffects flip = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Vector2 pos = whipPoints[0];
-
-            for (int i = 0; i < whipPoints.Count - 1; i++)
-            {
-                var frame = new Rectangle(0, 0, 14, 26);
-                var origin = frame.Size() / 2f;
-                float scale = 1;
-
-                if (i == whipPoints.Count - 2)
-                {
-                    frame.Y = 80;
-                    frame.Height = 18;
-
-                    Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
-                    float t = Timer / timeToFlyOut;
-                    scale = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true));
-                }
-                else if (i > 26)
-                {
-                    frame.Y = 62;
-                    frame.Height = 18;
-                }
-                else if (i > 13)
-                {
-                    frame.Y = 44;
-                    frame.Height = 18;
-                }
-                else if (i > 0)
-                {
-                    frame.Y = 26;
-                    frame.Height = 18;
-                }
-
-                Vector2 element = whipPoints[i];
-                Vector2 diff = whipPoints[i + 1] - element;
-
-                float rotation = diff.ToRotation() - MathHelper.PiOver2;
-                Color color = Lighting.GetColor(element.ToTileCoordinates());
-
-                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);
-
-                pos += diff;
-            }
-            return false;
-        }
+        public override bool PreDraw(ref Color light) => WhipCommon.Draw(Projectile, Timer, new(0, 0, 14, 26), new(80, 18), new(62, 18), new(44, 18), new(26, 18));
     }
 }

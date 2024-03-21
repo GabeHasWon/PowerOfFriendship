@@ -77,37 +77,18 @@ internal class TwoTopTalisman : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<TwoTopTalisman>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 1.15f;
+                Despawning = HandleBasicFunctions<TwoTopTalisman>(Projectile, ref Time, 1.15f);
 
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
+                if (Time == 0)
+                    SpawnProj(Projectile.GetSource_FromAI(), 1f);
 
                 if (Utilities.CanHitLine(Projectile, Projectile.Owner()))
                     Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
                 else
                     Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.1f, 0.1f);
 
-                if (Time++ > Projectile.Owner().HeldItem.useTime)
-                {
-                    PayMana(Projectile);
-                    Time = 0;
-
-                    SpawnProj(Projectile.GetSource_FromAI(), 1f);
-                }
-
                 if (Time % 15 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GlowingMushroom, Projectile.velocity.X, Projectile.velocity.Y);
-
-                if (!Projectile.Owner().channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Projectile.Owner().channel = false;
-                    Despawning = true;
-                }
             }
             else
             {

@@ -132,37 +132,17 @@ internal class UnholyAmulet : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * MinSpeed;
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<UnholyAmulet>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 1.2f;
-
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
+                Despawning = HandleBasicFunctions<UnholyAmulet>(Projectile, ref Time, 1.2f);
 
                 if (Utilities.CanHitLine(Projectile, Projectile.Owner()))
                     Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
                 else
                     Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.1f, 0.1f);
 
-                if (Time++ > Projectile.Owner().HeldItem.useTime)
-                {
-                    paidMana = PayMana(Projectile);
-                    Time = 0;
-                }
-
                 if (Main.rand.NextBool(3))
                 {
                     float scale = Main.rand.NextFloat(0.8f, 2f);
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Torch, Projectile.velocity.X, Projectile.velocity.Y, Scale: scale);
-                }
-
-                if (!Projectile.Owner().channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Projectile.Owner().channel = false;
-                    Despawning = true;
                 }
             }
             else

@@ -62,6 +62,7 @@ public class TheStinger : ModItem
 
         public override bool PreDraw(ref Color lightColor)
         {
+            return WhipCommon.Draw(Projectile, Timer, new(0, 0, 10, 26), new(74, 18), new(58, 16), new(42, 16), new(26, 16));
             List<Vector2> whipPoints = [];
             Projectile.FillWhipControlPoints(Projectile, whipPoints);
             Main.instance.LoadProjectile(Type);

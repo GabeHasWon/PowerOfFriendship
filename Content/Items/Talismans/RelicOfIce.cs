@@ -96,30 +96,10 @@ internal class RelicOfIce : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<RelicOfIce>())
-                    Projectile.velocity += Projectile.DirectionTo(Projectile.Owner().Center) * 1f;
-
-                Projectile.timeLeft++;
-
-                bool paidMana = true;
-
-                if (Time++ > Projectile.Owner().HeldItem.useTime)
-                {
-                    PayMana(Projectile);
-                    Time = 0;
-                }
+                Despawning = HandleBasicFunctions<RelicOfIce>(Projectile, ref Time, 1f);
 
                 if (Time % 20 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ChooseDust(), Projectile.velocity.X, Projectile.velocity.Y);
-
-                if (!Projectile.Owner().channel)
-                    Despawning = true;
-
-                if (!paidMana)
-                {
-                    Projectile.Owner().channel = false;
-                    Despawning = true;
-                }
             }
             else
             {
