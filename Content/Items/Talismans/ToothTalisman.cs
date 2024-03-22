@@ -20,8 +20,7 @@ internal class ToothTalisman : Talisman
         Item.shoot = ModContent.ProjectileType<ToothCreature>();
         Item.knockBack = 0.8f;
         Item.shootSpeed = 5;
-        Item.width = 40;
-        Item.height = 60;
+        Item.Size = new(40);
         Item.value = Item.buyPrice(0, 1);
     }
 

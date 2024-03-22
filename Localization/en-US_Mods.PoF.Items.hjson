@@ -237,3 +237,12 @@ Catgrass: {
 		'Technically, isn't this a Stray Cat? Weird.'
 		'''
 }
+
+SpookyBoard: {
+	DisplayName: Spooky Board
+	Tooltip:
+		'''
+		Conjures Jerry Skelly to fight for you
+		Jerry has two Enchanted Daggers summoned, which automatia
+		'''
+}

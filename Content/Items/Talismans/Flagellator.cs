@@ -20,8 +20,7 @@ internal class Flagellator : Talisman
         Item.shoot = ModContent.ProjectileType<FlagellatorHandle>();
         Item.shootSpeed = 5;
         Item.knockBack = 1f;
-        Item.width = 40;
-        Item.height = 60;
+        Item.Size = new(44, 40);
         Item.value = Item.buyPrice(0, 10);
     }
 
@@ -75,7 +74,7 @@ internal class Flagellator : Talisman
         {
             if (!Despawning)
             {
-                bool invalidWhip = (!Whip.active || Whip.type != ModContent.ProjectileType<FlagellatorWhip>());
+                bool invalidWhip = !Whip.active || Whip.type != ModContent.ProjectileType<FlagellatorWhip>();
 
                 if (invalidWhip && GetTarget(out NPC npc))
                 {
@@ -91,6 +90,8 @@ internal class Flagellator : Talisman
                             NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, (int)WhipWhoAmI);
                     }
                     Projectile.rotation = vel.ToRotation();
+
+                    PayMana(Projectile);
                 }
 
                 if (invalidWhip)
@@ -157,31 +158,35 @@ internal class Flagellator : Talisman
             }
 
             // Brutal decompiled code, stolen from vanilla. Used to make this whip fire out of the controlled handle instead of the player
+
             Projectile.GetWhipSettings(proj, out var timeToFlyOut, out var segments, out var rangeMultiplier);
-            float num = proj.ai[0] / timeToFlyOut;
-            float num10 = 0.5f;
-            float num11 = 1f + num10;
-            float num12 = (float)Math.PI * 10f * (1f - num * num11) * (-proj.spriteDirection) / segments;
-            float num13 = num * num11;
+            float swingTime = proj.ai[0] / timeToFlyOut;
+            float num11 = 1.5f;
+            float num12 = (float)Math.PI * 10f * (1f - swingTime * 1.5f) * (-proj.spriteDirection) / segments;
+            float num13 = swingTime * 1.5f;
             float num14 = 0f;
 
             if (num13 > 1f)
             {
-                num14 = (num13 - 1f) / num10;
+                num14 = (num13 - 1f) / 0.5f;
                 num13 = MathHelper.Lerp(1f, 0f, num14);
             }
 
             Player player = Main.player[proj.owner];
+            Projectile ownerProjectile = Main.projectile[(int)proj.ai[2]];
             Item heldItem = player.HeldItem;
 
-            float num15 = (ContentSamples.ItemsByType[heldItem.type].useAnimation * 2) * num * player.whipRangeMultiplier;
-            float num16 = 8 * num15 * num13 * rangeMultiplier / (float)segments;
-            float num17 = 1f;
-            Vector2 playerArmPosition = Main.projectile[(int)proj.ai[2]].Center + proj.velocity * 16;// Main.GetPlayerArmPosition(proj);
+            float num15 = (ContentSamples.ItemsByType[heldItem.type].useAnimation * 2) * swingTime * player.whipRangeMultiplier;
+            float num16 = 8 * num15 * num13 * rangeMultiplier / segments;
+
+            Vector2 playerArmPosition = ownerProjectile.type == ModContent.ProjectileType<FlagellatorHandle>() 
+                ? ownerProjectile.Center + proj.velocity * 16
+                : ownerProjectile.Center + new Vector2(ownerProjectile.direction == -1 ? -10 : 8, 10);
+
             Vector2 vector = playerArmPosition;
             float num2 = -(float)Math.PI / 2f;
             Vector2 vector2 = vector;
-            float num3 = (float)Math.PI / 2f + (float)Math.PI / 2f * (float)proj.spriteDirection;
+            float num3 = (float)Math.PI / 2f + (float)Math.PI / 2f * proj.spriteDirection;
             Vector2 vector3 = vector;
             float num4 = (float)Math.PI / 2f;
             controlPoints.Add(playerArmPosition);
@@ -189,7 +194,7 @@ internal class Flagellator : Talisman
             for (int i = 0; i < segments; i++)
             {
                 float num5 = (float)i / segments;
-                float num6 = num12 * num5 * num17;
+                float num6 = num12 * num5;
                 Vector2 vector4 = vector + num2.ToRotationVector2() * num16;
                 Vector2 vector5 = vector3 + num4.ToRotationVector2() * (num16 * 2f);
                 Vector2 val = vector2 + num3.ToRotationVector2() * (num16 * 2f);

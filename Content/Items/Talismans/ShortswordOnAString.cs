@@ -19,8 +19,7 @@ internal class ShortswordOnAString : Talisman
         Item.shoot = ModContent.ProjectileType<ShortswordOnAStringProj>();
         Item.shootSpeed = 5;
         Item.knockBack = 0.2f;
-        Item.width = 34;
-        Item.height = 44;
+        Item.Size = new(44, 30);
         Item.value = Item.buyPrice(0, 10);
     }
 

@@ -19,8 +19,7 @@ internal class RelicOfIce : Talisman
         Item.shoot = ModContent.ProjectileType<RelicOfFrosty>();
         Item.shootSpeed = 5;
         Item.knockBack = 1f;
-        Item.width = 50;
-        Item.height = 54;
+        Item.Size = new(50, 54);
         Item.value = Item.buyPrice(0, 5);
     }
 

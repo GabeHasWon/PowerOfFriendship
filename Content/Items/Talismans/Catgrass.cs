@@ -16,8 +16,7 @@ internal class Catgrass : Talisman
         Item.mana = 20;
         Item.shoot = ModContent.ProjectileType<CatgrassProj>();
         Item.shootSpeed = 5;
-        Item.width = 38;
-        Item.height = 46;
+        Item.Size = new(42, 52);
         Item.value = Item.buyPrice(0, 5);
     }
 

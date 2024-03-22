@@ -20,8 +20,7 @@ internal class PartyTrick : Talisman
         Item.shootSpeed = 5;
         Item.knockBack = 0.2f;
         Item.value = Item.buyPrice(0, 10, 0, 0);
-        Item.width = 34;
-        Item.height = 44;
+        Item.Size = new(40);
     }
 
     public override void Update(ref float gravity, ref float maxFallSpeed) => gravity *= 0.2f;

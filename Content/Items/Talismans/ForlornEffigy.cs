@@ -21,8 +21,7 @@ internal class ForlornEffigy : Talisman
         Item.shoot = ModContent.ProjectileType<ForlornThing>();
         Item.shootSpeed = 5;
         Item.knockBack = 1f;
-        Item.width = 40;
-        Item.height = 60;
+        Item.Size = new(28, 32);
         Item.value = Item.buyPrice(0, 10);
     }
 

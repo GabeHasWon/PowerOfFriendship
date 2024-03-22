@@ -23,6 +23,7 @@ Projectiles: {
 	FlagellatorWhip.DisplayName: Flagellator Whip
 	CatgrassBubble.DisplayName: Catgrass Bubble
 	CatgrassProj.DisplayName: Catgrass Proj
+	SpookySummoner.DisplayName: Spooky Summoner
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
