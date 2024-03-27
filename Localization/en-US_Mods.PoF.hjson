@@ -24,6 +24,10 @@ Projectiles: {
 	CatgrassBubble.DisplayName: Catgrass Bubble
 	CatgrassProj.DisplayName: Catgrass Proj
 	SpookySummoner.DisplayName: Spooky Summoner
+	DaggerCopy.DisplayName: Dagger Copy
+	RingController.DisplayName: Ring Controller
+	RingButterfly.DisplayName: Ring Butterfly
+	SerpentOuroboros.DisplayName: Serpent Ouroboros
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
@@ -31,5 +35,6 @@ TileRangeTooltip: "{0} tile control range"
 
 SetBonuses: {
 	Comfy: Campfires give you additional life regen
+	Starry: +1 max minion
 	Dungeon: Egg
 }

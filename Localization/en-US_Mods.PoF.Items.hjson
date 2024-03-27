@@ -243,6 +243,53 @@ SpookyBoard: {
 	Tooltip:
 		'''
 		Conjures Jerry Skelly to fight for you
-		Jerry has two Enchanted Daggers summoned, which automatia
+		Jerry has two Enchanted Daggers summoned, which work like normal Daggers but deal 1/10th of Jerry's damage
+		Jerry also has a Flagellator that he'll use automatically on nearby enemies
+		'Hey, it's me, Jerry. Thanks for the Flagellator. I've been stuck with a Spinal Tap for FAR too long.'
 		'''
+
+	Dialogue: {
+		0: It's nice out, isn't it?
+		1: Hey, you look great conjuring me. Keep at it.
+		2: I made this armor myself! I'm proud of it.
+		3: I ain't spooky, but I sure am a skeleton.
+	}
+}
+
+RingOnAString: {
+	DisplayName: Ring On A String
+	Tooltip:
+		'''
+		Conjures an ethereal Ring to fight for you
+		Killing enemies with this Ring has a high chance of dropping a heart
+		'One of extremely few.'
+		'''
+}
+
+SerpentCharm: {
+	DisplayName: Serpent Charm
+	Tooltip:
+		'''
+		Conjures a bound Ouroboros to fight for you
+		'It's hungry, so while it waits for its true feast, find it a snack!'
+		'''
+}
+
+StarryBreastplate: {
+	DisplayName: Starry Breastplate
+	Tooltip:
+		'''
+		Increased jump height
+		+5% increased Talisman damage
+		'''
+}
+
+StarryHeaddress: {
+	DisplayName: Starry Headdress
+	Tooltip: +10% summon damage
+}
+
+StarryLeggings: {
+	DisplayName: Starry Leggings
+	Tooltip: +20% movement speed
 }

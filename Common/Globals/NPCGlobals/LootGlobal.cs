@@ -14,7 +14,9 @@ internal class LootGlobal : GlobalNPC
         else if (npc.type == NPCID.QueenBee)
             AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<TheStinger>()));
         else if (npc.type == NPCID.Golem)
-            AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<AncientSnare>()));
+            AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<AncientSnare>()), ItemDropRule.Common(ModContent.ItemType<SerpentCharm>()));
+        else if (npc.type == NPCID.HallowBoss)
+            AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<RingOnAString>()));
     }
 
     private static void AddNotExpertRules(NPCLoot npcLoot, params IItemDropRule[] rules)
