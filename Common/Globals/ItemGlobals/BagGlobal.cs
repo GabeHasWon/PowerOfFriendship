@@ -23,5 +23,7 @@ internal class BagGlobal : GlobalItem
         }
         else if (item.type == ItemID.FairyQueenBossBag)
             itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<RingOnAString>()));
+        else if (item.type == ItemID.FishronBossBag)
+            itemLoot.Add(ItemDropRule.Common(ModContent.ItemType<DukeToothNecklace>()));
     }
 }

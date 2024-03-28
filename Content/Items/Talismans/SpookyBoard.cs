@@ -125,7 +125,9 @@ internal class SpookyBoard : Talisman
                             NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, (int)WhipWhoAmI);
                     }
 
-                    PayMana(Projectile);
+                    if (!PayMana(Projectile))
+                        Despawning = true;
+
                     _casualTime = 0;
                 }
 
@@ -155,7 +157,10 @@ internal class SpookyBoard : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                Despawning = HandleBasicFunctions<SpookyBoard>(Projectile, ref Time, 0.45f, false);
+                bool stop = HandleBasicFunctions<SpookyBoard>(Projectile, ref Time, 0.45f, false);
+
+                if (!Despawning && stop)
+                    Despawning = true;
             }
             else
             {

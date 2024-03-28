@@ -293,3 +293,23 @@ StarryLeggings: {
 	DisplayName: Starry Leggings
 	Tooltip: +20% movement speed
 }
+
+DukeToothNecklace: {
+	DisplayName: Duke Tooth Necklace
+	Tooltip:
+		'''
+		Conjures a...pish? fisg?...to fight for you
+		The...uh...figh?...will dash towards your cursor repeatedly if near enough
+		'I think something's wrong with this thing. What IS it?'
+		'''
+}
+
+StarfireTalisman: {
+	DisplayName: Starfire Talisman
+	Tooltip:
+		'''
+		Summons a baby Flow Invader to fight for You
+		The baby will spawn even smaller Flow Invaders, which can be stacked or sent towards a nearby enemy
+		'I can't tell if it's cute, or if it's just doing something to my brain. Fun!'
+		'''
+}

@@ -91,7 +91,10 @@ internal class Flagellator : Talisman
                     }
                     Projectile.rotation = vel.ToRotation();
 
-                    PayMana(Projectile);
+                    bool paid = PayMana(Projectile);
+
+                    if (!paid)
+                        Despawning = true;
                 }
 
                 if (invalidWhip)
@@ -107,7 +110,10 @@ internal class Flagellator : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                Despawning = HandleBasicFunctions<Flagellator>(Projectile, ref Time, 1.3f, false);
+                bool stop = HandleBasicFunctions<Flagellator>(Projectile, ref Time, 1.3f, false);
+
+                if (!Despawning && stop)
+                    Despawning = true;
             }
             else
             {

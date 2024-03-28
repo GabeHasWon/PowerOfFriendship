@@ -28,6 +28,9 @@ Projectiles: {
 	RingController.DisplayName: Ring Controller
 	RingButterfly.DisplayName: Ring Butterfly
 	SerpentOuroboros.DisplayName: Serpent Ouroboros
+	DukePish.DisplayName: Duke Pish
+	StarfireInvader.DisplayName: Starfire Invader
+	StarfireShot.DisplayName: Starfire Shot
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
