@@ -368,3 +368,13 @@ SpikedGuardianRobePink: {
 		'A simple but powerful statement. Watch your head!'
 		'''
 }
+
+Hellmask: {
+	DisplayName: Hellmask
+	Tooltip:
+		'''
+		+12% all summon damage
+		Skulls spawned by the set bonus are set aflame for additional damage, speed and flair
+		'Power courses through you.'
+		'''
+}
