@@ -105,7 +105,7 @@ internal class StarfireTalisman : Talisman
                     Despawning = PayMana(Projectile);
                 }
 
-                if (_ownedProjectiles.Count > 0 && GetTarget(out NPC npc) && ProjectileTime > 0)
+                if (_ownedProjectiles.Count > 0 && Projectile.GetNearestNPCTarget(out NPC npc, 600f) && ProjectileTime > 0)
                 {
                     int proj = Main.rand.Next(_ownedProjectiles);
                     Main.projectile[proj].ai[1] = 1;
@@ -130,26 +130,6 @@ internal class StarfireTalisman : Talisman
                 if (Projectile.Opacity < 0.05f)
                     Projectile.Kill();
             }
-        }
-
-        private bool GetTarget(out NPC npc)
-        {
-            HashSet<int> npcs = [];
-
-            for (int i = 0; i < Main.maxNPCs; ++i)
-            {
-                NPC cur = Main.npc[i];
-
-                if (cur.CanBeChasedBy() && cur.DistanceSQ(Projectile.Center) < 600 * 600)
-                    npcs.Add(i);
-            }
-
-            npc = null;
-
-            if (npcs.Count > 0)
-                npc = Main.npc[Main.rand.Next(npcs.ToArray())];
-
-            return npc != null;
         }
     }
 

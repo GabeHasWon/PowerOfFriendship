@@ -87,7 +87,7 @@ internal class ForlornEffigy : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                if (ProjectileTime > 60 && GetTarget(out NPC npc))
+                if (ProjectileTime > 60 && Projectile.GetNearestNPCTarget(out NPC npc))
                 {
                     Vector2 velocity = Projectile.DirectionTo(npc.Center) * 12;
 
@@ -127,26 +127,6 @@ internal class ForlornEffigy : Talisman
                 if (Projectile.Opacity < 0.05f)
                     Projectile.Kill();
             }
-        }
-
-        private bool GetTarget(out NPC npc)
-        {
-            HashSet<int> npcs = [];
-
-            for (int i = 0; i < Main.maxNPCs; ++i)
-            {
-                NPC cur = Main.npc[i];
-
-                if (cur.CanBeChasedBy() && cur.DistanceSQ(Projectile.Center) < 500 * 500)
-                    npcs.Add(i);
-            }
-
-            npc = null;
-
-            if (npcs.Count > 0)
-                npc = Main.npc[Main.rand.Next(npcs.ToArray())];
-
-            return npc != null;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity)

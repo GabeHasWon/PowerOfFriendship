@@ -1,4 +1,8 @@
-﻿namespace PoF;
+﻿using Steamworks;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace PoF;
 
 internal static class Utilities
 {
@@ -16,5 +20,25 @@ internal static class Utilities
         int playerFrame = player.bodyFrame.Y / player.bodyFrame.Height;
         bool lowFrame = (playerFrame >= 7 && playerFrame <= 9) || (playerFrame >= 14 && playerFrame <= 16);
         return !lowFrame ? 0 : -2;
+    }
+
+    public static bool GetNearestNPCTarget(this Entity entity, out NPC npc, float distance = 500)
+    {
+        HashSet<int> npcs = [];
+
+        for (int i = 0; i < Main.maxNPCs; ++i)
+        {
+            NPC cur = Main.npc[i];
+
+            if (cur.CanBeChasedBy() && cur.DistanceSQ(entity.Center) < distance * distance)
+                npcs.Add(i);
+        }
+
+        npc = null;
+
+        if (npcs.Count > 0)
+            npc = Main.npc[Main.rand.Next(npcs.ToArray())];
+
+        return npc != null;
     }
 }

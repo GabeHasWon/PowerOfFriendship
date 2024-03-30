@@ -76,7 +76,7 @@ internal class Flagellator : Talisman
             {
                 bool invalidWhip = !Whip.active || Whip.type != ModContent.ProjectileType<FlagellatorWhip>();
 
-                if (invalidWhip && GetTarget(out NPC npc))
+                if (invalidWhip && Projectile.GetNearestNPCTarget(out NPC npc))
                 {
                     var src = Projectile.GetSource_FromAI();
                     int type = ModContent.ProjectileType<FlagellatorWhip>();
@@ -124,26 +124,6 @@ internal class Flagellator : Talisman
                 if (Projectile.Opacity < 0.05f)
                     Projectile.Kill();
             }
-        }
-
-        private bool GetTarget(out NPC npc)
-        {
-            HashSet<int> npcs = [];
-
-            for (int i = 0; i < Main.maxNPCs; ++i)
-            {
-                NPC cur = Main.npc[i];
-
-                if (cur.CanBeChasedBy() && cur.DistanceSQ(Projectile.Center) < 500 * 500)
-                    npcs.Add(i);
-            }
-
-            npc = null;
-
-            if (npcs.Count > 0)
-                npc = Main.npc[Main.rand.Next(npcs.ToArray())];
-
-            return npc != null;
         }
     }
 

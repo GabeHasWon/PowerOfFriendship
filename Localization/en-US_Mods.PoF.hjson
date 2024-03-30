@@ -31,6 +31,7 @@ Projectiles: {
 	DukePish.DisplayName: Duke Pish
 	StarfireInvader.DisplayName: Starfire Invader
 	StarfireShot.DisplayName: Starfire Shot
+	GhostSkull.DisplayName: Ghost Skull
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
@@ -39,5 +40,9 @@ TileRangeTooltip: "{0} tile control range"
 SetBonuses: {
 	Comfy: Campfires give you additional life regen
 	Starry: +1 max minion
-	Dungeon: Egg
+	Dungeon:
+		'''
+		Defeating an enemy spawns a ghastly skull in its place
+		The skull does 20 damage and benefits from summon boosts
+		'''
 }

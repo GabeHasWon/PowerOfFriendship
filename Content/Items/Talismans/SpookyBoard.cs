@@ -110,7 +110,7 @@ internal class SpookyBoard : Talisman
             {
                 bool invalidWhip = !Whip.active || Whip.type != ModContent.ProjectileType<FlagellatorWhip>();
 
-                if (invalidWhip && GetTarget(out NPC npc))
+                if (invalidWhip && Projectile.GetNearestNPCTarget(out NPC npc))
                 {
                     var src = Projectile.GetSource_FromAI();
                     int type = ModContent.ProjectileType<FlagellatorWhip>();
@@ -185,26 +185,6 @@ internal class SpookyBoard : Talisman
                     SoundEngine.PlaySound(SoundID.NPCHit2, Projectile.Center);
                 }
             }
-        }
-
-        private bool GetTarget(out NPC npc)
-        {
-            HashSet<int> npcs = [];
-
-            for (int i = 0; i < Main.maxNPCs; ++i)
-            {
-                NPC cur = Main.npc[i];
-
-                if (cur.CanBeChasedBy() && cur.DistanceSQ(Projectile.Center) < 500 * 500)
-                    npcs.Add(i);
-            }
-
-            npc = null;
-
-            if (npcs.Count > 0)
-                npc = Main.npc[Main.rand.Next(npcs.ToArray())];
-
-            return npc != null;
         }
 
         public override bool OnTileCollide(Vector2 oldVelocity) => false;
