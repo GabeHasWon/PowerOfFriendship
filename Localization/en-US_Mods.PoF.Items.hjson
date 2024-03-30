@@ -344,15 +344,27 @@ SpikedGuardianMaskGreen: {
 
 SpikedGuardianRobe: {
 	DisplayName: Spiked Guardian Robe
-	Tooltip: ""
+	Tooltip:
+		'''
+		+10% minion- and sentry-only damage
+		'Surprisingly comfortable! The spikes add confidence.'
+		'''
 }
 
 SpikedGuardianRobeGreen: {
 	DisplayName: Spiked Guardian Robe Green
-	Tooltip: ""
+	Tooltip:
+		'''
+		+10% whip-only damage
+		'Stylish, classy, only a little ominous.'
+		'''
 }
 
 SpikedGuardianRobePink: {
 	DisplayName: Spiked Guardian Robe Pink
-	Tooltip: ""
+	Tooltip:
+		'''
+		+10% talisman-only damage
+		'A simple but powerful statement. Watch your head!'
+		'''
 }

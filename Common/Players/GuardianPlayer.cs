@@ -16,7 +16,7 @@ public class GuardianPlayer : ModPlayer
         if (target.life > 0)
             return;
 
-        int damage = (int)Player.GetDamage(DamageClass.Summon).ApplyTo(20);
+        int damage = (int)Player.GetDamage(DamageClass.Summon).ApplyTo(26);
         var baseVel = new Vector2(0, Main.rand.NextFloat(3, 7)).RotatedByRandom(MathHelper.TwoPi);
         int proj = Projectile.NewProjectile(Player.GetSource_OnHit(target), target.Center, baseVel, ModContent.ProjectileType<GhostSkull>(), damage, 3f);
 
@@ -66,7 +66,7 @@ public class GuardianPlayer : ModPlayer
                 return;
             }
 
-            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Target].Center) * MathHelper.Min(Time * 0.1f, 10f), 0.05f);
+            Projectile.velocity = Vector2.Lerp(Projectile.velocity, Projectile.DirectionTo(Main.npc[(int)Target].Center) * MathHelper.Min(Time * 0.15f, 10f), 0.05f);
         }
 
         public override Color? GetAlpha(Color lightColor) => Color.White with { A = 0 };
