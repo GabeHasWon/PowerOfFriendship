@@ -281,17 +281,26 @@ StarryBreastplate: {
 		'''
 		Increased jump height
 		+5% increased Talisman damage
+		'You feel just a little bit taller.'
 		'''
 }
 
 StarryHeaddress: {
 	DisplayName: Starry Headdress
-	Tooltip: +10% summon damage
+	Tooltip: 
+		'''
+		+10% summon damage
+		'You feel just a little more enlightened.'
+		'''
 }
 
 StarryLeggings: {
 	DisplayName: Starry Leggings
-	Tooltip: +20% movement speed
+	Tooltip:
+		'''
+		+20% movement speed
+		'You feel just a little lighter.'
+		'''
 }
 
 DukeToothNecklace: {

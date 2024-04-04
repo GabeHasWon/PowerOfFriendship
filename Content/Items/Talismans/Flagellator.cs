@@ -89,6 +89,7 @@ internal class Flagellator : Talisman
                         if (Main.netMode == NetmodeID.MultiplayerClient)
                             NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, (int)WhipWhoAmI);
                     }
+
                     Projectile.rotation = vel.ToRotation();
 
                     bool paid = PayMana(Projectile);

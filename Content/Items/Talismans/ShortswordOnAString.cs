@@ -46,6 +46,7 @@ internal class ShortswordOnAString : Talisman
         }
 
         private ref float Time => ref Projectile.ai[1];
+        private ref float Rotation => ref Projectile.ai[2];
 
         public override void SetStaticDefaults()
         {
@@ -73,16 +74,18 @@ internal class ShortswordOnAString : Talisman
         {
             if (!Despawning)
             {
+                Projectile.rotation = Rotation;
+
                 if (Main.myPlayer == Projectile.owner)
                 {
                     Vector2 oldPos = Projectile.Center;
-
                     Projectile.Center = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.15f);
 
                     if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<ShortswordOnAString>())
                         Projectile.Center += Projectile.DirectionTo(Projectile.Owner().Center) * (Projectile.Distance(Projectile.Owner().Center) - GetRange<ShortswordOnAString>());
 
                     Projectile.rotation = (Projectile.Center - oldPos).ToRotation();
+                    Rotation = Projectile.rotation;
                 }
 
                 Despawning = HandleBasicFunctions<ShortswordOnAString>(Projectile, ref Time, null);
@@ -131,7 +134,6 @@ internal class ShortswordOnAString : Talisman
                 polePosY -= -10f;
             }
             
-            
             //stringColor = Projectile.TryApplyingPlayerStringColor(Main.player[Projectile.owner].stringColor, stringColor);
 
             Color stringColor = Color.White;
@@ -152,9 +154,7 @@ internal class ShortswordOnAString : Talisman
             {
                 float num4 = (float)Math.Sqrt(num * num + num2 * num2);
                 num4 = 12f / num4;
-                num *= num4;
                 num2 *= num4;
-                drawPosition.X -= num;
                 drawPosition.Y -= num2;
 
                 Vector2 offset = new Vector2(-16, -1).RotatedBy(Projectile.rotation) - drawPosition;

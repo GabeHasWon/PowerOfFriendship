@@ -60,59 +60,6 @@ public class TheStinger : ModItem
             Projectile.damage = (int)(Projectile.damage * 0.6f);
         }
 
-        public override bool PreDraw(ref Color lightColor)
-        {
-            return WhipCommon.Draw(Projectile, Timer, new(0, 0, 10, 26), new(74, 18), new(58, 16), new(42, 16), new(26, 16));
-            List<Vector2> whipPoints = [];
-            Projectile.FillWhipControlPoints(Projectile, whipPoints);
-            Main.instance.LoadProjectile(Type);
-
-            SpriteEffects flip = Projectile.spriteDirection < 0 ? SpriteEffects.None : SpriteEffects.FlipHorizontally;
-            Texture2D texture = TextureAssets.Projectile[Type].Value;
-            Vector2 pos = whipPoints[0];
-
-            for (int i = 0; i < whipPoints.Count - 1; i++)
-            {
-                var frame = new Rectangle(0, 0, 10, 26);
-                var origin = new Vector2(5, 8);
-                float scale = 1;
-
-                if (i == whipPoints.Count - 2)
-                {
-                    frame.Y = 74;
-                    frame.Height = 18;
-
-                    Projectile.GetWhipSettings(Projectile, out float timeToFlyOut, out int _, out float _);
-                    float t = Timer / timeToFlyOut;
-                    scale = MathHelper.Lerp(0.5f, 1.5f, Utils.GetLerpValue(0.1f, 0.7f, t, true) * Utils.GetLerpValue(0.9f, 0.7f, t, true));
-                }
-                else if (i > 10)
-                {
-                    frame.Y = 58;
-                    frame.Height = 16;
-                }
-                else if (i > 5)
-                {
-                    frame.Y = 42;
-                    frame.Height = 16;
-                }
-                else if (i > 0)
-                {
-                    frame.Y = 26;
-                    frame.Height = 16;
-                }
-
-                Vector2 element = whipPoints[i];
-                Vector2 diff = whipPoints[i + 1] - element;
-
-                float rotation = diff.ToRotation() - MathHelper.PiOver2;
-                Color color = Lighting.GetColor(element.ToTileCoordinates());
-
-                Main.EntitySpriteDraw(texture, pos - Main.screenPosition, frame, color, rotation, origin, scale, flip, 0);
-
-                pos += diff;
-            }
-            return false;
-        }
+        public override bool PreDraw(ref Color lightColor) => WhipCommon.Draw(Projectile, Timer, new(0, 0, 10, 26), new(74, 18), new(58, 16), new(42, 16), new(26, 16));
     }
 }

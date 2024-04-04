@@ -102,7 +102,7 @@ internal class StarfireTalisman : Talisman
                             NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, p);
                     }
 
-                    Despawning = PayMana(Projectile);
+                    Despawning = !PayMana(Projectile);
                 }
 
                 if (_ownedProjectiles.Count > 0 && Projectile.GetNearestNPCTarget(out NPC npc, 600f) && ProjectileTime > 0)
@@ -167,13 +167,13 @@ internal class StarfireTalisman : Talisman
 
             if (!Parent.active || Parent.type != ModContent.ProjectileType<StarfireInvader>())
             {
-                Projectile.timeLeft++;
                 Projectile.Kill();
                 return;
             }
 
             if (!LetGo)
             {
+                Projectile.timeLeft++;
                 Time++;
                 Projectile.Center = Parent.Center + new Vector2(MathF.Sin(Time * 0.04f) * 40, MathF.Sin((Time + MathHelper.PiOver2) * 0.08f) * 28);
             }

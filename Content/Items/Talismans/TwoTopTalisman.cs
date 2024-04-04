@@ -79,7 +79,7 @@ internal class TwoTopTalisman : Talisman
 
                 Despawning = HandleBasicFunctions<TwoTopTalisman>(Projectile, ref Time, 1.15f);
 
-                if (Time == 0)
+                if (Time == 0 && Main.myPlayer == Projectile.owner)
                     SpawnProj(Projectile.GetSource_FromAI(), 1f);
 
                 if (Utilities.CanHitLine(Projectile, Projectile.Owner()))
@@ -102,9 +102,14 @@ internal class TwoTopTalisman : Talisman
                     bool canPay = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana * 6, true);
                     Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
 
-                    if (canPay)
-                        for (int i = 0; i < 8; ++i)
-                            SpawnProj(Projectile.GetSource_Death(), Main.rand.NextFloat(0.2f, 1.2f));
+                    if (Main.myPlayer == Projectile.owner)
+                    {
+                        Projectile.Owner().netMana = true;
+
+                        if (canPay)
+                            for (int i = 0; i < 8; ++i)
+                                SpawnProj(Projectile.GetSource_Death(), Main.rand.NextFloat(0.2f, 1.2f));
+                    }
 
                     Projectile.scale = 0.5f;
                     Projectile.Kill();
@@ -118,7 +123,10 @@ internal class TwoTopTalisman : Talisman
         private void SpawnProj(IEntitySource source, float velMul)
         {
             Vector2 vel = Projectile.velocity * 0.4f + new Vector2(0, 4).RotatedByRandom(MathHelper.Pi) * velMul;
-            Projectile.NewProjectile(source, Projectile.Center, vel, ModContent.ProjectileType<TwoTopSpores>(), Projectile.damage, 0, Projectile.owner);
+            int proj = Projectile.NewProjectile(source, Projectile.Center, vel, ModContent.ProjectileType<TwoTopSpores>(), Projectile.damage, 0, Projectile.owner);
+
+            if (Main.netMode != NetmodeID.SinglePlayer)
+                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
         }
     }
 

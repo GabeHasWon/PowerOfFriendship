@@ -1,6 +1,7 @@
 ﻿using ReLogic.Content;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria.GameContent;
 
 namespace PoF.Content.Items.Talismans;
@@ -124,16 +125,24 @@ internal class ToothTalisman : Talisman
             {
                 _childId = -1;
 
-                for (int i = 0; i < 3; ++i)
+                if (Main.myPlayer == Projectile.owner)
                 {
-                    int proj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.velocity, Type, Projectile.damage / 4, 0, Projectile.owner);
+                    for (int i = 0; i < 3; ++i)
+                    {
+                        int proj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), Projectile.Center, Projectile.velocity, Type, Projectile.damage / 4, 0, Projectile.owner);
 
-                    Projectile projectile = Main.projectile[proj];
-                    projectile.Size = new Vector2(18);
+                        Projectile projectile = Main.projectile[proj];
+                        projectile.Size = new Vector2(18);
 
-                    ToothCreature newCreature = projectile.ModProjectile as ToothCreature;
-                    newCreature._childId = i + 1;
-                    newCreature._parentWhoAmI = Projectile.whoAmI;
+                        ToothCreature newCreature = projectile.ModProjectile as ToothCreature;
+                        newCreature._childId = i + 1;
+                        newCreature._parentWhoAmI = Projectile.whoAmI;
+
+                        if (Main.netMode != NetmodeID.SinglePlayer)
+                            NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+
+                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, Projectile.whoAmI);
+                    }
                 }
             }
 
@@ -144,7 +153,6 @@ internal class ToothTalisman : Talisman
             {
                 const float Speed = 10;
 
-                Projectile.Owner().SetDummyItemTime(2);
                 Vector2 sine = new Vector2(0, MathF.Sin(Time * 0.16f) * 90).RotatedBy(Projectile.velocity.ToRotation());
 
                 if (_childId <= 0)
@@ -210,6 +218,8 @@ internal class ToothTalisman : Talisman
         }
 
         public override void DrawBehind(int index, List<int> bhT, List<int> bN, List<int> bP, List<int> players, List<int> wires) => bhT.Add(index);
+        //public override void SendExtraAI(BinaryWriter writer) => writer.Write((byte)_childId);
+        //public override void ReceiveExtraAI(BinaryReader reader) => _childId = reader.ReadByte();
 
         public override bool PreDraw(ref Color lightColor)
         {

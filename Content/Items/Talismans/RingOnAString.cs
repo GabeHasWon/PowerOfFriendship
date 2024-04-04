@@ -1,4 +1,5 @@
 ﻿using ReLogic.Content;
+using System.IO;
 using Terraria.GameContent;
 
 namespace PoF.Content.Items.Talismans;
@@ -193,6 +194,9 @@ internal class RingOnAString : Talisman
             offset += dir;
             Projectile.Center = Parent.Center + offset;
         }
+
+        public override void SendExtraAI(BinaryWriter writer) => writer.WriteVector2(dir);
+        public override void ReceiveExtraAI(BinaryReader reader) => dir = reader.ReadVector2();
 
         public override void OnHitNPC(NPC target, NPC.HitInfo hit, int damageDone)
         {

@@ -59,6 +59,9 @@ internal abstract class Talisman : ModItem
         Player plr = proj.Owner();
         bool paidMana = plr.CheckMana(plr.HeldItem.mana, true);
         plr.manaRegenDelay = (int)plr.maxRegenDelay;
+
+        if (Main.myPlayer == proj.owner)
+            NetMessage.SendData(MessageID.PlayerMana, -1, -1, null, Main.myPlayer);
         return paidMana;
     }
 
@@ -66,6 +69,7 @@ internal abstract class Talisman : ModItem
     {
         bool paidMana = true;
 
+        projectile.netUpdate = true;
         projectile.Owner().SetDummyItemTime(2);
         projectile.timeLeft++;
 
@@ -78,7 +82,7 @@ internal abstract class Talisman : ModItem
             time = 0;
         }
 
-        if (!projectile.Owner().channel)
+        if (Main.myPlayer == projectile.owner && !projectile.Owner().channel)
             return true;
 
         if (!paidMana)

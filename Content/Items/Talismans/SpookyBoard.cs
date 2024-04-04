@@ -80,7 +80,7 @@ internal class SpookyBoard : Talisman
             {
                 AdvancedPopupRequest request = default;
                 request.Text = Language.GetTextValue("Mods.PoF.Items.SpookyBoard.Dialogue." + Main.rand.Next(4));
-                request.DurationInFrames = 60;
+                request.DurationInFrames = 120;
                 request.Color = new Color(119, 92, 138);
                 PopupText.NewText(request, Projectile.Center);
                 
@@ -94,13 +94,16 @@ internal class SpookyBoard : Talisman
                 int type = ModContent.ProjectileType<DaggerCopy>();
                 var src = Projectile.GetSource_FromAI();
 
-                for (int i = 0; i < 2; ++i)
+                if (Main.myPlayer == Projectile.owner)
                 {
-                    var pos = Projectile.Center;
-                    int proj = Projectile.NewProjectile(src, pos, Vector2.Zero, type, Projectile.damage / 10, 0, Projectile.owner, 0, 0, Projectile.whoAmI);
+                    for (int i = 0; i < 2; ++i)
+                    {
+                        var pos = Projectile.Center;
+                        int proj = Projectile.NewProjectile(src, pos, Vector2.Zero, type, Projectile.damage / 10, 0, Projectile.owner, 0, 0, Projectile.whoAmI);
 
-                    if (Main.netMode == NetmodeID.MultiplayerClient)
-                        NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+                        if (Main.netMode == NetmodeID.MultiplayerClient)
+                            NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
+                    }
                 }
 
                 _casualTime = 0;

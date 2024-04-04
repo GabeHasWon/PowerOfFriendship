@@ -59,7 +59,7 @@ internal class Catgrass : Talisman
 
             if (!Despawning)
             {
-                Despawning = HandleBasicFunctions<ArmCharm>(Projectile, ref Time, 0.45f);
+                Despawning = HandleBasicFunctions<Catgrass>(Projectile, ref Time, 0.45f);
 
                 if (Time == owner.HeldItem.useTime / 2)
                 {
@@ -92,6 +92,12 @@ internal class Catgrass : Talisman
         private const int MaxTimeLeft = MaxFireRate * 3 - 20;
         private const int ExplosionTimeLeft = 4;
 
+        private bool Exploding
+        {
+            get => Projectile.ai[0] == 1;
+            set => Projectile.ai[0] = value ? 1 : 0;
+        }
+
         public override void SetDefaults()
         {
             Projectile.friendly = true;
@@ -108,6 +114,9 @@ internal class Catgrass : Talisman
         {
             Player owner = Projectile.Owner();
 
+            if (Exploding && Projectile.timeLeft > ExplosionTimeLeft)
+                Projectile.timeLeft = ExplosionTimeLeft;
+
             if (Main.myPlayer == owner.whoAmI)
             {
                 const float Speed = 10;
@@ -118,12 +127,16 @@ internal class Catgrass : Talisman
                     Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
             }
 
-            if (!owner.channel && Projectile.timeLeft > ExplosionTimeLeft)
+            if (Main.myPlayer == Projectile.owner && !owner.channel && Projectile.timeLeft > ExplosionTimeLeft)
+            {
                 Projectile.timeLeft = ExplosionTimeLeft;
+                Exploding = true;
+            }
 
             if (Projectile.scale < 1f)
                 Projectile.scale *= 1.04f;
-
+            
+            Projectile.netUpdate = true;
             Projectile.rotation = Projectile.velocity.X * 0.05f;
 
             if (Projectile.timeLeft == ExplosionTimeLeft)

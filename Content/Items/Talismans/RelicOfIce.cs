@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using Terraria.Audio;
 using Terraria.GameContent;
 
@@ -263,6 +264,8 @@ internal class RelicOfIce : Talisman
                 Projectile.Kill();
         }
 
+        public override void SendExtraAI(BinaryWriter writer) => writer.WriteVector2(dir);
+        public override void ReceiveExtraAI(BinaryReader reader) => dir = reader.ReadVector2();
         public override bool OnTileCollide(Vector2 oldVelocity) => RelicOfFrosty.BounceOffTiles(Projectile, oldVelocity);
     }
 
