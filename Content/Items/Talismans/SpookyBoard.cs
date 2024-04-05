@@ -80,8 +80,8 @@ internal class SpookyBoard : Talisman
             {
                 AdvancedPopupRequest request = default;
                 request.Text = Language.GetTextValue("Mods.PoF.Items.SpookyBoard.Dialogue." + Main.rand.Next(4));
-                request.DurationInFrames = 120;
-                request.Color = new Color(119, 92, 138);
+                request.DurationInFrames = 240;
+                request.Color = Color.Lerp(new Color(119, 92, 138), Color.White, 0.3f);
                 PopupText.NewText(request, Projectile.Center);
                 
                 _casualTime = 0;
@@ -115,13 +115,13 @@ internal class SpookyBoard : Talisman
 
                 if (invalidWhip && Projectile.GetNearestNPCTarget(out NPC npc))
                 {
-                    var src = Projectile.GetSource_FromAI();
-                    int type = ModContent.ProjectileType<FlagellatorWhip>();
-                    var vel = Projectile.DirectionTo(npc.Center) * 1.2f;
-
                     if (Main.myPlayer == Projectile.owner)
                     {
+                        var src = Projectile.GetSource_FromAI();
+                        int type = ModContent.ProjectileType<FlagellatorWhip>();
+                        var vel = Projectile.DirectionTo(npc.Center) * 1.2f;
                         var pos = Projectile.Center + vel;
+
                         WhipWhoAmI = Projectile.NewProjectile(src, pos, vel, type, Projectile.damage, 0, Projectile.owner, ai2: Projectile.whoAmI);
 
                         if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -225,6 +225,7 @@ internal class SpookyBoard : Talisman
         public override void SetDefaults()
         {
             Projectile.CloneDefaults(ProjectileID.Smolstar);
+            Projectile.minionSlots = 0;
             AIType = ProjectileID.Smolstar;
         }
 

@@ -15,10 +15,7 @@ public class AncientSnare : ModItem
     {
         velocity *= Main.rand.NextFloat(1.8f, 2.4f);
         velocity = velocity.RotatedByRandom(0.1f);
-        int proj = Projectile.NewProjectile(source, position, velocity, ProjectileID.SpikyBallTrap, damage / 3 * 2, 0.3f, player.whoAmI);
-        Main.projectile[proj].hostile = false;
-        Main.projectile[proj].friendly = true;
-        Main.projectile[proj].timeLeft = 180;
+        int proj = Projectile.NewProjectile(source, position, velocity, ModContent.ProjectileType<AncientSpikeball>(), damage / 3 * 2, 0.3f, player.whoAmI);
 
         if (Main.netMode == NetmodeID.MultiplayerClient)
             NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
@@ -50,5 +47,18 @@ public class AncientSnare : ModItem
         }
 
         public override bool PreDraw(ref Color light) => WhipCommon.Draw(Projectile, Timer, new(0, 0, 14, 26), new(80, 18), new(62, 18), new(44, 18), new(26, 18));
+    }
+
+    public class AncientSpikeball : ModProjectile
+    {
+        public override string Texture => "Terraria/Images/Projectile_" + ProjectileID.SpikyBallTrap;
+
+        public override void SetDefaults()
+        {
+            Projectile.CloneDefaults(ProjectileID.SpikyBallTrap);
+            Projectile.timeLeft = 180;
+            Projectile.hostile = false;
+            Projectile.friendly = true;
+        }
     }
 }

@@ -32,6 +32,7 @@ Projectiles: {
 	StarfireInvader.DisplayName: Starfire Invader
 	StarfireShot.DisplayName: Starfire Shot
 	GhostSkull.DisplayName: Ghost Skull
+	AncientSpikeball.DisplayName: Ancient Spikeball
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
@@ -46,3 +47,5 @@ SetBonuses: {
 		The skull does 20 damage and benefits from summon boosts
 		'''
 }
+
+NPCs.EmpressOfDeath.DisplayName: Empress Of Death

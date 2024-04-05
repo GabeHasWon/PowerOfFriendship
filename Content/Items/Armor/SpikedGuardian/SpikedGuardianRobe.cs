@@ -26,7 +26,7 @@ public class SpikedGuardianRobe : ModItem
     public override void EquipFrameEffects(Player player, EquipType type)
     {
         if (type == EquipType.Body)
-            player.legs = EquipLoader.GetEquipSlot(Mod, Name + "Legs", EquipType.Legs);
+            player.legs = EquipLoader.GetEquipSlot(Mod, "SpikedGuardianRobeLegs", EquipType.Legs);
     }
 
     public override void AddRecipes()
@@ -41,7 +41,7 @@ public class SpikedGuardianRobe : ModItem
 }
 
 [AutoloadEquip(EquipType.Body)]
-class SpikedGuardianRobeGreen : SpikedGuardianMask
+class SpikedGuardianRobeGreen : SpikedGuardianRobe
 {
     protected override int BrickType => ItemID.GreenBrick;
     public override void UpdateEquip(Player player) => player.GetDamage(DamageClass.SummonMeleeSpeed) += 0.1f;
@@ -49,12 +49,12 @@ class SpikedGuardianRobeGreen : SpikedGuardianMask
     public override void EquipFrameEffects(Player player, EquipType type)
     {
         if (type == EquipType.Body)
-            player.legs = Item.legSlot;
+            player.legs = EquipLoader.GetEquipSlot(Mod, "SpikedGuardianRobeGreenLegs", EquipType.Legs);
     }
 }
 
 [AutoloadEquip(EquipType.Body)]
-class SpikedGuardianRobePink : SpikedGuardianMask
+class SpikedGuardianRobePink : SpikedGuardianRobe
 {
     protected override int BrickType => ItemID.PinkBrick;
     public override void UpdateEquip(Player player) => player.GetDamage<TalismanDamageClass>() += 0.1f;
@@ -62,6 +62,6 @@ class SpikedGuardianRobePink : SpikedGuardianMask
     public override void EquipFrameEffects(Player player, EquipType type)
     {
         if (type == EquipType.Body)
-            player.legs = Item.legSlot;
+            player.legs = EquipLoader.GetEquipSlot(Mod, "SpikedGuardianRobePinkLegs", EquipType.Legs);
     }
 }

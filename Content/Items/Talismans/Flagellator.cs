@@ -78,12 +78,12 @@ internal class Flagellator : Talisman
 
                 if (invalidWhip && Projectile.GetNearestNPCTarget(out NPC npc))
                 {
-                    var src = Projectile.GetSource_FromAI();
-                    int type = ModContent.ProjectileType<FlagellatorWhip>();
                     var vel = Projectile.DirectionTo(npc.Center) * 1.2f;
 
                     if (Main.myPlayer == Projectile.owner)
                     {
+                        var src = Projectile.GetSource_FromAI();
+                        int type = ModContent.ProjectileType<FlagellatorWhip>();
                         WhipWhoAmI = Projectile.NewProjectile(src, Projectile.Center + vel, vel, type, Projectile.damage, 0, Projectile.owner, ai2: Projectile.whoAmI);
 
                         if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -136,6 +136,12 @@ internal class Flagellator : Talisman
 
         public override void Load() => On_Projectile.FillWhipControlPoints += HijackControlPointsForFlagellator;
 
+        /// <summary>
+        /// Maybe move this to AI
+        /// </summary>
+        /// <param name="orig"></param>
+        /// <param name="proj"></param>
+        /// <param name="controlPoints"></param>
         private void HijackControlPointsForFlagellator(On_Projectile.orig_FillWhipControlPoints orig, Projectile proj, List<Vector2> controlPoints)
         {
             if (proj.type != ModContent.ProjectileType<FlagellatorWhip>())
@@ -147,52 +153,53 @@ internal class Flagellator : Talisman
             // Brutal decompiled code, stolen from vanilla. Used to make this whip fire out of the controlled handle instead of the player
 
             Projectile.GetWhipSettings(proj, out var timeToFlyOut, out var segments, out var rangeMultiplier);
+            Main.NewText(proj.ai[0]);
             float swingTime = proj.ai[0] / timeToFlyOut;
             float num11 = 1.5f;
             float num12 = (float)Math.PI * 10f * (1f - swingTime * 1.5f) * (-proj.spriteDirection) / segments;
-            float num13 = swingTime * 1.5f;
+            float maxUseRange = swingTime * 1.5f;
             float num14 = 0f;
 
-            if (num13 > 1f)
+            if (maxUseRange > 1f)
             {
-                num14 = (num13 - 1f) / 0.5f;
-                num13 = MathHelper.Lerp(1f, 0f, num14);
+                num14 = (maxUseRange - 1f) / 0.5f;
+                maxUseRange = MathHelper.Lerp(1f, 0f, num14);
             }
 
             Player player = Main.player[proj.owner];
             Projectile ownerProjectile = Main.projectile[(int)proj.ai[2]];
             Item heldItem = player.HeldItem;
 
-            float num15 = (ContentSamples.ItemsByType[heldItem.type].useAnimation * 2) * swingTime * player.whipRangeMultiplier;
-            float num16 = 8 * num15 * num13 * rangeMultiplier / segments;
+            float useRange = (ContentSamples.ItemsByType[heldItem.type].useAnimation * 2) * swingTime * player.whipRangeMultiplier;
+            float num16 = 8 * useRange * maxUseRange * rangeMultiplier / segments;
 
-            Vector2 playerArmPosition = ownerProjectile.type == ModContent.ProjectileType<FlagellatorHandle>() 
+            Vector2 projectileCenter = ownerProjectile.type == ModContent.ProjectileType<FlagellatorHandle>() 
                 ? ownerProjectile.Center + proj.velocity * 16
                 : ownerProjectile.Center + new Vector2(ownerProjectile.direction == -1 ? -10 : 8, 10);
 
-            Vector2 vector = playerArmPosition;
+            Vector2 vector = projectileCenter;
             float num2 = -(float)Math.PI / 2f;
             Vector2 vector2 = vector;
             float num3 = (float)Math.PI / 2f + (float)Math.PI / 2f * proj.spriteDirection;
             Vector2 vector3 = vector;
             float num4 = (float)Math.PI / 2f;
-            controlPoints.Add(playerArmPosition);
+            controlPoints.Add(projectileCenter);
 
-            for (int i = 0; i < segments; i++)
+            for (int i = 0; i < segments; i++) // This is all unclean because I care not to understand it
             {
-                float num5 = (float)i / segments;
-                float num6 = num12 * num5;
+                float segmentFactor = (float)i / segments;
+                float num6 = num12 * segmentFactor;
                 Vector2 vector4 = vector + num2.ToRotationVector2() * num16;
                 Vector2 vector5 = vector3 + num4.ToRotationVector2() * (num16 * 2f);
                 Vector2 val = vector2 + num3.ToRotationVector2() * (num16 * 2f);
-                float num7 = 1f - num13;
+                float num7 = 1f - maxUseRange;
                 float num8 = 1f - num7 * num7;
                 Vector2 value = Vector2.Lerp(vector5, vector4, num8 * 0.9f + 0.1f);
                 Vector2 vector6 = Vector2.Lerp(val, value, num8 * 0.7f + 0.3f);
-                Vector2 spinPoint = playerArmPosition + (vector6 - playerArmPosition) * new Vector2(1f, num11);
+                Vector2 spinPoint = projectileCenter + (vector6 - projectileCenter) * new Vector2(1f, num11);
                 float num9 = num14;
                 num9 *= num9;
-                Vector2 item = spinPoint.RotatedBy(proj.rotation + 4.712389f * num9 * proj.spriteDirection, playerArmPosition);
+                Vector2 item = spinPoint.RotatedBy(proj.rotation + 4.712389f * num9 * proj.spriteDirection, projectileCenter);
                 controlPoints.Add(item);
                 num2 += num6;
                 num4 += num6;
@@ -210,25 +217,18 @@ internal class Flagellator : Talisman
             Projectile.DefaultToWhip();
             Projectile.WhipSettings.Segments = 16;
             Projectile.WhipSettings.RangeMultiplier = 1.2f;
+            Projectile.minionSlots = 0;
         }
 
         public override bool PreAI()
         {
-            Projectile.position = Main.projectile[(int)ProjectileOwner].Center;
-
             if (!Main.projectile[(int)ProjectileOwner].active)
             {
                 Projectile.Kill();
                 return false;
             }
 
-            return base.PreAI();
-        }
-
-        public override void PostAI()
-        {
-            Projectile.position = Main.projectile[(int)ProjectileOwner].Center;
-            base.PostAI();
+            return true;
         }
 
         public override bool PreDraw(ref Color l) => WhipCommon.Draw(Projectile, Timer, new(0, 0, 10, 26), new(74, 18), new(58, 16), new(42, 16), new(26, 16), Projectile.Opacity);

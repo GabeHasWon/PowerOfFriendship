@@ -123,6 +123,9 @@ internal class ToothTalisman : Talisman
 
             if (_childId == 0)
             {
+                if (_segments.Count == 0)
+                    SpawnBody();
+
                 _childId = -1;
 
                 if (Main.myPlayer == Projectile.owner)
@@ -218,8 +221,8 @@ internal class ToothTalisman : Talisman
         }
 
         public override void DrawBehind(int index, List<int> bhT, List<int> bN, List<int> bP, List<int> players, List<int> wires) => bhT.Add(index);
-        //public override void SendExtraAI(BinaryWriter writer) => writer.Write((byte)_childId);
-        //public override void ReceiveExtraAI(BinaryReader reader) => _childId = reader.ReadByte();
+        public override void SendExtraAI(BinaryWriter writer) => writer.Write((sbyte)_childId);
+        public override void ReceiveExtraAI(BinaryReader reader) => _childId = reader.ReadSByte();
 
         public override bool PreDraw(ref Color lightColor)
         {
