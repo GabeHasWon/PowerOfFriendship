@@ -106,8 +106,8 @@ public class EmpressOfDeath : ModNPC
                     if (Timer % 3 == 0)
                     {
                         float rot = (Timer - 30) / 80f * MathHelper.Pi - MathHelper.PiOver4;
-                        var vel = NPC.DirectionTo(Target.Center).RotatedByRandom(0.2f).RotatedBy(rot * -Target.direction) * Main.rand.NextFloat(5, 9);
-                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ProjectileID.FairyQueenLance, 60, 0, Main.myPlayer, vel.ToRotation());
+                        var vel = NPC.DirectionTo(Target.Center).RotatedByRandom(0.2f).RotatedBy(rot * -Target.direction) * 14;
+                        Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<TelegraphSword>(), 60, 0, Main.myPlayer);
                     }
                 }
 

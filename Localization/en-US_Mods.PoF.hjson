@@ -35,6 +35,8 @@ Projectiles: {
 	AncientSpikeball.DisplayName: Ancient Spikeball
 	DeathAura.DisplayName: Death Aura
 	EoDPortal.DisplayName: Eo D Portal
+	SpinScythe.DisplayName: Spin Scythe
+	TelegraphSword.DisplayName: Telegraph Sword
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
