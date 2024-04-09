@@ -18,6 +18,9 @@ public class GuardianPlayer : ModPlayer
         if (target.life > 0)
             return;
 
+        if (!target.CanBeChasedBy())
+            return;
+
         int damage = (int)Player.GetDamage(DamageClass.Summon).ApplyTo(hellMask ? 32 : 26);
         var baseVel = new Vector2(0, Main.rand.NextFloat(3, 7)).RotatedByRandom(MathHelper.TwoPi);
         int proj = Projectile.NewProjectile(Player.GetSource_OnHit(target), target.Center, baseVel, ModContent.ProjectileType<GhostSkull>(), damage, 3f, Player.whoAmI);

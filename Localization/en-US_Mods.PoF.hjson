@@ -33,6 +33,8 @@ Projectiles: {
 	StarfireShot.DisplayName: Starfire Shot
 	GhostSkull.DisplayName: Ghost Skull
 	AncientSpikeball.DisplayName: Ancient Spikeball
+	DeathAura.DisplayName: Death Aura
+	EoDPortal.DisplayName: Eo D Portal
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
@@ -48,4 +50,8 @@ SetBonuses: {
 		'''
 }
 
-NPCs.EmpressOfDeath.DisplayName: Empress Of Death
+NPCs: {
+	EmpressOfDeath.DisplayName: Empress Of Death
+	RottenGhoulHanging.DisplayName: Rotten Ghoul Hanging
+	RottenGhoul.DisplayName: Rotten Ghoul
+}

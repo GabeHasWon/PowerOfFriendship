@@ -134,10 +134,9 @@ internal class UnholyAmulet : Talisman
 
                 Despawning = HandleBasicFunctions<UnholyAmulet>(Projectile, ref Time, 1.2f);
 
-                if (Utilities.CanHitLine(Projectile, Projectile.Owner()))
-                    Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
-                else
-                    Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.1f, 0.1f);
+                Projectile.Opacity = Utilities.CanHitLine(Projectile, Projectile.Owner())
+                    ? MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f)
+                    : MathHelper.Lerp(Projectile.Opacity, 0.1f, 0.1f);
 
                 if (Main.rand.NextBool(3))
                 {
@@ -186,7 +185,7 @@ internal class UnholyAmulet : Talisman
 
         public override bool PreDraw(ref Color lightColor)
         {
-            FallenStarDrawer magicMissileDrawer = default;
+            UnholyFlameDrawer magicMissileDrawer = default;
             magicMissileDrawer.Draw(Projectile);
 
             var tex = TextureAssets.Projectile[Type].Value;
@@ -226,10 +225,10 @@ internal class UnholyAmulet : Talisman
 
             if (Projectile.timeLeft > MaxTimeLeft - 60)
                 Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.5f, 0.05f);
-            else if (Projectile.timeLeft > 30)
-                Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, sine * 0.5f + 0.25f, 0.2f);
-            else
-                Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0, 0.2f);
+            else 
+                Projectile.Opacity = Projectile.timeLeft > 30
+                ? MathHelper.Lerp(Projectile.Opacity, sine * 0.5f + 0.25f, 0.2f)
+                : MathHelper.Lerp(Projectile.Opacity, 0, 0.2f);
         }
 
         public override void PostDraw(Color lightColor)
@@ -250,7 +249,7 @@ internal class UnholyAmulet : Talisman
     }
 
     [StructLayout(LayoutKind.Sequential, Size = 1)]
-    public readonly struct FallenStarDrawer
+    public readonly struct UnholyFlameDrawer
     {
         private static readonly VertexStrip _vertexStrip = new();
 
