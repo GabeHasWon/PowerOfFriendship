@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using PoF.Common.Globals.ProjectileGlobals;
+using Terraria.Audio;
 
 namespace PoF.Content.Items.Talismans;
 
@@ -136,7 +137,11 @@ internal class TwoTopTalisman : Talisman
 
         private ref float BaseOpacity => ref Projectile.ai[0];
 
-        public override void SetStaticDefaults() => Main.projFrames[Type] = 4;
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Type] = 4;
+            TalismanGlobal.IsMinorTalismanProjectile.Add(Type);
+        }
 
         public override void SetDefaults()
         {

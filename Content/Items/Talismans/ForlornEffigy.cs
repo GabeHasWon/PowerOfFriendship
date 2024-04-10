@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoF.Common.Globals.ProjectileGlobals;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.Audio;
@@ -184,7 +185,11 @@ internal class ForlornEffigy : Talisman
             set => Projectile.ai[0] = value ? 1 : 0;
         }
 
-        public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Type] = 3;
+            TalismanGlobal.IsMinorTalismanProjectile.Add(Type);
+        }
 
         public override void SetDefaults()
         {

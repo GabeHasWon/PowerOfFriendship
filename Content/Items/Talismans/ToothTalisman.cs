@@ -121,11 +121,11 @@ internal class ToothTalisman : Talisman
         {
             Projectile.rotation = Projectile.velocity.ToRotation();
 
+            if (_segments.Count == 0)
+                SpawnBody();
+
             if (_childId == 0)
             {
-                if (_segments.Count == 0)
-                    SpawnBody();
-
                 _childId = -1;
 
                 if (Main.myPlayer == Projectile.owner)
@@ -189,8 +189,8 @@ internal class ToothTalisman : Talisman
                             2 => DustID.Frost,
                             _ => DustID.Torch
                         };
-                        var last = _segments[^1];
 
+                        var last = _segments[^1];
                         Dust.NewDust(last.position, 16, 16, dustType);
                     }
                 }

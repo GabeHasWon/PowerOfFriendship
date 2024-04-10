@@ -3,7 +3,7 @@ using Terraria.Audio;
 
 namespace PoF.Content.NPCs.EoD;
 
-public class RottenGhoulHanging : ModNPC
+public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
 {
     private Projectile Parent => Main.projectile[(int)NPC.ai[0]];
     private ref float Timer => ref NPC.ai[1];
@@ -43,10 +43,16 @@ public class RottenGhoulHanging : ModNPC
         if (Main.expertMode && Timer % 360 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
         {
             NPC.TargetClosest();
-            Vector2 vel = NPC.DirectionTo(Main.player[NPC.target].Center) * 12;
-            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(8, 10), vel, ProjectileID.SalamanderSpit, 30, 1f, Main.myPlayer);
-            SoundEngine.PlaySound(SoundID.NPCDeath9 with { Volume = 1f, PitchRange = (-0.8f, 0.2f ) });
-        } 
+            SpawnSpit(1f);
+            SoundEngine.PlaySound(SoundID.NPCDeath9 with { Volume = 1f, PitchRange = (-0.8f, 0.2f) });
+        }
+    }
+
+    private void SpawnSpit(float speedBoost, float rotation = 0f)
+    {
+        Vector2 vel = NPC.DirectionTo(Main.player[NPC.target].Center).RotatedByRandom(rotation) * 6 * speedBoost;
+        int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(8, 10), vel, ProjectileID.SalamanderSpit, 30, 1f, Main.myPlayer);
+        Main.projectile[proj].extraUpdates++;
     }
 
     public override bool CheckDead()
@@ -62,6 +68,16 @@ public class RottenGhoulHanging : ModNPC
             for (int i = 0; i < 6; ++i)
                 Dust.NewDust(NPC.Center, 26, 18, DustID.Grass, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
         }
+    }
+
+    public void OnHitByWhip(Projectile projectile)
+    {
+        NPC.TargetClosest();
+
+        for (int i = 0; i < 8; ++i)
+            SpawnSpit(Main.rand.NextFloat(1.1f, 1.7f), Main.rand.NextFloat(-0.2f, 0.2f));
+
+        Timer = 1;
     }
 }
 

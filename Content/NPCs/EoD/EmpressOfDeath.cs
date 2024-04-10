@@ -1,7 +1,13 @@
-﻿using System;
+﻿using NPCUtils;
+using PoF.Content.Items.Melee;
+using ReLogic.Content;
+using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
+using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
+using Terraria.GameContent.ItemDropRules;
 
 namespace PoF.Content.NPCs.EoD;
 
@@ -17,6 +23,8 @@ public class EmpressOfDeath : ModNPC
         SummonAdds, // Ghosts (scale in speed), Ghouls (hung from noose, released after some time, verlet?), Gargoyles (bat but stronger)
         WhipAdds,
     }
+
+    private static Asset<Texture2D> RightHand;
 
     private Player Target => Main.player[NPC.target];
     private float LifeFactor => NPC.life / (float)NPC.lifeMax;
@@ -39,13 +47,19 @@ public class EmpressOfDeath : ModNPC
     private readonly HashSet<int> portalWhoAmI = [];
 
     private Vector2 storedPos = Vector2.Zero;
+    private int whipWho = -1;
+    private int targettedAdd = -1;
 
     public override void SetStaticDefaults()
     {
         Main.npcFrameCount[Type] = 1;
         NPCID.Sets.TrailCacheLength[Type] = 20;
         NPCID.Sets.TrailingMode[Type] = 3;
+
+        RightHand ??= ModContent.Request<Texture2D>(Texture + "_Hand_Right");
     }
+
+    public override void Unload() => RightHand = null;
 
     public override void SetDefaults()
     {
@@ -64,10 +78,14 @@ public class EmpressOfDeath : ModNPC
         NPC.DeathSound = SoundID.NPCDeath4;
     }
 
-    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.Info.AddRange([
-        BestiaryDatabaseNPCsPopulator.CommonTags.SpawnConditions.Biomes.Graveyard,
-        new FlavorTextBestiaryInfoElement("Death."),
-    ]);
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
+
+    public override void ModifyNPCLoot(NPCLoot npcLoot)
+    {
+        LeadingConditionRule notExpert = new(new Conditions.NotExpert());
+        notExpert.AddCommon<VoidRippers>();
+        npcLoot.Add(notExpert);
+    }
 
     public override void AI()
     {
@@ -83,13 +101,16 @@ public class EmpressOfDeath : ModNPC
 
                 if (switchState)
                 {
-                    SwitchState(Main.rand.NextBool(3) ? EoDState.TeleportDash : EoDState.SwordSpam);
+                    SwitchState(EoDState.SwordSpam);
 
                     if (AuraWho == -1 && (Main.expertMode || Main.rand.NextBool(6)))
                         SwitchState(EoDState.DeathAura);
 
-                    if (portalWhoAmI.Count < 4 && Main.rand.NextBool(4))
+                    if (portalWhoAmI.Count < 4 && Main.rand.NextBool(2))
                         SwitchState(EoDState.SummonAdds);
+
+                    if (portalWhoAmI.Count > 0 && Main.rand.NextBool(1))
+                        SwitchState(EoDState.WhipAdds);
                 }
 
                 break;
@@ -125,12 +146,15 @@ public class EmpressOfDeath : ModNPC
                 if (Timer == 1)
                 {
                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<EoDPortal>(), 0, 0, Main.myPlayer, 0, Main.rand.NextFloat(350, 500));
-
                     portalWhoAmI.Add(proj);
                 }
 
                 if (Timer > 30)
                     SwitchState(EoDState.Idle);
+                break;
+
+            case EoDState.WhipAdds:
+                WhipAdds();
                 break;
 
             default: // Spawn
@@ -143,6 +167,44 @@ public class EmpressOfDeath : ModNPC
 
         if (AuraWho == -1 || !Main.projectile[AuraWho].active || Main.projectile[AuraWho].type != ModContent.ProjectileType<DeathAura>())
             AuraWho = -1;
+    }
+
+    private void WhipAdds()
+    {
+        NPC.velocity *= 0.98f;
+
+        if (targettedAdd == -1)
+            targettedAdd = Main.rand.Next([..portalWhoAmI]);
+
+        int npcSlot = (int)Main.projectile[targettedAdd].ai[2];
+
+        if (npcSlot is (-2) or 0)
+        {
+            SwitchState(EoDState.Idle);
+            return;
+        }
+
+        NPC target = Main.npc[npcSlot];
+
+        if (!target.active)
+        {
+            SwitchState(EoDState.Idle);
+            return;
+        }
+
+        if (Timer < 60)
+        {
+            Vector2 targetPosition = target.Center + NPC.DirectionFrom(target.Center) * 300;
+            NPC.Center = Vector2.Lerp(NPC.Center, targetPosition, 0.04f);
+            NPC.rotation = (NPC.Center.X - targetPosition.X) * -0.001f;
+        }
+        else if (Timer == 60)
+        {
+            var vel = NPC.DirectionTo(target.Center) * 1.2f;
+            whipWho = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center + vel, vel, ModContent.ProjectileType<EoDWhip>(), 60, 0, Main.myPlayer, ai2: NPC.whoAmI);
+        }
+        else if (Timer >= 100)
+            SwitchState(EoDState.Idle);
     }
 
     private void SummonAura()
@@ -207,6 +269,7 @@ public class EmpressOfDeath : ModNPC
     {
         State = toState;
         Timer = 0;
+        targettedAdd = -1;
         NPC.TargetClosest(false);
     }
 
@@ -235,5 +298,10 @@ public class EmpressOfDeath : ModNPC
         }
 
         return true;
+    }
+
+    public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
+    {
+
     }
 }

@@ -1,4 +1,5 @@
-﻿using Steamworks;
+﻿using PoF.Common.Globals.ProjectileGlobals;
+using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -146,7 +147,11 @@ internal class StarfireTalisman : Talisman
 
         private ref float Time => ref Projectile.ai[2];
 
-        public override void SetStaticDefaults() => Main.projFrames[Type] = 4;
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Type] = 4;
+            TalismanGlobal.IsMinorTalismanProjectile.Add(Type);
+        }
 
         public override void SetDefaults()
         {

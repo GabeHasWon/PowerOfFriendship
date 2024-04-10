@@ -387,3 +387,13 @@ Hellmask: {
 		'Power courses through you.'
 		'''
 }
+
+VoidRippers: {
+	DisplayName: Void Rippers
+	Tooltip: ""
+}
+
+DarkOrb: {
+	DisplayName: Dark Orb
+	Tooltip: ""
+}

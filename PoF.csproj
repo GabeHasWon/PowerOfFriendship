@@ -9,9 +9,15 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Content\Items\Talismans\UnholyFlame.png" />
+    <None Remove="Content\NPCs\EoD\EoDWhip.png" />
     <None Remove="Localization\en-US_Mods.PoF.Items.hjson" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="tModLoader.CodeAssist" Version="0.1.*" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="NPCUtils">
+      <HintPath>lib\NPCUtils.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

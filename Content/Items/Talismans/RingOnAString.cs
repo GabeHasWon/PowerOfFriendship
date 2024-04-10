@@ -1,4 +1,5 @@
-﻿using ReLogic.Content;
+﻿using PoF.Common.Globals.ProjectileGlobals;
+using ReLogic.Content;
 using System.IO;
 using Terraria.GameContent;
 
@@ -154,7 +155,11 @@ internal class RingOnAString : Talisman
         private Vector2 dir = Vector2.Zero;
         private Vector2 offset = Vector2.Zero;
 
-        public override void SetStaticDefaults() => Main.projFrames[Type] = 24;
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Type] = 24;
+            TalismanGlobal.IsMinorTalismanProjectile.Add(Type);
+        }
 
         public override void SetDefaults()
         {

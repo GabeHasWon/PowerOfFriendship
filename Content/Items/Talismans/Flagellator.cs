@@ -136,12 +136,6 @@ internal class Flagellator : Talisman
 
         public override void Load() => On_Projectile.FillWhipControlPoints += HijackControlPointsForFlagellator;
 
-        /// <summary>
-        /// Maybe move this to AI
-        /// </summary>
-        /// <param name="orig"></param>
-        /// <param name="proj"></param>
-        /// <param name="controlPoints"></param>
         private void HijackControlPointsForFlagellator(On_Projectile.orig_FillWhipControlPoints orig, Projectile proj, List<Vector2> controlPoints)
         {
             if (proj.type != ModContent.ProjectileType<FlagellatorWhip>())
@@ -153,7 +147,6 @@ internal class Flagellator : Talisman
             // Brutal decompiled code, stolen from vanilla. Used to make this whip fire out of the controlled handle instead of the player
 
             Projectile.GetWhipSettings(proj, out var timeToFlyOut, out var segments, out var rangeMultiplier);
-            Main.NewText(proj.ai[0]);
             float swingTime = proj.ai[0] / timeToFlyOut;
             float num11 = 1.5f;
             float num12 = (float)Math.PI * 10f * (1f - swingTime * 1.5f) * (-proj.spriteDirection) / segments;

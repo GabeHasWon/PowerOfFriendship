@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PoF.Common.Globals.ProjectileGlobals;
+using System;
 using System.IO;
 using Terraria.Audio;
 using Terraria.GameContent;
@@ -210,7 +211,11 @@ internal class RelicOfIce : Talisman
         private Vector2 dir = Vector2.Zero;
         private Vector2 offset = Vector2.Zero;
 
-        public override void SetStaticDefaults() => Main.projFrames[Type] = 4;
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Type] = 4;
+            TalismanGlobal.IsMinorTalismanProjectile.Add(Type);
+        }
 
         public override void SetDefaults()
         {
@@ -271,7 +276,11 @@ internal class RelicOfIce : Talisman
 
     public class RelicSnowballs : RelicIceShards
     {
-        public override void SetStaticDefaults() => Main.projFrames[Type] = 3;
+        public override void SetStaticDefaults()
+        {
+            Main.projFrames[Type] = 3;
+            TalismanGlobal.IsMinorTalismanProjectile.Add(Type);
+        }
 
         public override void SetDefaults()
         {

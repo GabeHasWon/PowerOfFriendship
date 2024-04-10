@@ -1,4 +1,5 @@
-﻿using Terraria.Audio;
+﻿using PoF.Common.Globals.ProjectileGlobals;
+using Terraria.Audio;
 
 namespace PoF.Content.Items.Talismans;
 
@@ -97,6 +98,8 @@ internal class Catgrass : Talisman
             get => Projectile.ai[0] == 1;
             set => Projectile.ai[0] = value ? 1 : 0;
         }
+
+        public override void SetStaticDefaults() => TalismanGlobal.IsMinorTalismanProjectile.Add(Type);
 
         public override void SetDefaults()
         {

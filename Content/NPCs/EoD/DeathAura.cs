@@ -40,6 +40,12 @@ class DeathAura : ModProjectile
 
     public override void AI()
     {
+        if (!NPC.AnyNPCs(ModContent.NPCType<EmpressOfDeath>()))
+        {
+            Projectile.Kill();
+            return;
+        }
+
         if (!auraInitialized)
         {
             InitializeAura();

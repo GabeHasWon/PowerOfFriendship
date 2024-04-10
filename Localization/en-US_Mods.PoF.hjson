@@ -37,6 +37,8 @@ Projectiles: {
 	EoDPortal.DisplayName: Eo D Portal
 	SpinScythe.DisplayName: Spin Scythe
 	TelegraphSword.DisplayName: Telegraph Sword
+	EoDWhip.DisplayName: Eo D Whip
+	DarkDagger.DisplayName: Dark Dagger
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
@@ -53,7 +55,12 @@ SetBonuses: {
 }
 
 NPCs: {
-	EmpressOfDeath.DisplayName: Empress Of Death
+	EmpressOfDeath: {
+		DisplayName: Empress Of Death
+		Entry: ""
+	}
+
 	RottenGhoulHanging.DisplayName: Rotten Ghoul Hanging
 	RottenGhoul.DisplayName: Rotten Ghoul
+	DeathsHeadMoth.DisplayName: Deaths Head Moth
 }
