@@ -1,4 +1,6 @@
-﻿using System;
+﻿using NPCUtils;
+using System;
+using Terraria.GameContent.Bestiary;
 
 namespace PoF.Content.NPCs.EoD;
 
@@ -21,15 +23,17 @@ public class DeathsHeadMoth : ModNPC
 
     private ref float ChainDistance => ref NPC.ai[2];
 
+    internal float hitCount = 1;
+
     public override void SetStaticDefaults() => Main.npcFrameCount[NPC.type] = 4;
 
     public override void SetDefaults()
     {
         NPC.width = 26;
         NPC.height = 18;
-        NPC.damage = 0;
-        NPC.defense = 0;
-        NPC.lifeMax = 120;
+        NPC.damage = 40;
+        NPC.defense = 20;
+        NPC.lifeMax = 200;
         NPC.noGravity = true;
         NPC.noTileCollide = true;
         NPC.dontTakeDamage = false;
@@ -40,9 +44,14 @@ public class DeathsHeadMoth : ModNPC
         NPC.DeathSound = SoundID.Critter;
     }
 
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
+
     public override void AI()
     {
         NPC.direction = NPC.spriteDirection = -Math.Sign(Target.Center.X - NPC.Center.X);
+
+        if (IsChained && PortalWhoAmI == -1 || !Parent.active)
+            IsChained = false;
 
         if (IsChained)
         {
@@ -52,11 +61,42 @@ public class DeathsHeadMoth : ModNPC
             if (NPC.velocity.LengthSquared() > 12 * 12)
                 NPC.velocity = Vector2.Normalize(NPC.velocity) * 12;
 
-            if (NPC.DistanceSQ(Parent.Center) > (ChainDistance * ChainDistance) * (Parent.ModProjectile as EoDPortal).ExtendFactor)
+            if (NPC.DistanceSQ(Parent.Center) > ChainDistance * ChainDistance * (Parent.ModProjectile as EoDPortal).ExtendFactor)
                 NPC.velocity += NPC.DirectionTo(Parent.Center) * 2f;
 
             NPC.rotation = (Parent.ModProjectile as EoDPortal).endOfRopeRotation;
         }
+        else
+        {
+            NPC.TargetClosest();
+            NPC.velocity += NPC.DirectionTo(Target.Center) * (0.75f + hitCount * 0.25f);
+            NPC.rotation = NPC.velocity.ToRotation();
+
+            if (NPC.velocity.X < 0)
+            {
+                NPC.rotation += MathHelper.Pi;
+                NPC.spriteDirection = 1;
+            }
+            else
+                NPC.spriteDirection = -1;
+
+            float maxSpeed = 6 + hitCount;
+
+            if (NPC.velocity.LengthSquared() > maxSpeed * maxSpeed)
+                NPC.velocity = Vector2.Normalize(NPC.velocity) * maxSpeed;
+        }
+    }
+
+    public override bool CheckDead()
+    {
+        if (IsChained)
+        {
+            IsChained = false;
+            NPC.life = NPC.lifeMax;
+            return false;
+        }
+
+        return true;
     }
 
     public override void FindFrame(int frameHeight)
@@ -67,5 +107,16 @@ public class DeathsHeadMoth : ModNPC
 
     public override void HitEffect(NPC.HitInfo hit)
     {
+        for (int i = 0; i < 3; ++i)
+            Dust.NewDust(NPC.Center, 26, 18, DustID.Blood, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
+
+        if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
+        {
+            for (int i = 0; i < 10; ++i)
+                Dust.NewDust(NPC.Center, 26, 18, DustID.Blood, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
+
+            for (int i = 0; i < 3; ++i)
+                Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>($"{Name}" + i).Type, NPC.scale);
+        }
     }
 }

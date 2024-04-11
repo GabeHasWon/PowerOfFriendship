@@ -3,8 +3,6 @@ using PoF.Content.Items.Melee;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
-using System.Drawing.Printing;
-using Terraria;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
 using Terraria.GameContent.ItemDropRules;
@@ -24,7 +22,7 @@ public class EmpressOfDeath : ModNPC
         WhipAdds,
     }
 
-    private static Asset<Texture2D> RightHand;
+    private static Asset<Texture2D> Hands;
 
     private Player Target => Main.player[NPC.target];
     private float LifeFactor => NPC.life / (float)NPC.lifeMax;
@@ -44,11 +42,14 @@ public class EmpressOfDeath : ModNPC
         set => NPC.ai[3] = value;
     }
 
+    internal float leftHandOffset = 0;
+
     private readonly HashSet<int> portalWhoAmI = [];
 
     private Vector2 storedPos = Vector2.Zero;
     private int whipWho = -1;
     private int targettedAdd = -1;
+    private float visualTimer = 0;
 
     public override void SetStaticDefaults()
     {
@@ -56,16 +57,16 @@ public class EmpressOfDeath : ModNPC
         NPCID.Sets.TrailCacheLength[Type] = 20;
         NPCID.Sets.TrailingMode[Type] = 3;
 
-        RightHand ??= ModContent.Request<Texture2D>(Texture + "_Hand_Right");
+        Hands ??= ModContent.Request<Texture2D>(Texture + "_Hands");
     }
 
-    public override void Unload() => RightHand = null;
+    public override void Unload() => Hands = null;
 
     public override void SetDefaults()
     {
         NPC.width = 298;
         NPC.height = 256;
-        NPC.damage = 100;
+        NPC.damage = 0;
         NPC.defense = 35;
         NPC.lifeMax = 60000;
         NPC.noGravity = true;
@@ -90,12 +91,14 @@ public class EmpressOfDeath : ModNPC
     public override void AI()
     {
         Timer++;
-
+        visualTimer++;
         portalWhoAmI.RemoveWhere(x => !Main.projectile[x].active || Main.projectile[x].type != ModContent.ProjectileType<EoDPortal>());
 
         switch (State)
         {
             case EoDState.Idle:
+                leftHandOffset = MathHelper.Lerp(leftHandOffset, 0, 0.08f);
+
                 bool switchState = Timer > 120 - LifeFactor * 60;
                 IdleMovement(switchState);
 
@@ -103,14 +106,14 @@ public class EmpressOfDeath : ModNPC
                 {
                     SwitchState(EoDState.SwordSpam);
 
-                    if (AuraWho == -1 && (Main.expertMode || Main.rand.NextBool(6)))
-                        SwitchState(EoDState.DeathAura);
-
-                    if (portalWhoAmI.Count < 4 && Main.rand.NextBool(2))
+                    if (portalWhoAmI.Count < 8 && Main.rand.NextBool(3))
                         SwitchState(EoDState.SummonAdds);
 
-                    if (portalWhoAmI.Count > 0 && Main.rand.NextBool(1))
+                    if (portalWhoAmI.Count > 0 && Main.rand.NextBool(3))
                         SwitchState(EoDState.WhipAdds);
+
+                    if (AuraWho == -1 && (Main.expertMode || Main.rand.NextBool(6)))
+                        SwitchState(EoDState.DeathAura);
                 }
 
                 break;
@@ -145,7 +148,8 @@ public class EmpressOfDeath : ModNPC
 
                 if (Timer == 1)
                 {
-                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, ModContent.ProjectileType<EoDPortal>(), 0, 0, Main.myPlayer, 0, Main.rand.NextFloat(350, 500));
+                    int type = ModContent.ProjectileType<EoDPortal>();
+                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 0, 0, Main.myPlayer, 0, Main.rand.NextFloat(350, 500));
                     portalWhoAmI.Add(proj);
                 }
 
@@ -197,6 +201,7 @@ public class EmpressOfDeath : ModNPC
             Vector2 targetPosition = target.Center + NPC.DirectionFrom(target.Center) * 300;
             NPC.Center = Vector2.Lerp(NPC.Center, targetPosition, 0.04f);
             NPC.rotation = (NPC.Center.X - targetPosition.X) * -0.001f;
+            leftHandOffset = MathHelper.Lerp(leftHandOffset, 60, 0.05f);
         }
         else if (Timer == 60)
         {
@@ -235,14 +240,13 @@ public class EmpressOfDeath : ModNPC
 
     private void TeleportDash()
     {
-        // Teleport past the player, bats reconglomerate on the other side, cooldown
         const float FadeTime = 10f;
         const float TeleportTime = 30f;
 
         NPC.velocity *= 0.9f;
 
         if (Timer < FadeTime)
-            NPC.Opacity = 1 - (Timer / (FadeTime - 1));
+            NPC.Opacity = 1 - Timer / (FadeTime - 1);
         else if (Timer == FadeTime)
         {
             Vector2 dir = NPC.DirectionTo(Target.Center);
@@ -302,6 +306,21 @@ public class EmpressOfDeath : ModNPC
 
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
+        var tex = Hands.Value;
+        var pos = NPC.Center - screenPos;
+        var origin = new Vector2(40, -20 + MathF.Sin(visualTimer * 0.04f + 1.5f) * 10f) + tex.Size() / 4f;
+        Main.EntitySpriteDraw(tex, pos, new Rectangle(0, 0, 22, 26), Color.MediumPurple with { A = 0 }, NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0);
+        DrawLeftHand(tex, pos);
+    }
 
+    private void DrawLeftHand(Texture2D tex, Vector2 pos)
+    {
+        var origin = new Vector2(-40, -20 + MathF.Sin(visualTimer * 0.04f) * 10f + leftHandOffset) + tex.Size() / 4f;
+        var col = Color.MediumPurple with { A = 0 };
+
+        if (State != EoDState.WhipAdds)
+            Main.EntitySpriteDraw(tex, pos, new Rectangle(24, 0, 22, 26), col, NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0);
+        else
+            Main.EntitySpriteDraw(tex, pos, new Rectangle(2, 28, 16, 12), col, NPC.rotation, origin, NPC.scale, SpriteEffects.None, 0);
     }
 }

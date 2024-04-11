@@ -14,7 +14,7 @@ class DeathAura : ModProjectile
 
     public override string Texture => "Terraria/Images/NPC_0";
 
-    private static int MaxAuraPoints => 260;
+    private static int MaxAuraPoints => 460;
 
     private ref float Time => ref Projectile.ai[0];
     private ref float EoDOwner => ref Projectile.ai[1];
@@ -66,6 +66,28 @@ class DeathAura : ModProjectile
 
         for (int i = 0; i < MaxAuraPoints; i++)
             ModifySingleAuraPosition(i);
+
+        for (int i = 0; i < Main.maxPlayers; ++i)
+        {
+            Player plr = Main.player[i];
+            float dist = plr.DistanceSQ(Projectile.Center);
+
+            if (plr.active && !plr.dead && dist < 2400 * 2400 && dist > 1200 * 1200)
+            {
+                if (dist > 2300 * 2300)
+                {
+                    plr.Teleport(Projectile.Center, TeleportationStyleID.DemonConch);
+                    plr.SetImmuneTimeForAllTypes(60);
+                }
+                else
+                {
+                    plr.velocity += plr.DirectionTo(Projectile.Center);
+
+                    if (plr.velocity.LengthSquared() > 12 * 12)
+                        plr.velocity = Vector2.Normalize(plr.velocity * 12);
+                }
+            }
+        }
     }
 
     private void ModifySingleAuraPosition(int i)
@@ -79,7 +101,7 @@ class DeathAura : ModProjectile
         else
             auraPositions[i] *= Projectile.timeLeft / FadeOutTime * 1200f;
 
-        auraPositions[i] *= MathF.Sin((Time + i * 2f) * 0.12f) * 0.035f + 1f;
+        auraPositions[i] *= MathF.Sin((Time + i * 2f) * 0.14f) * 0.05f + 1f;
     }
 
     private void InitializeAura()
@@ -88,7 +110,7 @@ class DeathAura : ModProjectile
 
         for (int i = 0; i < MaxAuraPoints; ++i)
         {
-            float rot = i / (float)MaxAuraPoints * MathHelper.TwoPi * 3f;
+            float rot = i / (float)MaxAuraPoints * MathHelper.TwoPi * 10f;
             auraPositions.Add(new Vector2(0, 1).RotatedBy(rot));
             auraRotations.Add(rot);
         }
@@ -141,7 +163,7 @@ class DeathAura : ModProjectile
 
         private readonly Color StripColors(float progressOnStrip)
         {
-            var result = Color.Lerp(Color.Purple, Color.Black, MathF.Pow(MathF.Sin(progressOnStrip * 15), 2));
+            var result = Color.Lerp(Color.Purple, Color.Black, MathF.Pow(MathF.Sin(progressOnStrip * 15), 2) * 0.75f);
             result.A = (byte)(result.A * 0.7f);
 
             if (progressOnStrip < 0.1f)
@@ -149,6 +171,6 @@ class DeathAura : ModProjectile
             return result;
         }
 
-        private readonly float StripWidth(float progress) => 60;
+        private readonly float StripWidth(float progress) => 40;
     }
 }

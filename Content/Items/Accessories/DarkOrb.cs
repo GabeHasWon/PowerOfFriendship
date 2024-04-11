@@ -79,5 +79,7 @@ public class DarkOrb : ModItem
             Projectile.Center = Parent.Center + (Vector2.UnitY * 120).RotatedBy(BaseRot + Timer * 0.04f);
             Projectile.rotation = BaseRot + Timer * 0.04f - MathHelper.PiOver2;
         }
+
+        public override Color? GetAlpha(Color lightColor) => lightColor with { A = 0 };
     }
 }

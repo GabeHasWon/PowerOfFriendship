@@ -390,10 +390,14 @@ Hellmask: {
 
 VoidRippers: {
 	DisplayName: Void Rippers
-	Tooltip: ""
+	Tooltip: "'Tear through everything as if it's nothing.'"
 }
 
 DarkOrb: {
 	DisplayName: Dark Orb
-	Tooltip: ""
+	Tooltip:
+		'''
+		Talisman projectiles have three ethereal daggers orbit them, dealing additional damage
+		'Many have pondered where or when this is from. No one knows.'
+		'''
 }

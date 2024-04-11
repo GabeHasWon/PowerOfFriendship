@@ -55,7 +55,7 @@ public class EoDWhip : ModProjectile
         float useRange = 80 * swingTime * player.whipRangeMultiplier;
         float num16 = 8 * useRange * maxUseRange * rangeMultiplier / segments;
 
-        Vector2 npcCenter = ownerNpc.Center;
+        Vector2 npcCenter = ownerNpc.Center + new Vector2(60, 20) - new Vector2(24, 0 + (ownerNpc.ModNPC as EmpressOfDeath).leftHandOffset);
 
         Vector2 vector = npcCenter;
         float num2 = -(float)Math.PI / 2f;
@@ -101,6 +101,8 @@ public class EoDWhip : ModProjectile
         Projectile.hostile = true;
         Projectile.friendly = true;
     }
+
+    public override bool? CanHitNPC(NPC target) => target.type == ModContent.NPCType<EmpressOfDeath>() ? false : null;
 
     public override bool PreAI()
     {

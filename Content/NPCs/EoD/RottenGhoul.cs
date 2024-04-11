@@ -1,5 +1,9 @@
-﻿using System;
+﻿using NPCUtils;
+using PoF.Common.Globals.ProjectileGlobals;
+using PoF.Content.Items.Talismans;
+using System;
 using Terraria.Audio;
+using Terraria.GameContent.Bestiary;
 
 namespace PoF.Content.NPCs.EoD;
 
@@ -8,7 +12,13 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
     private Projectile Parent => Main.projectile[(int)NPC.ai[0]];
     private ref float Timer => ref NPC.ai[1];
 
-    public override void SetStaticDefaults() => Main.npcFrameCount[Type] = 2;
+    public override void SetStaticDefaults()
+    {
+        Main.npcFrameCount[Type] = 2;
+
+        var drawModifier = new NPCID.Sets.NPCBestiaryDrawModifiers() { Hide = true };
+        NPCID.Sets.NPCBestiaryDrawOffset.Add(NPC.type, drawModifier);
+    }
 
     public override void SetDefaults()
     {
@@ -50,8 +60,8 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
 
     private void SpawnSpit(float speedBoost, float rotation = 0f)
     {
-        Vector2 vel = NPC.DirectionTo(Main.player[NPC.target].Center).RotatedByRandom(rotation) * 6 * speedBoost;
-        int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(8, 10), vel, ProjectileID.SalamanderSpit, 30, 1f, Main.myPlayer);
+        Vector2 vel = NPC.DirectionTo(Main.player[NPC.target].Center).RotatedByRandom(rotation) * 5 * speedBoost;
+        int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(8, 10), vel, ModContent.ProjectileType<RottenGhoul.RottenSpit>(), 30, 1f, Main.myPlayer);
         Main.projectile[proj].extraUpdates++;
     }
 
@@ -98,12 +108,60 @@ public class RottenGhoul : ModNPC
         AIType = NPCID.DesertGhoul;
     }
 
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
+
     public override void HitEffect(NPC.HitInfo hit)
     {
-        if (NPC.life <= 0)
+        for (int i = 0; i < 3; ++i)
+            Dust.NewDust(NPC.Center, 26, 18, DustID.Blood, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
+
+        if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
         {
-            for (int i = 0; i < 6; ++i)
-                Dust.NewDust(NPC.Center, 26, 18, DustID.Grass, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
+            for (int i = 0; i < 10; ++i)
+                Dust.NewDust(NPC.Center, 26, 18, DustID.Blood, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
+
+            for (int i = 0; i < 3; ++i)
+                Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>($"{Name}" + i).Type, NPC.scale);
+            
+            Gore.NewGore(NPC.GetSource_Death(), NPC.position, NPC.velocity, Mod.Find<ModGore>($"{Name}1").Type, NPC.scale);
         }
+    }
+
+    public class RottenSpit : ModProjectile
+    {
+        const int MaxTimeLeft = 240;
+
+        private bool HitPlayer
+        {
+            get => Projectile.ai[0] == 1;
+            set => Projectile.ai[0] = value ? 1 : 0;
+        }
+
+        public override void SetDefaults()
+        {
+            Projectile.friendly = false;
+            Projectile.hostile = true;
+            Projectile.Size = new Vector2(16);
+            Projectile.tileCollide = false;
+            Projectile.penetrate = 3;
+            Projectile.timeLeft = MaxTimeLeft;
+            Projectile.Opacity = 0.8f;
+        }
+
+        public override void AI()
+        {
+            Projectile.rotation += 0.008f * Projectile.velocity.X;
+
+            if (Projectile.timeLeft < 15f)
+                Projectile.Opacity = Projectile.timeLeft / 15f * 0.8f;
+
+            if (HitPlayer)
+                Projectile.velocity.Y += 0.2f;
+
+            if (Main.rand.NextBool(6))
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.CorruptGibs);
+        }
+
+        public override void OnHitPlayer(Player target, Player.HurtInfo info) => HitPlayer = true;
     }
 }

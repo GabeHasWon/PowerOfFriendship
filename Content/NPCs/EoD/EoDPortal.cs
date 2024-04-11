@@ -54,8 +54,18 @@ class EoDPortal : ModProjectile
             Projectile.netUpdate = true;
         }
 
-        if (AttachedNPC == -2 || AttachedNPC != 0 && (!Main.npc[(int)AttachedNPC].active || Main.npc[(int)AttachedNPC].type != attachedType))
+        if (AttachedNPC == -2 || AttachedNPC != 0 && (!Main.npc[(int)AttachedNPC].active || Main.npc[(int)AttachedNPC].type != attachedType) || MothnotAttached())
         {
+            if (AttachedNPC != -2 && attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.netMode != NetmodeID.Server)
+            {
+                Vector2 start = Projectile.Center;
+                Vector2 middle = Vector2.Lerp(start, EndOfRope, 0.5f) + new Vector2(0, 150);
+                var bezier = Bezier.GetBezier(20, start, middle, EndOfRope);
+
+                foreach (var item in bezier)
+                    Gore.NewGore(Projectile.GetSource_FromAI(), item, Vector2.Zero, Mod.Find<ModGore>("Chain").Type);
+            }
+
             AttachedNPC = -2;
 
             if (retractionTime > 121)
@@ -75,6 +85,7 @@ class EoDPortal : ModProjectile
         }
     }
 
+    private bool MothnotAttached() => attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.npc[(int)AttachedNPC].ai[0] == 1;
     public override void DrawBehind(int index, List<int> nt, List<int> behindNPCs, List<int> bp, List<int> op, List<int> ow) => behindNPCs.Add(index);
 
     public override void PostDraw(Color lightColor)
@@ -88,6 +99,9 @@ class EoDPortal : ModProjectile
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color, rot, texture.Size() / 2f, 1 - i / 4f, SpriteEffects.None, 0);
         }
+
+        if (attachedType == ModContent.NPCType<DeathsHeadMoth>() && AttachedNPC == -2)
+            return;
 
         int tileType = attachedType == ModContent.NPCType<DeathsHeadMoth>() ? TileID.Chain : TileID.Rope;
         Main.instance.LoadTiles(TileID.Rope);

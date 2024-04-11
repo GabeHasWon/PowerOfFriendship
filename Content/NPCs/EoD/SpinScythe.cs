@@ -3,10 +3,8 @@ using Terraria.GameContent;
 
 namespace PoF.Content.NPCs.EoD;
 
-public class SpinScythe : ModProjectile
+public class TelegraphSword : ModProjectile
 {
-    protected virtual bool Spin => true;
-
     private ref float Timer => ref Projectile.ai[0];
 
     public override void SetStaticDefaults()
@@ -33,16 +31,16 @@ public class SpinScythe : ModProjectile
         Timer++;
 
         Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.02f);
+        Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
 
-        if (Spin)
-        {
-            if (Timer < 90)
-                Projectile.rotation -= 0.15f * Math.Sign(Projectile.velocity.X);
-            else
-                Projectile.rotation += 0.3f * Math.Sign(Projectile.velocity.X);
-        }
-        else
-            Projectile.rotation = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
+        if (Main.rand.NextBool(30))
+            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Gold);
+    }
+
+    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
+    {
+        Vector2 adjVel = Vector2.Normalize(Projectile.velocity) * 29;
+        return Collision.CheckAABBvLineCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.Center + adjVel, Projectile.Center - adjVel);
     }
 
     public override bool ShouldUpdatePosition() => Timer >= 90;
@@ -58,7 +56,7 @@ public class SpinScythe : ModProjectile
             var drawPos = Projectile.Center - Main.screenPosition;
             var origin = new Vector2(spotLight.Width / 2f, spotLight.Height / 2 + 12);
             float rot = Projectile.velocity.ToRotation() + MathHelper.PiOver2;
-            var color = Color.Gold with { A = 0 } * 0.7f;
+            var color = Color.Gold with { A = 0 } * 0.5f;
 
             if (Timer < 10)
                 color *= Timer / 10f;
@@ -78,24 +76,5 @@ public class SpinScythe : ModProjectile
         }
 
         return true;
-    }
-}
-
-public class TelegraphSword : SpinScythe
-{
-    protected override bool Spin => false;
-
-    public override void AI()
-    {
-        base.AI();
-
-        if (Main.rand.NextBool(30))
-            Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Gold);
-    }
-
-    public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
-    {
-        Vector2 adjVel = Vector2.Normalize(Projectile.velocity) * 29;
-        return Collision.CheckAABBvLineCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.Center + adjVel, Projectile.Center - adjVel);
     }
 }

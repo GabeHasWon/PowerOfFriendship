@@ -1,4 +1,5 @@
 ﻿using ReLogic.Content;
+using System.Collections.Generic;
 
 namespace PoF.Common;
 
@@ -25,5 +26,21 @@ public static class Bezier
             Main.spriteBatch.Draw(tex.Value, currentPos - Main.screenPosition, src, col, rot, src.Size() / 2f, 1f, SpriteEffects.None, 0);
             lastPos = currentPos;
         }
+    }
+
+    public static List<Vector2> GetBezier(float interations, Vector2 start, Vector2 middle, Vector2 end)
+    {
+        List<Vector2> positions = [];
+        Vector2 lastPos = start;
+
+        for (int i = 0; i <= interations; ++i)
+        {
+            float factor = i / interations;
+            var currentPos = Vector2.Lerp(Vector2.Lerp(start, middle, factor), Vector2.Lerp(middle, end, factor), factor);
+            positions.Add(lastPos);
+            lastPos = currentPos;
+        }
+
+        return positions;
     }
 }
