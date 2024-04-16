@@ -8,6 +8,7 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Assets\Effects\EoDWingFlap.fx" />
     <None Remove="Content\Items\Talismans\UnholyFlame.png" />
     <None Remove="Content\NPCs\EoD\EoDWhip.png" />
     <None Remove="Localization\en-US_Mods.PoF.Items.hjson" />

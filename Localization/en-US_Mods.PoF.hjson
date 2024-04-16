@@ -40,6 +40,7 @@ Projectiles: {
 	EoDWhip.DisplayName: Eo D Whip
 	DarkDagger.DisplayName: Dark Dagger
 	RottenSpit.DisplayName: Rotten Spit
+	Phantom.DisplayName: Phantom
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage

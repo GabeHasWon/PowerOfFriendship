@@ -104,7 +104,7 @@ class EoDPortal : ModProjectile
             return;
 
         int tileType = attachedType == ModContent.NPCType<DeathsHeadMoth>() ? TileID.Chain : TileID.Rope;
-        Main.instance.LoadTiles(TileID.Rope);
+        Main.instance.LoadTiles(tileType);
 
         var src = new Rectangle(94, 0, 8, 16);
         Vector2 start = Projectile.Center;
@@ -112,6 +112,6 @@ class EoDPortal : ModProjectile
             ? Vector2.Lerp(start, EndOfRope, 0.5f) + new Vector2(0, 150)
             : Projectile.Center + new Vector2(0, Length / 2f * ExtendFactor);
         var tex = TextureAssets.Tile[tileType];
-        Bezier.DrawBezier(tex, src, tileType == TileID.Chain ? 60 : 36, start, middle, EndOfRope, Color.White * Projectile.Opacity, out endOfRopeRotation);
+        Bezier.DrawBezier(tex, src, 36, start, middle, EndOfRope, Color.White * Projectile.Opacity, out endOfRopeRotation);
     }
 }

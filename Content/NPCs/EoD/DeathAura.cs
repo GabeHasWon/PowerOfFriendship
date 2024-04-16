@@ -12,9 +12,11 @@ class DeathAura : ModProjectile
     private const float FadeInTime = 120;
     private const float FadeOutTime = 240;
 
+    public NPC EmpressOwner => Main.npc[(int)EoDOwner];
+
     public override string Texture => "Terraria/Images/NPC_0";
 
-    private static int MaxAuraPoints => 460;
+    private static int MaxAuraPoints => 1200;
 
     private ref float Time => ref Projectile.ai[0];
     private ref float EoDOwner => ref Projectile.ai[1];
@@ -81,7 +83,7 @@ class DeathAura : ModProjectile
                 }
                 else
                 {
-                    plr.velocity += plr.DirectionTo(Projectile.Center);
+                    plr.velocity += plr.DirectionTo(Projectile.Center) * 2f;
 
                     if (plr.velocity.LengthSquared() > 12 * 12)
                         plr.velocity = Vector2.Normalize(plr.velocity * 12);
@@ -101,7 +103,7 @@ class DeathAura : ModProjectile
         else
             auraPositions[i] *= Projectile.timeLeft / FadeOutTime * 1200f;
 
-        auraPositions[i] *= MathF.Sin((Time + i * 2f) * 0.14f) * 0.05f + 1f;
+        auraPositions[i] *= MathF.Sin((Time + i * 4f) * 0.05f) * 0.05f + 1f;
     }
 
     private void InitializeAura()
@@ -119,11 +121,34 @@ class DeathAura : ModProjectile
     private Vector2[] GetRealAuraPositions()
     {
         Span<Vector2> positions = stackalloc Vector2[MaxAuraPoints];
+        float adjustment = 1;
+        float pullAngle = 0;
+
+        if (EmpressOwner.ai[0] == (float)EmpressOfDeath.EoDState.PullAura)
+        {
+            var owner = EmpressOwner.ModNPC as EmpressOfDeath;
+            adjustment = owner.auraPullStrength;
+            pullAngle = owner.auraPullAngle;
+        }
 
         for (int i = 0; i < MaxAuraPoints; ++i)
-            positions[i] = auraPositions[i] + Projectile.Center;
+        {
+            positions[i] = auraPositions[i];
+
+            if (adjustment != 1 && GetAngleIsValid(positions, pullAngle, i, out float distance))
+                positions[i] *= MathHelper.Lerp(adjustment, 1, distance);
+
+            positions[i] += Projectile.Center;
+        }
 
         return [..positions];
+    }
+
+    private static bool GetAngleIsValid(Span<Vector2> positions, float pullAngle, int i, out float distance)
+    {
+        float angle = positions[i].AngleTo(Vector2.Zero) + MathHelper.Pi;
+        distance = MathF.Pow(Math.Abs(angle - pullAngle) / MathHelper.PiOver4, 2);
+        return distance < MathHelper.PiOver4;
     }
 
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
@@ -163,7 +188,7 @@ class DeathAura : ModProjectile
 
         private readonly Color StripColors(float progressOnStrip)
         {
-            var result = Color.Lerp(Color.Purple, Color.Black, MathF.Pow(MathF.Sin(progressOnStrip * 15), 2) * 0.75f);
+            var result = Color.Lerp(Color.Purple, Color.DarkBlue, MathF.Pow(MathF.Sin(progressOnStrip * 15), 2) * 0.75f);
             result.A = (byte)(result.A * 0.7f);
 
             if (progressOnStrip < 0.1f)

@@ -31,7 +31,7 @@ public class DeathsHeadMoth : ModNPC
     {
         NPC.width = 26;
         NPC.height = 18;
-        NPC.damage = 40;
+        NPC.damage = 45;
         NPC.defense = 20;
         NPC.lifeMax = 200;
         NPC.noGravity = true;
@@ -87,6 +87,8 @@ public class DeathsHeadMoth : ModNPC
         }
     }
 
+    public override Color? GetAlpha(Color drawColor) => Color.Lerp(drawColor, Lighting.GetColor(NPC.Center.ToTileCoordinates()), MathF.Min(hitCount, 10) / 10f);
+
     public override bool CheckDead()
     {
         if (IsChained)
@@ -110,7 +112,7 @@ public class DeathsHeadMoth : ModNPC
         for (int i = 0; i < 3; ++i)
             Dust.NewDust(NPC.Center, 26, 18, DustID.Blood, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));
 
-        if (NPC.life <= 0 && Main.netMode != NetmodeID.Server)
+        if (NPC.life <= 0 && Main.netMode != NetmodeID.Server && !IsChained)
         {
             for (int i = 0; i < 10; ++i)
                 Dust.NewDust(NPC.Center, 26, 18, DustID.Blood, Main.rand.NextFloat(-3, 3), Main.rand.NextFloat(-3, 3));

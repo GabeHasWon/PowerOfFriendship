@@ -1,4 +1,6 @@
-﻿using NPCUtils;
+﻿using log4net.Util;
+using Microsoft.Xna.Framework.Graphics;
+using NPCUtils;
 using PoF.Content.Items.Melee;
 using ReLogic.Content;
 using System;
@@ -11,18 +13,24 @@ namespace PoF.Content.NPCs.EoD;
 
 public class EmpressOfDeath : ModNPC
 {
-    private enum EoDState : byte
+    public enum EoDState : byte
     {
         Spawn,
         Idle,
         TeleportDash,
         SwordSpam,
-        DeathAura, // Only accessible in first phase, normal mode
-        SummonAdds, // Ghosts (scale in speed), Ghouls (hung from noose, released after some time, verlet?), Gargoyles (bat but stronger)
+        DeathAura,
+        SummonAdds,
         WhipAdds,
+        // Second phase below
+        SpawnPhantoms,
+        PullAura,
     }
 
     private static Asset<Texture2D> Hands;
+    private static Asset<Texture2D> Wings;
+    private static Asset<Texture2D> TailWings;
+    private static Asset<Texture2D> Depth;
 
     private Player Target => Main.player[NPC.target];
     private float LifeFactor => NPC.life / (float)NPC.lifeMax;
@@ -43,6 +51,8 @@ public class EmpressOfDeath : ModNPC
     }
 
     internal float leftHandOffset = 0;
+    internal float auraPullAngle = 0;
+    internal float auraPullStrength = 0;
 
     private readonly HashSet<int> portalWhoAmI = [];
 
@@ -58,6 +68,9 @@ public class EmpressOfDeath : ModNPC
         NPCID.Sets.TrailingMode[Type] = 3;
 
         Hands ??= ModContent.Request<Texture2D>(Texture + "_Hands");
+        Wings ??= ModContent.Request<Texture2D>(Texture + "_Wings");
+        Depth ??= ModContent.Request<Texture2D>(Texture + "_Wings_Depths");
+        TailWings ??= ModContent.Request<Texture2D>(Texture + "_TailWings");
     }
 
     public override void Unload() => Hands = null;
@@ -77,6 +90,7 @@ public class EmpressOfDeath : ModNPC
         NPC.aiStyle = -1;
         NPC.HitSound = SoundID.Critter;
         NPC.DeathSound = SoundID.NPCDeath4;
+        NPC.Opacity = 0;
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
@@ -99,18 +113,18 @@ public class EmpressOfDeath : ModNPC
             case EoDState.Idle:
                 leftHandOffset = MathHelper.Lerp(leftHandOffset, 0, 0.08f);
 
-                bool switchState = Timer > 120 - LifeFactor * 60;
+                bool switchState = Timer > 120 - LifeFactor * 80;
                 IdleMovement(switchState);
 
                 if (switchState)
                 {
-                    SwitchState(EoDState.SwordSpam);
+                    SwitchState(DetermineNextState());
 
-                    if (portalWhoAmI.Count < 8 && Main.rand.NextBool(3))
-                        SwitchState(EoDState.SummonAdds);
+                    //if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 12 : 8) : 25) && Main.rand.NextBool(3))
+                    //    SwitchState(EoDState.SummonAdds);
 
-                    if (portalWhoAmI.Count > 0 && Main.rand.NextBool(3))
-                        SwitchState(EoDState.WhipAdds);
+                    //if (portalWhoAmI.Count > 0 && Main.rand.NextBool(3))
+                    //    SwitchState(EoDState.WhipAdds);
 
                     if (AuraWho == -1 && (Main.expertMode || Main.rand.NextBool(6)))
                         SwitchState(EoDState.DeathAura);
@@ -125,17 +139,19 @@ public class EmpressOfDeath : ModNPC
             case EoDState.SwordSpam:
                 IdleMovement(false);
 
-                if (Timer is > 30 and < 80)
+                float adjTime = Timer + LifeFactor * 30;
+
+                if (adjTime is > 30 and < 80)
                 {
-                    if (Timer % 3 == 0)
+                    if (adjTime % 3 == 0)
                     {
-                        float rot = (Timer - 30) / 80f * MathHelper.Pi - MathHelper.PiOver4;
+                        float rot = (adjTime - 30) / 80f * MathHelper.Pi - MathHelper.PiOver4;
                         var vel = NPC.DirectionTo(Target.Center).RotatedByRandom(0.2f).RotatedBy(rot * -Target.direction) * 14;
                         Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<TelegraphSword>(), 60, 0, Main.myPlayer);
                     }
                 }
 
-                if (Timer == 100)
+                if (adjTime > 100)
                     SwitchState(EoDState.Idle);
                 break;
 
@@ -161,8 +177,18 @@ public class EmpressOfDeath : ModNPC
                 WhipAdds();
                 break;
 
+            case EoDState.SpawnPhantoms:
+                SpawnPhantoms();
+                break;
+
+            case EoDState.PullAura:
+                PullAura();
+                break;
+
             default: // Spawn
                 AuraWho = -1;
+                NPC.Opacity = MathHelper.Lerp(NPC.Opacity, 1f, 0.1f);
+                NPC.velocity.Y = (1 - Timer / 120f) * -8;
 
                 if (Timer > 120)
                     SwitchState(EoDState.Idle);
@@ -171,6 +197,68 @@ public class EmpressOfDeath : ModNPC
 
         if (AuraWho == -1 || !Main.projectile[AuraWho].active || Main.projectile[AuraWho].type != ModContent.ProjectileType<DeathAura>())
             AuraWho = -1;
+    }
+
+    private void PullAura()
+    {
+        if (Timer == 1)
+        {
+            auraPullAngle = Main.rand.NextFloat(MathHelper.TwoPi);
+            auraPullStrength = 1;
+            NPC.netUpdate = true;
+        }
+
+        NPC.Center = Vector2.Lerp(NPC.Center, Main.projectile[AuraWho].Center, 0.02f);
+        NPC.velocity.X *= 0.9f;
+
+        if (Timer is > 10 and < 120)
+        {
+            auraPullStrength -= 0.01f;
+
+            if (auraPullStrength < 0.2f)
+                auraPullStrength = 0.2f;
+        }
+        else if (Timer is >= 480 and < 600)
+        {
+            auraPullStrength += 0.01f;
+
+            if (auraPullStrength > 1f)
+                auraPullStrength = 1f;
+        }
+        else if (Timer >= 600)
+            SwitchState(EoDState.Idle);
+
+        Dust.NewDust(Main.projectile[AuraWho].Center + new Vector2(1206 * auraPullStrength, 10).RotatedBy(auraPullAngle), 1, 1, DustID.BubbleBurst_Pink);
+    }
+
+    private void SpawnPhantoms()
+    {
+        IdleMovement(false);
+
+        if (Timer % 15 == 0)
+        {
+            int type = ModContent.ProjectileType<Phantom>();
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 0, 0, Main.myPlayer);
+        }
+
+        if (Timer > 70)
+            SwitchState(EoDState.Idle);
+    }
+
+    private EoDState DetermineNextState()
+    {
+        if (NPC.life > NPC.lifeMax / 2)
+            return EoDState.SwordSpam;
+
+        int random = Main.rand.Next(3);
+        random = 2;
+
+        return random switch
+        {
+            0 => EoDState.SwordSpam,
+            1 => EoDState.SpawnPhantoms,
+            _ => EoDState.PullAura,
+        };
     }
 
     private void WhipAdds()
@@ -286,6 +374,13 @@ public class EmpressOfDeath : ModNPC
 
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
+        if (NPC.IsABestiaryIconDummy)
+        {
+            Texture2D tex = TextureAssets.Npc[Type].Value;
+            Main.EntitySpriteDraw(tex, NPC.Center - screenPos + new Vector2(0, 50), null, drawColor, NPC.rotation, tex.Size() / 2f, NPC.scale, SpriteEffects.None, 0);
+            return true;
+        }
+
         Texture2D texture = TextureAssets.Npc[Type].Value;
         var drawOrigin = new Vector2(texture.Width * 0.5f, NPC.height * 0.5f);
 
@@ -299,10 +394,37 @@ public class EmpressOfDeath : ModNPC
             var fadeColor = Color.Lerp(Color.Lerp(drawColor, Color.Blue, factor), Color.Lerp(Color.Blue, Color.Transparent, factor), factor);
             Color color = NPC.GetAlpha(fadeColor) * ((NPC.oldPos.Length - k) / (float)NPC.oldPos.Length);
             Main.EntitySpriteDraw(texture, drawPos, null, color, NPC.rotation, drawOrigin, NPC.scale, SpriteEffects.None, 0);
+            //DrawWings(drawPos, color);
         }
 
+        DrawWings(NPC.Center - Main.screenPosition, drawColor);
         return true;
     }
+
+    private void DrawWings(Vector2 drawPos, Color color)
+    {
+        Main.EntitySpriteDraw(TailWings.Value, drawPos, null, color, NPC.rotation, TailWings.Size() / 2f, NPC.scale, SpriteEffects.None);
+
+        Effect effect = ModContent.Request<Effect>("PoF/Assets/Effects/EoDWingFlap").Value;
+
+        if (effect is null)
+            return;
+
+        Main.spriteBatch.End();
+        effect.Parameters["topWing"].SetValue(GetWingOffset(0) * 1f - 0.3f);
+        effect.Parameters["bottomWing"].SetValue(GetWingOffset(MathHelper.PiOver4) * 1.5f - 0.45f);
+        effect.Parameters["depthFactor"].SetValue(GetWingOffset(MathHelper.PiOver2) * 0.9f);
+        effect.Parameters["depthMap"].SetValue(Depth.Value);
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, Main.Rasterizer, effect, Main.GameViewMatrix.EffectMatrix);
+
+        var wingFrame = Wings.Value.Frame(1, 1, 0, 0, 0, 0);
+        Main.EntitySpriteDraw(Wings.Value, drawPos - new Vector2(0, 46), wingFrame, color, NPC.rotation, wingFrame.Size() / 2f, NPC.scale, SpriteEffects.None);
+
+        Main.spriteBatch.End();
+        Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, Main.DefaultSamplerState, DepthStencilState.None, Main.Rasterizer, null, Main.GameViewMatrix.TransformationMatrix);
+    }
+
+    private static float GetWingOffset(float off) => MathF.Pow(MathF.Sin(Main.GameUpdateCount * 0.15f + off), 2) * 0.4f;
 
     public override void PostDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
