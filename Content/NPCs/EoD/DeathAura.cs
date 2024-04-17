@@ -31,7 +31,7 @@ class DeathAura : ModProjectile
     {
         Projectile.friendly = false;
         Projectile.hostile = true;
-        Projectile.Size = new Vector2(34);
+        Projectile.Size = new Vector2(30);
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
         Projectile.timeLeft = 1200;
@@ -161,6 +161,12 @@ class DeathAura : ModProjectile
     {
         modifiers.HitDirectionOverride = 0;
         target.velocity = target.DirectionTo(Projectile.Center) * 16;
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info)
+    {
+        if (NPC.AnyNPCs(NPCID.HallowBoss))
+            target.AddBuff(BuffID.Blackout, 300);
     }
 
     public override bool PreDraw(ref Color lightColor)

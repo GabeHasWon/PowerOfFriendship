@@ -9,6 +9,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Assets\Effects\EoDWingFlap.fx" />
+    <None Remove="Content\Items\Blocks\SnakeTrophy.png" />
+    <None Remove="Content\Items\Blocks\SnakeTrophyItem.png" />
     <None Remove="Content\Items\Talismans\UnholyFlame.png" />
     <None Remove="Content\NPCs\EoD\EoDWhip.png" />
     <None Remove="Localization\en-US_Mods.PoF.Items.hjson" />

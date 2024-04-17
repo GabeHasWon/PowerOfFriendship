@@ -1,7 +1,11 @@
 ﻿using log4net.Util;
 using Microsoft.Xna.Framework.Graphics;
 using NPCUtils;
+using PoF.Content.Items.Blocks;
+using PoF.Content.Items.Magic;
 using PoF.Content.Items.Melee;
+using PoF.Content.Items.Ranged;
+using PoF.Content.Items.Talismans;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
@@ -15,6 +19,7 @@ public class EmpressOfDeath : ModNPC
 {
     public enum EoDState : byte
     {
+        // All phases
         Spawn,
         Idle,
         TeleportDash,
@@ -25,6 +30,7 @@ public class EmpressOfDeath : ModNPC
         // Second phase below
         SpawnPhantoms,
         PullAura,
+        CardinalDaggers,
     }
 
     private static Asset<Texture2D> Hands;
@@ -60,6 +66,7 @@ public class EmpressOfDeath : ModNPC
     private int whipWho = -1;
     private int targettedAdd = -1;
     private float visualTimer = 0;
+    private byte cardinalDir = 0;
 
     public override void SetStaticDefaults()
     {
@@ -94,11 +101,16 @@ public class EmpressOfDeath : ModNPC
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
+    public override void BossLoot(ref string name, ref int potionType) => potionType = ItemID.GreaterHealingPotion;
 
     public override void ModifyNPCLoot(NPCLoot npcLoot)
     {
+        //npcLoot.AddMasterModeRelicAndPet<VinewrathRelicItem, VinewrathPetItem>();
+        npcLoot.AddBossBag<EoDBag>();
+
         LeadingConditionRule notExpert = new(new Conditions.NotExpert());
-        notExpert.AddCommon<VoidRippers>();
+        notExpert.AddOneFromOptions<VoidRippers, KissOfDeath, BandOfCommitment, BlackDeath>();
+        notExpert.AddCommon<EoDTrophyItem>(10);
         npcLoot.Add(notExpert);
     }
 
@@ -139,7 +151,7 @@ public class EmpressOfDeath : ModNPC
             case EoDState.SwordSpam:
                 IdleMovement(false);
 
-                float adjTime = Timer + LifeFactor * 30;
+                float adjTime = Timer + (int)((1 - LifeFactor) * 30);
 
                 if (adjTime is > 30 and < 80)
                 {
@@ -185,18 +197,74 @@ public class EmpressOfDeath : ModNPC
                 PullAura();
                 break;
 
+            case EoDState.CardinalDaggers:
+                CardinalDaggers();
+                break;
+
             default: // Spawn
                 AuraWho = -1;
                 NPC.Opacity = MathHelper.Lerp(NPC.Opacity, 1f, 0.1f);
                 NPC.velocity.Y = (1 - Timer / 120f) * -8;
 
                 if (Timer > 120)
+                {
                     SwitchState(EoDState.Idle);
+
+                    if (Main.expertMode)
+                    {
+                        int type = ModContent.ProjectileType<SpinScythe>();
+
+                        for (int i = 0; i < 2; ++i)
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 40, 0, Main.myPlayer, NPC.whoAmI, 0, MathHelper.TwoPi / 2 * i);
+                    }
+                }
+
                 break;
         }
 
         if (AuraWho == -1 || !Main.projectile[AuraWho].active || Main.projectile[AuraWho].type != ModContent.ProjectileType<DeathAura>())
             AuraWho = -1;
+    }
+
+    private void CardinalDaggers()
+    {
+        if (Timer == 1)
+        {
+            cardinalDir = (byte)Main.rand.Next(4);
+            NPC.netUpdate = true;
+        }
+
+        NPC.velocity *= 0.8f;
+
+        if (Timer < 60)
+        {
+            NPC.Center = Vector2.Lerp(NPC.Center, Main.projectile[AuraWho].Center - cardinalDir switch
+            {
+                0 => new Vector2(1200, 0),
+                1 => new Vector2(-1200, 0),
+                2 => new Vector2(0, -1200),
+                _ => new Vector2(0, 1200)
+            }, 0.05f);
+        }
+        else if (Timer < 240)
+        {
+            NPC.Center = Vector2.Lerp(NPC.Center, Main.projectile[AuraWho].Center, 0.01f);
+
+            if (Timer % 10 == 0)
+            {
+                Vector2 vel = new Vector2(0, 14).RotatedBy(cardinalDir switch
+                {
+                    0 => 0,
+                    1 => MathHelper.Pi,
+                    2 => MathHelper.PiOver2,
+                    _ => MathHelper.Pi + MathHelper.PiOver2
+                });
+
+                Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, vel, ModContent.ProjectileType<TelegraphSword>(), 60, 0, Main.myPlayer);
+            }
+        }
+        else if (Timer >= 240)
+            SwitchState(EoDState.Idle);
     }
 
     private void PullAura()
@@ -238,7 +306,7 @@ public class EmpressOfDeath : ModNPC
         if (Timer % 15 == 0)
         {
             int type = ModContent.ProjectileType<Phantom>();
-            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 0, 0, Main.myPlayer);
+            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 20, 0, Main.myPlayer);
         }
 
         if (Timer > 70)
@@ -250,14 +318,14 @@ public class EmpressOfDeath : ModNPC
         if (NPC.life > NPC.lifeMax / 2)
             return EoDState.SwordSpam;
 
-        int random = Main.rand.Next(3);
+        int random = Main.rand.Next(5);
         random = 2;
 
         return random switch
         {
-            0 => EoDState.SwordSpam,
-            1 => EoDState.SpawnPhantoms,
-            _ => EoDState.PullAura,
+            0 or 1 => EoDState.SwordSpam,
+            2 => EoDState.CardinalDaggers,
+            3 or _ => EoDState.SpawnPhantoms,
         };
     }
 

@@ -18,29 +18,31 @@ Projectiles: {
 	ForlornThing.DisplayName: The Thing
 	ForlornSpit.DisplayName: Spit
 	ToothCreature.DisplayName: Tooth Creature
-	ShortswordOnAStringProj.DisplayName: Shortsword On A String Proj
+	ShortswordOnAStringProj.DisplayName: Shortsword
 	FlagellatorHandle.DisplayName: Flagellator Handle
-	FlagellatorWhip.DisplayName: Flagellator Whip
+	FlagellatorWhip.DisplayName: Flagellator
 	CatgrassBubble.DisplayName: Catgrass Bubble
-	CatgrassProj.DisplayName: Catgrass Proj
-	SpookySummoner.DisplayName: Spooky Summoner
-	DaggerCopy.DisplayName: Dagger Copy
+	CatgrassProj.DisplayName: Catgrass
+	SpookySummoner.DisplayName: Jerry Skelly
+	DaggerCopy.DisplayName: Jerry Skelly's Dagger
 	RingController.DisplayName: Ring Controller
-	RingButterfly.DisplayName: Ring Butterfly
-	SerpentOuroboros.DisplayName: Serpent Ouroboros
-	DukePish.DisplayName: Duke Pish
+	RingButterfly.DisplayName: Butterfly
+	SerpentOuroboros.DisplayName: Ouroboros
+	DukePish.DisplayName: Duke Pishrosh
 	StarfireInvader.DisplayName: Starfire Invader
 	StarfireShot.DisplayName: Starfire Shot
 	GhostSkull.DisplayName: Ghost Skull
 	AncientSpikeball.DisplayName: Ancient Spikeball
 	DeathAura.DisplayName: Death Aura
-	EoDPortal.DisplayName: Eo D Portal
+	EoDPortal.DisplayName: Deathly Portal
 	SpinScythe.DisplayName: Spin Scythe
 	TelegraphSword.DisplayName: Telegraph Sword
-	EoDWhip.DisplayName: Eo D Whip
+	EoDWhip.DisplayName: Whip ov Death
 	DarkDagger.DisplayName: Dark Dagger
 	RottenSpit.DisplayName: Rotten Spit
 	Phantom.DisplayName: Phantom
+	BlackHeart.DisplayName: Black Heart
+	KissOfDeathLance.DisplayName: Dark Lance
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
@@ -74,3 +76,5 @@ NPCs: {
 		Entry: A distant cousin to the Mothron, the Death's Head Moth is like a pet to the Empress of Death. Just one she loves to lose.
 	}
 }
+
+Tiles.EoDTrophy.MapEntry: Empress of Death Trophy

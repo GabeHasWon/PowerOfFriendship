@@ -1,5 +1,5 @@
 ﻿using System;
-using Terraria;
+using Terraria.Audio;
 using Terraria.GameContent;
 
 namespace PoF.Content.NPCs.EoD;
@@ -28,7 +28,7 @@ public class Phantom : ModProjectile
 
     public override void AI()
     {
-        if (Projectile.timeLeft > 30)
+        if (Projectile.timeLeft > 90)
         {
             Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.05f);
 
@@ -38,13 +38,32 @@ public class Phantom : ModProjectile
                 return;
 
             float speed = 1 - Projectile.timeLeft / (float)MaxTimeLeft;
-            Projectile.velocity += Projectile.DirectionTo(nearest.Center) * (0.5f + 3 * speed);
+            Projectile.velocity += Projectile.DirectionTo(nearest.Center) * (0.25f + 1 * speed);
 
-            if (Projectile.velocity.LengthSquared() > MathF.Pow(6f + 6f * speed, 2))
-                Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (6f + 6f * speed);
+            if (Projectile.velocity.LengthSquared() > MathF.Pow(5f + 5f * speed, 2))
+                Projectile.velocity = Vector2.Normalize(Projectile.velocity) * (5f + 5f * speed);
         }
         else
+        {
             Projectile.velocity *= 0.9f;
+
+            if (Projectile.timeLeft == 5)
+            {
+                for (int i = 0; i < 28; ++i)
+                    Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Phantasmal, Main.rand.NextFloat(-8, 8), Main.rand.NextFloat(-8, 8));
+
+                SoundEngine.PlaySound(SoundID.NPCDeath6 with { Volume = Main.rand.NextFloat(0.8f, 1f), PitchRange = (-0.6f, 0.2f) }, Projectile.Center);
+
+                Projectile.Resize(240, 240);
+                Projectile.hide = true;
+            }
+        }
+    }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo info)
+    {
+        if (Projectile.timeLeft > 5)
+            Projectile.timeLeft = 5;
     }
 
     public override Color? GetAlpha(Color lightColor) => lightColor with { A = 0 };

@@ -401,3 +401,43 @@ DarkOrb: {
 		'Many have pondered where or when this is from. No one knows.'
 		'''
 }
+
+BandOfCommitment: {
+	DisplayName: Band Of Commitment
+	Tooltip:
+		'''
+		Fires a barrage of shadow hearts
+		'A little too big for your finger.'
+		'''
+}
+
+KissOfDeath: {
+	DisplayName: Kiss Of Death
+	Tooltip:
+		'''
+		Conjures a dark lance to fight for you
+		The lance moves ridiculously fast
+		The lance deals more damage the faster it's moving
+		'This is uncomfortable to use for so many reasons.'
+		'''
+}
+
+EoDTrophyItem: {
+	DisplayName: Empress of Death Trophy
+	Tooltip: ""
+}
+
+EoDBag: {
+	DisplayName: Teasure Bag (Empress of Death)
+	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
+}
+
+BlackDeath: {
+	DisplayName: Black Death
+	Tooltip: 
+		'''
+		Uses rockets as ammo
+		Has a 33% chance to fire twice
+		'Slow but insidious.'
+		'''
+}

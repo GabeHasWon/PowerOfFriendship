@@ -19,7 +19,7 @@ public class DarkOrb : ModItem
     {
         public bool equipped = false;
 
-        public override void ResetEffects() => equipped = true;
+        public override void ResetEffects() => equipped = false;
     }
 
     class OrbProjectile : GlobalProjectile
@@ -69,7 +69,7 @@ public class DarkOrb : ModItem
                 Projectile.ai[0] = -1;
                 Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0f, 0.1f);
 
-                if (Projectile.Opacity < 0.03f)
+                if (Projectile.Opacity < 0.036f)
                     Projectile.Kill();
 
                 return;
