@@ -44,8 +44,8 @@ public class SpinScythe : ModProjectile
         dist += 2f;
         Timer++;
 
-        if (dist > 200)
-            dist = 200;
+        if (dist > 100)
+            dist = 100;
 
         Projectile.Center = Owner.Center + new Vector2(0, dist).RotatedBy(Timer * 0.02f + RotationOffset);
     }

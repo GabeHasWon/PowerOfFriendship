@@ -167,6 +167,9 @@ class DeathAura : ModProjectile
     {
         if (NPC.AnyNPCs(NPCID.HallowBoss))
             target.AddBuff(BuffID.Blackout, 300);
+
+        if (Main.expertMode)
+            target.AddBuff(BuffID.Darkness, 240);
     }
 
     public override bool PreDraw(ref Color lightColor)

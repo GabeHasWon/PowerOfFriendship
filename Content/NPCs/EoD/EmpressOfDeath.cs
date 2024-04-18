@@ -132,11 +132,11 @@ public class EmpressOfDeath : ModNPC
                 {
                     SwitchState(DetermineNextState());
 
-                    //if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 12 : 8) : 25) && Main.rand.NextBool(3))
-                    //    SwitchState(EoDState.SummonAdds);
+                    if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 12 : 8) : 25) && Main.rand.NextBool(3))
+                        SwitchState(EoDState.SummonAdds);
 
-                    //if (portalWhoAmI.Count > 0 && Main.rand.NextBool(3))
-                    //    SwitchState(EoDState.WhipAdds);
+                    if (portalWhoAmI.Count > 0 && Main.rand.NextBool(3))
+                        SwitchState(EoDState.WhipAdds);
 
                     if (AuraWho == -1 && (Main.expertMode || Main.rand.NextBool(6)))
                         SwitchState(EoDState.DeathAura);
@@ -248,7 +248,13 @@ public class EmpressOfDeath : ModNPC
         }
         else if (Timer < 240)
         {
-            NPC.Center = Vector2.Lerp(NPC.Center, Main.projectile[AuraWho].Center, 0.01f);
+            NPC.Center = Vector2.Lerp(NPC.Center, Main.projectile[AuraWho].Center + cardinalDir switch
+            {
+                0 => new Vector2(1200, 0),
+                1 => new Vector2(-1200, 0),
+                2 => new Vector2(0, -1200),
+                _ => new Vector2(0, 1200)
+            }, 0.01f);
 
             if (Timer % 10 == 0)
             {
@@ -319,7 +325,6 @@ public class EmpressOfDeath : ModNPC
             return EoDState.SwordSpam;
 
         int random = Main.rand.Next(5);
-        random = 2;
 
         return random switch
         {

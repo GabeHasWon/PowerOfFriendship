@@ -43,6 +43,12 @@ public class TelegraphSword : ModProjectile
         return Collision.CheckAABBvLineCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.Center + adjVel, Projectile.Center - adjVel);
     }
 
+    public override void OnHitPlayer(Player target, Player.HurtInfo info)
+    {
+        if (Main.expertMode)
+            target.AddBuff(BuffID.BrokenArmor, 120);
+    }
+
     public override bool ShouldUpdatePosition() => Timer >= 90;
 
     public override bool PreDraw(ref Color lightColor)

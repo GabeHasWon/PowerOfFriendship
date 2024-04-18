@@ -434,7 +434,7 @@ EoDBag: {
 
 BlackDeath: {
 	DisplayName: Black Death
-	Tooltip: 
+	Tooltip:
 		'''
 		Uses rockets as ammo
 		Has a 33% chance to fire twice

@@ -89,6 +89,12 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
 
         Timer = 1;
     }
+
+    public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
+    {
+        if (Main.expertMode)
+            target.AddBuff(BuffID.Darkness, 240);
+    }
 }
 
 public class RottenGhoul : ModNPC

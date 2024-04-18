@@ -64,6 +64,9 @@ public class Phantom : ModProjectile
     {
         if (Projectile.timeLeft > 5)
             Projectile.timeLeft = 5;
+
+        if (Main.expertMode)
+            target.AddBuff(BuffID.Weak, 60);
     }
 
     public override Color? GetAlpha(Color lightColor) => lightColor with { A = 0 };
