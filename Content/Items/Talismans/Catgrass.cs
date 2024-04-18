@@ -46,6 +46,7 @@ internal class Catgrass : Talisman
             Projectile.penetrate = -1;
             Projectile.aiStyle = -1;
             Projectile.hide = true;
+            Projectile.tileCollide = false;
         }
 
         public override bool? CanCutTiles() => false;
@@ -68,7 +69,7 @@ internal class Catgrass : Talisman
                     {
                         var dir = new Vector2(owner.direction * 8, 0);
                         int type = ModContent.ProjectileType<CatgrassBubble>();
-                        var pos = owner.Center + dir;
+                        var pos = owner.Center + dir - new Vector2(0, 6);
                         int proj = Projectile.NewProjectile(Projectile.GetSource_FromAI(), pos, dir / 2, type, Projectile.damage, 4f, Projectile.owner);
 
                         if (Main.netMode == NetmodeID.MultiplayerClient)
@@ -138,7 +139,8 @@ internal class Catgrass : Talisman
 
             if (Projectile.scale < 1f)
                 Projectile.scale *= 1.04f;
-            
+
+            Projectile.tileCollide = Projectile.scale >= 0.99f;
             Projectile.netUpdate = true;
             Projectile.rotation = Projectile.velocity.X * 0.05f;
 

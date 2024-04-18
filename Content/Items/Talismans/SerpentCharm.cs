@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Terraria.GameContent;
@@ -115,12 +116,13 @@ internal class SerpentCharm : Talisman
             {
                 if (Main.myPlayer == Projectile.owner)
                 {
-                    const float Speed = 8;
+                    float dist = Projectile.Distance(Main.MouseWorld);
+                    float speed = 8 * (dist > 80 ? 1f : dist / 80f);
 
                     Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld) * 1.2f;
 
-                    if (Projectile.velocity.LengthSquared() > Speed * Speed)
-                        Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
+                    if (Projectile.velocity.LengthSquared() > speed * speed)
+                        Projectile.velocity = Projectile.velocity.SafeNormalize() * speed;
                 }
 
                 Despawning = HandleBasicFunctions<SerpentCharm>(Projectile, ref Time, 1.5f);

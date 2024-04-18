@@ -53,7 +53,9 @@ internal class KissOfDeath : Talisman
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 15;
+            Projectile.extraUpdates = 2;
             Projectile.tileCollide = false;
+            Projectile.aiStyle = -1;
         }
 
         public override bool? CanCutTiles() => false;
@@ -64,12 +66,13 @@ internal class KissOfDeath : Talisman
 
             if (!Despawning)
             {
+                Projectile.velocity = Vector2.Zero;
                 Projectile.rotation = Rotation;
 
                 if (Main.myPlayer == Projectile.owner)
                 {
                     Vector2 oldPos = Projectile.Center;
-                    Projectile.Center = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.15f);
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.05f);
 
                     if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<KissOfDeath>())
                         Projectile.Center += MovementSpeed();
@@ -84,7 +87,7 @@ internal class KissOfDeath : Talisman
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.Clentaminator_Purple, Projectile.velocity.X, Projectile.velocity.Y);
 
                 if (Despawning)
-                    Projectile.velocity = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.15f) - Projectile.Center;
+                    Projectile.velocity = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.05f) - Projectile.Center;
             }
             else
             {

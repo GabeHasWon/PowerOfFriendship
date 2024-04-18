@@ -66,6 +66,8 @@ internal class ShortswordOnAString : Talisman
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 12;
+            Projectile.aiStyle = -1;
+            Projectile.extraUpdates = 1;
         }
 
         public override bool? CanCutTiles() => false;
@@ -74,12 +76,13 @@ internal class ShortswordOnAString : Talisman
         {
             if (!Despawning)
             {
+                Projectile.velocity = Vector2.Zero;
                 Projectile.rotation = Rotation;
 
                 if (Main.myPlayer == Projectile.owner)
                 {
                     Vector2 oldPos = Projectile.Center;
-                    Projectile.Center = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.15f);
+                    Projectile.Center = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.075f);
 
                     if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<ShortswordOnAString>())
                         Projectile.Center += Projectile.DirectionTo(Projectile.Owner().Center) * (Projectile.Distance(Projectile.Owner().Center) - GetRange<ShortswordOnAString>());
@@ -111,7 +114,7 @@ internal class ShortswordOnAString : Talisman
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
             {
-                Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length);
                 Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
@@ -178,6 +181,7 @@ internal class ShortswordOnAString : Talisman
                     num5 = distance - 8f;
                     runWhile = false;
                 }
+
                 distance = 12f / distance;
                 num *= distance;
                 num2 *= distance;
