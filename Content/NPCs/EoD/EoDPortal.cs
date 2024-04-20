@@ -1,6 +1,7 @@
 ﻿using PoF.Common;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using Terraria.GameContent;
 using Terraria.GameContent.RGB;
 
@@ -19,6 +20,7 @@ class EoDPortal : ModProjectile
     private int attachedType = 0;
     internal float endOfRopeRotation = 0;
     internal float retractionTime = 0;
+    private bool _spawnedNPC = false;
 
     public override void SetStaticDefaults() => ProjectileID.Sets.DrawScreenCheckFluff[Type] = 1600;
 
@@ -39,22 +41,30 @@ class EoDPortal : ModProjectile
     {
         Projectile.rotation += 0.1f;
         Projectile.timeLeft = 2;
-        Time++; 
+        Time++;
 
-        if (AttachedNPC == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+        Lighting.AddLight(Projectile.Center, new Vector3(0.25f, 0.25f, 0.05f));
+
+        if (!_spawnedNPC && Main.netMode != NetmodeID.MultiplayerClient)
         {
-            bool isMoth = !Main.rand.NextBool(2);
+            bool isMoth = true;// !Main.rand.NextBool(2);
             attachedType = !isMoth ? ModContent.NPCType<RottenGhoulHanging>() : ModContent.NPCType<DeathsHeadMoth>();
 
             if (isMoth)
-                AttachedNPC = NPC.NewNPC(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, attachedType, 0, 0, Projectile.whoAmI, 250);
+                AttachedNPC = NPC.NewNPC(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, attachedType, 0, 0, Projectile.identity, 250);
             else
-                AttachedNPC = NPC.NewNPC(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, attachedType, 0, Projectile.whoAmI);
+                AttachedNPC = NPC.NewNPC(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, attachedType, 0, Projectile.identity);
 
-            Projectile.netUpdate = true;
+            if (Main.netMode == NetmodeID.Server)
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, (int)AttachedNPC);
+
+            _spawnedNPC = Projectile.netUpdate = true;
         }
 
-        if (AttachedNPC == -2 || AttachedNPC != 0 && (!Main.npc[(int)AttachedNPC].active || Main.npc[(int)AttachedNPC].type != attachedType) || MothnotAttached())
+        if (!_spawnedNPC)
+            return;
+
+        if (AttachedNPC == -2 || (!Main.npc[(int)AttachedNPC].active || Main.npc[(int)AttachedNPC].type != attachedType) || MothNotAttached())
         {
             if (AttachedNPC != -2 && attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.netMode != NetmodeID.Server)
             {
@@ -82,11 +92,26 @@ class EoDPortal : ModProjectile
             retractionTime++;
 
             Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.02f);
+
+            if (AttachedNPC != 0 && !MothNotAttached())
+                (Main.npc[(int)AttachedNPC].ModNPC as DeathsHeadMoth).UpdateFromParent();
         }
     }
 
-    private bool MothnotAttached() => attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.npc[(int)AttachedNPC].ai[0] == 1;
+    private bool MothNotAttached() => attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.npc[(int)AttachedNPC].ai[0] == 1;
     public override void DrawBehind(int index, List<int> nt, List<int> behindNPCs, List<int> bp, List<int> op, List<int> ow) => behindNPCs.Add(index);
+
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write(_spawnedNPC);
+        writer.Write((short)attachedType);
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        _spawnedNPC = reader.ReadBoolean();
+        attachedType = reader.ReadInt16();
+    }
 
     public override void PostDraw(Color lightColor)
     {
@@ -94,7 +119,7 @@ class EoDPortal : ModProjectile
         {
             Texture2D texture = TextureAssets.Projectile[Type].Value;
             float factor = i / 3f;
-            var color = Color.Lerp(Color.White, Color.Black, factor) * Projectile.Opacity;
+            var color = Color.Lerp(Lighting.GetColor(Projectile.Center.ToTileCoordinates()), Color.Black, factor) * Projectile.Opacity;
             float rot = Projectile.rotation * (i % 2 == 0 ? -1 : 1) + i * MathHelper.PiOver4;
 
             Main.spriteBatch.Draw(texture, Projectile.Center - Main.screenPosition, null, color, rot, texture.Size() / 2f, 1 - i / 4f, SpriteEffects.None, 0);

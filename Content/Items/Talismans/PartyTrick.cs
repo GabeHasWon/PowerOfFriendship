@@ -11,7 +11,7 @@ internal class PartyTrick : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 38;
+        Item.damage = 42;
         Item.useTime = 16;
         Item.useAnimation = 16;
         Item.mana = 6;
@@ -28,7 +28,8 @@ internal class PartyTrick : Talisman
 
     private class PartyTrickBalloon : ModProjectile
     {
-        private static int[] BuffIds = [BuffID.OnFire, BuffID.Midas, BuffID.Poisoned, BuffID.Lovestruck, BuffID.Wet, BuffID.Venom, BuffID.Ichor, BuffID.CursedInferno, BuffID.Frostburn];
+        private static readonly int[] BuffIds = [BuffID.OnFire, BuffID.Midas, BuffID.Poisoned, BuffID.Lovestruck, BuffID.Wet, BuffID.Venom, BuffID.Ichor, 
+            BuffID.CursedInferno, BuffID.Frostburn];
 
         private bool Despawning
         {
@@ -69,7 +70,7 @@ internal class PartyTrick : Talisman
                 {
                     const float Speed = 12;
 
-                    Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld) * 0.8f;
+                    Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld) * 1.25f;
 
                     if (Projectile.velocity.LengthSquared() > Speed * Speed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;

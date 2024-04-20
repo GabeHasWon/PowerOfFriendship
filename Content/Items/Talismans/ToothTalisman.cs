@@ -10,10 +10,16 @@ internal class ToothTalisman : Talisman
 {
     protected override float TileRange => 50;
 
+    public override void SetStaticDefaults()
+    {
+        base.SetStaticDefaults();
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ForlornEffigy>();
+    }
+
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 49;
+        Item.damage = 42;
         Item.useTime = 13;
         Item.useAnimation = 13;
         Item.mana = 7;

@@ -1,19 +1,17 @@
-﻿using PoF.Common.Globals.ProjectileGlobals;
-using PoF.Content.Items.Talismans;
-
-namespace PoF.Content.Items.Magic;
+﻿namespace PoF.Content.Items.Magic;
 
 class BandOfCommitment : ModItem
 {
     public override void SetDefaults()
     {
         Item.CloneDefaults(ItemID.TopazStaff);
-        Item.damage = 56;
-        Item.useTime = 2;
-        Item.useAnimation = 10;
-        Item.reuseDelay = 40;
+        Item.damage = 78;
+        Item.useTime = 1;
+        Item.useAnimation = 5;
+        Item.reuseDelay = 20;
         Item.shoot = ModContent.ProjectileType<BlackHeart>();
         Item.shootSpeed = 14;
+        Item.rare = ItemRarityID.Purple;
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)

@@ -41,4 +41,16 @@ internal static class Utilities
 
         return npc != null;
     }
+
+    public static int ToActualDamage(float damageValue, float expertScaling = 1, float masterScaling = 1)
+    {
+        if (Main.masterMode)
+            damageValue = damageValue / 6 * masterScaling;
+        else if (Main.expertMode)
+            damageValue = damageValue / 4 * expertScaling;
+        else
+            damageValue /= 2;
+
+        return (int)damageValue;
+    }
 }

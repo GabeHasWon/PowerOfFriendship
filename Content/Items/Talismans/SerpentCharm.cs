@@ -16,7 +16,7 @@ internal class SerpentCharm : Talisman
         Item.damage = 90;
         Item.useTime = 13;
         Item.useAnimation = 13;
-        Item.mana = 7;
+        Item.mana = 5;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<SerpentOuroboros>();
         Item.knockBack = 0.8f;
@@ -103,7 +103,6 @@ internal class SerpentCharm : Talisman
         }
 
         public override bool? CanCutTiles() => false;
-        public override bool? CanDamage() => Utilities.CanHitLine(Projectile, Projectile.Owner()) ? null : false;
 
         public override void AI()
         {
@@ -169,7 +168,7 @@ internal class SerpentCharm : Talisman
 
         public override bool PreDraw(ref Color lightColor)
         {
-            if (_segments.Count == 0)
+            if (_segments.Count == 0 && !Despawning)
                 SpawnBody();
 
             foreach (var item in _segments)

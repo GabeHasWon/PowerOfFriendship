@@ -11,10 +11,10 @@ internal class KissOfDeath : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 70;
+        Item.damage = 16;
         Item.useTime = 16;
         Item.useAnimation = 16;
-        Item.mana = 6;
+        Item.mana = 3;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<KissOfDeathLance>();
         Item.shootSpeed = 5;
@@ -100,7 +100,7 @@ internal class KissOfDeath : Talisman
         }
 
         private Vector2 MovementSpeed() => Projectile.DirectionTo(Projectile.Owner().Center) * (Projectile.Distance(Projectile.Owner().Center) - GetRange<KissOfDeath>());
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.FinalDamage += (Projectile.Center - Projectile.oldPos[0]).Length() / 150f;
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.FinalDamage += MathF.Pow(((Projectile.Center - Projectile.oldPos[0]).Length() - 15) / 12f, 1.75f);
 
         public override bool PreDraw(ref Color lightColor)
         {
@@ -113,7 +113,7 @@ internal class KissOfDeath : Talisman
                 if (k % 2 == 1)
                     continue;
 
-                Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * 0.8f;
                 Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }

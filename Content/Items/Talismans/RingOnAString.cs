@@ -12,7 +12,7 @@ internal class RingOnAString : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Purple;
-        Item.damage = 30;
+        Item.damage = 36;
         Item.useTime = 30;
         Item.useAnimation = 30;
         Item.mana = 8;
@@ -100,6 +100,8 @@ internal class RingOnAString : Talisman
 
                     if (Projectile.velocity.LengthSquared() > Speed * Speed)
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
+
+                    Projectile.velocity *= 0.99f;
                 }
 
                 Despawning = HandleBasicFunctions<RingOnAString>(Projectile, ref Time, 1.5f);

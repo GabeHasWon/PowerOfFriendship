@@ -1,7 +1,6 @@
 ﻿using PoF.Content.Items.Whips;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace PoF.Content.Items.Talismans;
 
@@ -12,10 +11,10 @@ internal class Flagellator : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Purple;
-        Item.damage = 62;
-        Item.useTime = 30;
-        Item.useAnimation = 30;
-        Item.mana = 8;
+        Item.damage = 78;
+        Item.useTime = 18;
+        Item.useAnimation = 18;
+        Item.mana = 6;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<FlagellatorHandle>();
         Item.shootSpeed = 5;
@@ -26,13 +25,10 @@ internal class Flagellator : Talisman
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient(ItemID.HallowedBar, 12)
-            .AddTile(TileID.MythrilAnvil)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.HallowedBar, 12)
+        .AddTile(TileID.MythrilAnvil)
+        .Register();
 
     private class FlagellatorHandle : ModProjectile
     {
@@ -146,10 +142,10 @@ internal class Flagellator : Talisman
 
             // Brutal decompiled code, stolen from vanilla. Used to make this whip fire out of the controlled handle instead of the player
 
-            Projectile.GetWhipSettings(proj, out var timeToFlyOut, out var segments, out var rangeMultiplier);
+            Projectile.GetWhipSettings(proj, out float timeToFlyOut, out int segments, out float rangeMultiplier);
             float swingTime = proj.ai[0] / timeToFlyOut;
             float num11 = 1.5f;
-            float num12 = (float)Math.PI * 10f * (1f - swingTime * 1.5f) * (-proj.spriteDirection) / segments;
+            float num12 = (float)Math.PI * 10f * (1f - swingTime * 1.5f) * -proj.spriteDirection / segments;
             float maxUseRange = swingTime * 1.5f;
             float num14 = 0f;
 
@@ -163,7 +159,7 @@ internal class Flagellator : Talisman
             Projectile ownerProjectile = Main.projectile[(int)proj.ai[2]];
             Item heldItem = player.HeldItem;
 
-            float useRange = (ContentSamples.ItemsByType[heldItem.type].useAnimation * 2) * swingTime * player.whipRangeMultiplier;
+            float useRange = ContentSamples.ItemsByType[heldItem.type].useAnimation * 2 * swingTime * player.whipRangeMultiplier;
             float num16 = 8 * useRange * maxUseRange * rangeMultiplier / segments;
 
             Vector2 projectileCenter = ownerProjectile.type == ModContent.ProjectileType<FlagellatorHandle>() 
@@ -187,8 +183,8 @@ internal class Flagellator : Talisman
                 Vector2 val = vector2 + num3.ToRotationVector2() * (num16 * 2f);
                 float num7 = 1f - maxUseRange;
                 float num8 = 1f - num7 * num7;
-                Vector2 value = Vector2.Lerp(vector5, vector4, num8 * 0.9f + 0.1f);
-                Vector2 vector6 = Vector2.Lerp(val, value, num8 * 0.7f + 0.3f);
+                var value = Vector2.Lerp(vector5, vector4, num8 * 0.9f + 0.1f);
+                var vector6 = Vector2.Lerp(val, value, num8 * 0.7f + 0.3f);
                 Vector2 spinPoint = projectileCenter + (vector6 - projectileCenter) * new Vector2(1f, num11);
                 float num9 = num14;
                 num9 *= num9;

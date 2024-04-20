@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.Localization;
@@ -17,10 +15,10 @@ internal class SpookyBoard : Talisman
     {
         Item.Size = new(54, 22);
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 80;
-        Item.useTime = 23;
-        Item.useAnimation = 23;
-        Item.mana = 16;
+        Item.damage = 92;
+        Item.useTime = 16;
+        Item.useAnimation = 16;
+        Item.mana = 7;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<SpookySummoner>();
         Item.shootSpeed = 5;
@@ -279,12 +277,14 @@ internal class SpookyBoard : Talisman
                     TargetOrTimer = attackTarget;
                     Projectile.netUpdate = true;
                 }
+
                 float targetAngle = Projectile.velocity.SafeNormalize(Vector2.UnitY).ToRotation() + (float)Math.PI / 2f;
                 if (directionToParent.Length() < 40f)
                     targetAngle = Vector2.UnitY.ToRotation() + (float)Math.PI / 2f;
                 Projectile.rotation = Projectile.rotation.AngleLerp(targetAngle, 0.2f);
                 return false;
             }
+
             if (State == -1f)
             {
                 if (TargetOrTimer == 0f)
@@ -294,14 +294,17 @@ internal class SpookyBoard : Talisman
                     {
                         Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror,
                             Projectile.oldVelocity.X * 0.2f, Projectile.oldVelocity.Y * 0.2f, 0, default, 1.4f);
+
                         if (!Main.rand.NextBool(3))
                         {
                             dust.scale *= 1.3f;
                             dust.velocity *= 1.1f;
                         }
+
                         dust.noGravity = true;
                         dust.fadeIn = 0f;
                     }
+
                     Projectile.velocity += Main.rand.NextVector2CircularEdge(4f, 4f);
                 }
 
@@ -314,6 +317,7 @@ internal class SpookyBoard : Talisman
                     Projectile.ai[0] = 0f;
                     TargetOrTimer = 0f;
                 }
+
                 return false;
             }
 

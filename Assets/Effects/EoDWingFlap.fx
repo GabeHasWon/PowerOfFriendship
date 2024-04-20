@@ -3,6 +3,7 @@ float topWing;
 float bottomWing;
 texture depthMap;
 float depthFactor;
+float opacity;
 
 sampler2D depthSampler = sampler_state
 {
@@ -18,7 +19,7 @@ float4 main(float2 uv : TEXCOORD) : COLOR
     float4 color = tex2D(tex, location);
     float4 depth = tex2D(depthSampler, location);
     color = lerp(color, float4(0, 0, 0, 1), (1 - depth.r) * depthFactor) * color.a;
-    return color;
+    return color * opacity;
 }
 
 technique SpriteDrawing

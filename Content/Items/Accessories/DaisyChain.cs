@@ -19,7 +19,7 @@ public class DaisyChain : ModItem
     {
         public bool equipped = false;
 
-        public override void ResetEffects() => equipped = true;
+        public override void ResetEffects() => equipped = false;
     }
 
     class DaisyProjectile : GlobalProjectile

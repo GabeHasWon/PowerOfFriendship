@@ -11,7 +11,7 @@ internal class IcemanEmblem : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 14;
+        Item.damage = 12;
         Item.useTime = 15;
         Item.useAnimation = 15;
         Item.mana = 6;

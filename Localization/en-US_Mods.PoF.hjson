@@ -61,7 +61,7 @@ SetBonuses: {
 NPCs: {
 	EmpressOfDeath: {
 		DisplayName: Empress Of Death
-		Entry: Death. Oversees all that is, wishing for it to be not. She's polite in her efficiency.
+		Entry: Death. Oversees all that is, wishing for it to not be. She's polite in her efficiency.
 	}
 
 	RottenGhoulHanging.DisplayName: Rotten Ghoul Hanging
@@ -73,7 +73,7 @@ NPCs: {
 
 	DeathsHeadMoth: {
 		DisplayName: Death's Head Moth
-		Entry: A distant cousin to the Mothron, the Death's Head Moth is like a pet to the Empress of Death. Just one she loves to lose.
+		Entry: A distant cousin to the Mothron, the Death's Head Moth is like a pet to the Empress of Death. One she loves to lose.
 	}
 }
 

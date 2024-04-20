@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Operations;
-using System;
+﻿using System;
 using Terraria.GameContent;
 
 namespace PoF.Content.Items.Talismans;
@@ -11,7 +10,7 @@ internal class ShortswordOnAString : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Purple;
-        Item.damage = 68;
+        Item.damage = 60;
         Item.useTime = 16;
         Item.useAnimation = 16;
         Item.mana = 5;
@@ -65,7 +64,7 @@ internal class ShortswordOnAString : Talisman
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 12;
+            Projectile.localNPCHitCooldown = 18;
             Projectile.aiStyle = -1;
             Projectile.extraUpdates = 1;
         }

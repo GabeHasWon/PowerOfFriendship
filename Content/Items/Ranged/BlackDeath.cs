@@ -5,7 +5,7 @@ public class BlackDeath : ModItem
 {
     public override void SetDefaults()
     {
-        Item.damage = 120;
+        Item.damage = 301;
         Item.DamageType = DamageClass.Ranged;
         Item.Size = new Vector2(70, 26);
         Item.useTime = Item.useAnimation = 100;

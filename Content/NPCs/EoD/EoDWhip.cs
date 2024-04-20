@@ -35,11 +35,10 @@ public class EoDWhip : ModProjectile
         }
 
         // Brutal decompiled code, stolen from vanilla. Used to make this whip fire out of the controlled handle instead of the player
-
-        Projectile.GetWhipSettings(proj, out var timeToFlyOut, out var segments, out var rangeMultiplier);
+        Projectile.GetWhipSettings(proj, out float timeToFlyOut, out int segments, out float rangeMultiplier);
         float swingTime = proj.ai[0] / timeToFlyOut;
         float num11 = 1.5f;
-        float num12 = (float)Math.PI * 10f * (1f - swingTime * 1.5f) * (-proj.spriteDirection) / segments;
+        float num12 = (float)Math.PI * 10f * (1f - swingTime * 1.5f) * -proj.spriteDirection / segments;
         float maxUseRange = swingTime * 1.5f;
         float num14 = 0f;
 
@@ -54,6 +53,12 @@ public class EoDWhip : ModProjectile
 
         float useRange = 80 * swingTime * player.whipRangeMultiplier;
         float num16 = 8 * useRange * maxUseRange * rangeMultiplier / segments;
+
+        if (ownerNpc.ModNPC is not EmpressOfDeath)
+        {
+            proj.Kill();
+            return;
+        }
 
         Vector2 npcCenter = ownerNpc.Center + new Vector2(60, 20) - new Vector2(24, 0 + (ownerNpc.ModNPC as EmpressOfDeath).leftHandOffset);
 

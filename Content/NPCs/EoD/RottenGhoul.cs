@@ -1,6 +1,4 @@
 ﻿using NPCUtils;
-using PoF.Common.Globals.ProjectileGlobals;
-using PoF.Content.Items.Talismans;
 using System;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
@@ -33,6 +31,8 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
         NPC.value = 0;
         NPC.knockBackResist = 0f;
         NPC.aiStyle = -1;
+        NPC.HitSound = SoundID.NPCHit37;
+        NPC.DeathSound = SoundID.NPCDeath40;
     }
 
     public override void AI()
@@ -50,6 +50,9 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
 
         Timer++;
 
+        if (Timer > 20 * 60)
+            NPC.Transform(ModContent.NPCType<RottenGhoul>());
+
         if (Main.expertMode && Timer % 360 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
         {
             NPC.TargetClosest();
@@ -61,7 +64,8 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
     private void SpawnSpit(float speedBoost, float rotation = 0f)
     {
         Vector2 vel = NPC.DirectionTo(Main.player[NPC.target].Center).RotatedByRandom(rotation) * 5 * speedBoost;
-        int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(8, 10), vel, ModContent.ProjectileType<RottenGhoul.RottenSpit>(), 30, 1f, Main.myPlayer);
+        int damage = Utilities.ToActualDamage(40, 2f, 3);
+        int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center - new Vector2(8, 10), vel, ModContent.ProjectileType<RottenGhoul.RottenSpit>(), damage, 1f, Main.myPlayer);
         Main.projectile[proj].extraUpdates++;
     }
 
@@ -88,6 +92,12 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
             SpawnSpit(Main.rand.NextFloat(1.1f, 1.7f), Main.rand.NextFloat(-0.2f, 0.2f));
 
         Timer = 1;
+    }
+
+    public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
+    {
+        if (projectile.type == ModContent.ProjectileType<EoDWhip>())
+            modifiers.FinalDamage *= 0.5f;
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)

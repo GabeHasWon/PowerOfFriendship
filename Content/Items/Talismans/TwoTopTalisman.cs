@@ -100,7 +100,7 @@ internal class TwoTopTalisman : Talisman
 
                 if (KillTime == 30)
                 {
-                    bool canPay = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana * 6, true);
+                    bool canPay = Projectile.Owner().CheckMana(Projectile.Owner().HeldItem.mana * 8, true);
                     Projectile.Owner().manaRegenDelay = (int)Projectile.Owner().maxRegenDelay;
 
                     if (Main.myPlayer == Projectile.owner)

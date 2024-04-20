@@ -25,7 +25,7 @@ internal class UnholyAmulet : Talisman
         Item.damage = 32;
         Item.useTime = 16;
         Item.useAnimation = 16;
-        Item.mana = 5;
+        Item.mana = 7;
         Item.UseSound = SoundID.DD2_BetsyFireballShot;
         Item.shoot = ModContent.ProjectileType<UnholyFlame>();
         Item.shootSpeed = 5;
@@ -212,7 +212,7 @@ internal class UnholyAmulet : Talisman
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 15;
+            Projectile.localNPCHitCooldown = 30;
             Projectile.timeLeft = MaxTimeLeft;
             Projectile.Opacity = 0f;
             Projectile.tileCollide = false;

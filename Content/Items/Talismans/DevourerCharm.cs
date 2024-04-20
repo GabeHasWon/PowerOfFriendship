@@ -8,10 +8,16 @@ internal class DevourerCharm : Talisman
 {
     protected override float TileRange => 25;
 
+    public override void SetStaticDefaults()
+    {
+        base.SetStaticDefaults();
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<HemophilicHatch>();
+    }
+
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 20;
+        Item.damage = 18;
         Item.useTime = 13;
         Item.useAnimation = 13;
         Item.mana = 7;
@@ -26,14 +32,11 @@ internal class DevourerCharm : Talisman
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient(ItemID.DemoniteBar, 10)
-            .AddIngredient(ItemID.RottenChunk, 8)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.DemoniteBar, 10)
+        .AddIngredient(ItemID.RottenChunk, 8)
+        .AddTile(TileID.Anvils)
+        .Register();
 
     private class EaterOfTreats : ModProjectile
     {
@@ -144,10 +147,7 @@ internal class DevourerCharm : Talisman
             }
         }
 
-        public override void DrawBehind(int index, List<int> behindNPCsAndTiles, List<int> behindNPCs, List<int> behindProjs, List<int> players, List<int> wires)
-        {
-            behindNPCsAndTiles.Add(index);
-        }
+        public override void DrawBehind(int index, List<int> bNT, List<int> behindNPCs, List<int> behindProjs, List<int> players, List<int> wires) => bNT.Add(index);
 
         public override bool PreDraw(ref Color lightColor)
         {

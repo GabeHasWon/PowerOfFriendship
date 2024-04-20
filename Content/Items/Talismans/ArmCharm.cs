@@ -10,10 +10,10 @@ internal class ArmCharm : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 26;
+        Item.damage = 28;
         Item.useTime = 15;
         Item.useAnimation = 15;
-        Item.mana = 9;
+        Item.mana = 6;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<Humerus>();
         Item.shootSpeed = 5;
@@ -22,15 +22,12 @@ internal class ArmCharm : Talisman
         Item.value = Item.buyPrice(0, 0, 30);
     }
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient(ItemID.Bone, 30)
-            .AddIngredient(ItemID.Cobweb, 8)
-            .AddIngredient(ItemID.Chain, 6)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.Bone, 30)
+        .AddIngredient(ItemID.Cobweb, 8)
+        .AddIngredient(ItemID.Chain, 6)
+        .AddTile(TileID.WorkBenches)
+        .Register();
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
@@ -43,7 +40,6 @@ internal class ArmCharm : Talisman
         }
 
         private ref float Time => ref Projectile.ai[1];
-        private ref float KillTime => ref Projectile.ai[2];
 
         public override void SetDefaults()
         {

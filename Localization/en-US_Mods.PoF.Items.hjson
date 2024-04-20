@@ -181,7 +181,7 @@ RelicOfIce: {
 		'''
 		Conjures Frosty the Iceman's storm to fight for you
 		The storm hits very rapidly and Frosty's image inflicts Frostburn
-		'Exalted, Frosty rose. No longer shackled to snow, He lives.'		
+		'Exalted, Frosty rose. No longer shackled to snow, He lives.'
 		'''
 }
 
@@ -190,7 +190,7 @@ ForlornEffigy: {
 	Tooltip:
 		'''
 		Conjures the Thing to fight for you
-		The Thing will spit out globs of flesh that are on cursed flames, are coated in ichor, or inflict Frostburn
+		The Thing will spit out globs of flesh that are on fire, are coated in ichor, or inflict Frostburn
 		'What is it? I don't know! Go have fun!'
 		'''
 }
@@ -223,7 +223,7 @@ Flagellator: {
 		Conjures a Flagellator to fight for you
 		The Flagellator will automatically aim at and whip nearby enemies
 		This whip counts as a talisman instead of a normal whip
-		'Imagine finding this in a decrepit castle? A jumpscare of ages.'
+		'Ancient, ornate - despite being crafted by you very recently.'
 		'''
 }
 
@@ -361,7 +361,7 @@ SpikedGuardianRobe: {
 }
 
 SpikedGuardianRobeGreen: {
-	DisplayName: Spiked Guardian Robe Green
+	DisplayName: Spiked Guardian Robe
 	Tooltip:
 		'''
 		+10% whip-only damage
@@ -370,7 +370,7 @@ SpikedGuardianRobeGreen: {
 }
 
 SpikedGuardianRobePink: {
-	DisplayName: Spiked Guardian Robe Pink
+	DisplayName: Spiked Guardian Robe
 	Tooltip:
 		'''
 		+10% talisman-only damage
@@ -438,6 +438,6 @@ BlackDeath: {
 		'''
 		Uses rockets as ammo
 		Has a 33% chance to fire twice
-		'Slow but insidious.'
+		'Slow, but insidious.'
 		'''
 }

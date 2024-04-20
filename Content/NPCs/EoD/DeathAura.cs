@@ -34,7 +34,7 @@ class DeathAura : ModProjectile
         Projectile.Size = new Vector2(30);
         Projectile.tileCollide = false;
         Projectile.penetrate = -1;
-        Projectile.timeLeft = 1200;
+        Projectile.timeLeft = 60 * 10;
         Projectile.Opacity = 0f;
     }
 
@@ -169,7 +169,10 @@ class DeathAura : ModProjectile
             target.AddBuff(BuffID.Blackout, 300);
 
         if (Main.expertMode)
-            target.AddBuff(BuffID.Darkness, 240);
+        {
+            target.AddBuff(BuffID.Blackout, 300); 
+            target.AddBuff(BuffID.Darkness, 600);
+        }
     }
 
     public override bool PreDraw(ref Color lightColor)

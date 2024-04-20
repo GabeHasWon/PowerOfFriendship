@@ -5,14 +5,14 @@ namespace PoF.Content.Items.Talismans;
 
 internal class Catgrass : Talisman
 {
-    const int MaxFireRate = 100;
+    const int MaxFireRate = 80;
 
     protected override float TileRange => 60;
 
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 120;
+        Item.damage = 280;
         Item.useTime = Item.useAnimation = MaxFireRate;
         Item.mana = 20;
         Item.shoot = ModContent.ProjectileType<CatgrassProj>();
@@ -61,7 +61,7 @@ internal class Catgrass : Talisman
 
             if (!Despawning)
             {
-                Despawning = HandleBasicFunctions<Catgrass>(Projectile, ref Time, 0.45f);
+                HandleBasicFunctions<Catgrass>(Projectile, ref Time, 0.45f, false);
 
                 if (Time == owner.HeldItem.useTime / 2)
                 {
@@ -77,7 +77,12 @@ internal class Catgrass : Talisman
                     }
 
                     SoundEngine.PlaySound(SoundID.Item85, Projectile.Center);
+
+                    if (!PayMana(Projectile))
+                        Despawning = true;
                 }
+                else if (Time > owner.HeldItem.useTime)
+                    Time = 0;
             }
             else
             {

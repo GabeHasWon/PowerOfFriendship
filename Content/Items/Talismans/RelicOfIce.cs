@@ -27,16 +27,13 @@ internal class RelicOfIce : Talisman
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient<IcemanEmblem>()
-            .AddIngredient(ItemID.FrostCore, 1)
-            .AddIngredient(ItemID.SoulofLight, 5)
-            .AddIngredient(ItemID.SoulofNight, 5)
-            .AddTile(TileID.MythrilAnvil)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient<IcemanEmblem>()
+        .AddIngredient(ItemID.FrostCore, 1)
+        .AddIngredient(ItemID.SoulofLight, 5)
+        .AddIngredient(ItemID.SoulofNight, 5)
+        .AddTile(TileID.MythrilAnvil)
+        .Register();
 
     private class RelicOfFrosty : ModProjectile
     {
@@ -161,7 +158,7 @@ internal class RelicOfIce : Talisman
         {
             Main.instance.LoadProjectile(Projectile.type);
             Texture2D texture = TextureAssets.Projectile[Projectile.type].Value;
-            Vector2 drawOrigin = new Vector2(42, 52);
+            var drawOrigin = new Vector2(42, 52);
             Color baseColor = Projectile.GetAlpha(lightColor);
 
             for (int k = 0; k < Projectile.oldPos.Length; k++)
@@ -169,7 +166,7 @@ internal class RelicOfIce : Talisman
                 if (k % 2 == 0)
                     continue;
 
-                Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = baseColor * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * 0.5f;
                 Main.EntitySpriteDraw(texture, drawPos, null, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);
             }
@@ -187,7 +184,7 @@ internal class RelicOfIce : Talisman
             {
                 var col = Lighting.GetColor(Projectile.Center.ToTileCoordinates(), AuraColor[i]) with { A = 0 } * Projectile.Opacity;
                 float mul = (i + 1) * 0.33f;
-                float rotation = Main.GameUpdateCount * (0.08f + (i * 0.1f)) + i;
+                float rotation = Main.GameUpdateCount * (0.08f + i * 0.1f) + i;
 
                 Main.EntitySpriteDraw(tex, pos, null, col * mul * 0.7f, rotation, tex.Size() / 2f, 1.5f - mul + Projectile.scale, SpriteEffects.None, 0);
             }

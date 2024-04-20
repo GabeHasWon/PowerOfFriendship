@@ -57,6 +57,9 @@ public class SpinScythe : ModProjectile
 
         for (int k = 0; k < Projectile.oldPos.Length; k++)
         {
+            if (k % 2 == 0)
+                continue;
+
             Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
             var baseCol = Color.Lerp(lightColor, Color.Black, k / (float)(Projectile.oldPos.Length - 1));
             Color color = Projectile.GetAlpha(baseCol) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * Projectile.Opacity;

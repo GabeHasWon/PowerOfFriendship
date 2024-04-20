@@ -40,7 +40,8 @@ public class TelegraphSword : ModProjectile
     public override bool? Colliding(Rectangle projHitbox, Rectangle targetHitbox)
     {
         Vector2 adjVel = Vector2.Normalize(Projectile.velocity) * 29;
-        return Collision.CheckAABBvLineCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.Center + adjVel, Projectile.Center - adjVel);
+        float _ = 0;
+        return Collision.CheckAABBvLineCollision(targetHitbox.Location.ToVector2(), targetHitbox.Size(), Projectile.Center + adjVel, Projectile.Center - adjVel, 12, ref _);
     }
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info)

@@ -65,6 +65,15 @@ internal abstract class Talisman : ModItem
         return paidMana;
     }
 
+    /// <summary>
+    /// Handles all basic functionality of a given Talisman projectile, like net syncing, paying mana, respecting range, and more.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="projectile"></param>
+    /// <param name="time"></param>
+    /// <param name="returnVelocity"></param>
+    /// <param name="autoPayMana"></param>
+    /// <returns>Whether the projectile should start despawning.</returns>
     public static bool HandleBasicFunctions<T>(Projectile projectile, ref float time, float? returnVelocity, bool autoPayMana = true) where T : Talisman
     {
         bool paidMana = true;

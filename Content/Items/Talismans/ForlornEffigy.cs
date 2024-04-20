@@ -1,7 +1,5 @@
 ﻿using PoF.Common.Globals.ProjectileGlobals;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Terraria.Audio;
 using Terraria.GameContent;
 
@@ -11,10 +9,16 @@ internal class ForlornEffigy : Talisman
 {
     protected override float TileRange => 50;
 
+    public override void SetStaticDefaults()
+    {
+        base.SetStaticDefaults();
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<ToothTalisman>();
+    }
+
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 57;
+        Item.damage = 38;
         Item.useTime = 15;
         Item.useAnimation = 15;
         Item.mana = 6;
@@ -28,15 +32,12 @@ internal class ForlornEffigy : Talisman
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient<RelicOfIce>()
-            .AddIngredient<UnholyAmulet>()
-            .AddIngredient<HemophilicHatch>()
-            .AddTile(TileID.MythrilAnvil)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient<RelicOfIce>()
+        .AddIngredient<UnholyAmulet>()
+        .AddIngredient<HemophilicHatch>()
+        .AddTile(TileID.MythrilAnvil)
+        .Register();
 
     private class ForlornThing : ModProjectile
     {
@@ -65,7 +66,7 @@ internal class ForlornEffigy : Talisman
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
-            Projectile.localNPCHitCooldown = 15;
+            Projectile.localNPCHitCooldown = 20;
         }
 
         public override bool? CanCutTiles() => false;
@@ -112,9 +113,13 @@ internal class ForlornEffigy : Talisman
                         SoundEngine.PlaySound(SoundID.NPCDeath13 with { Volume = 0.5f, PitchRange = (-0.2f, 0.2f) }, Projectile.Center);
 
                     ProjectileTime = 0;
+
+                    if (!PayMana(Projectile))
+                        Despawning = true;
                 }
 
-                Despawning = HandleBasicFunctions<ForlornEffigy>(Projectile, ref Time, 1.3f);
+                if (!Despawning && HandleBasicFunctions<ForlornEffigy>(Projectile, ref Time, 1.3f))
+                    Despawning = true;
 
                 if (Time % 6 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, ChooseDust(), Projectile.velocity.X, Projectile.velocity.Y);

@@ -4,13 +4,19 @@ internal class HemophilicHatch : Talisman
 {
     protected override float TileRange => 25;
 
+    public override void SetStaticDefaults()
+    {
+        base.SetStaticDefaults();
+        ItemID.Sets.ShimmerTransformToItem[Type] = ModContent.ItemType<DevourerCharm>();
+    }
+
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
         Item.damage = 18;
         Item.useTime = 10;
         Item.useAnimation = 10;
-        Item.mana = 7;
+        Item.mana = 5;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<Crimterry>();
         Item.shootSpeed = 5;
@@ -22,14 +28,11 @@ internal class HemophilicHatch : Talisman
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient(ItemID.CrimtaneBar, 10)
-            .AddIngredient(ItemID.Vertebrae, 8)
-            .AddTile(TileID.Anvils)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.CrimtaneBar, 10)
+        .AddIngredient(ItemID.Vertebrae, 8)
+        .AddTile(TileID.Anvils)
+        .Register();
 
     private class Crimterry : ModProjectile
     {

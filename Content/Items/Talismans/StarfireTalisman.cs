@@ -1,10 +1,6 @@
 ﻿using PoF.Common.Globals.ProjectileGlobals;
-using Steamworks;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Terraria.Audio;
-using Terraria.GameContent;
 
 namespace PoF.Content.Items.Talismans;
 
@@ -15,10 +11,10 @@ internal class StarfireTalisman : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 134;
+        Item.damage = 150;
         Item.useTime = 15;
         Item.useAnimation = 15;
-        Item.mana = 12;
+        Item.mana = 7;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<StarfireInvader>();
         Item.shootSpeed = 5;
@@ -68,7 +64,6 @@ internal class StarfireTalisman : Talisman
         }
 
         public override bool? CanCutTiles() => false;
-        public override bool? CanDamage() => false;
 
         public override void AI()
         {
@@ -87,7 +82,7 @@ internal class StarfireTalisman : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * Speed;
                 }
 
-                if (ProjectileTime++ > (60 * (Projectile.Owner().HeldItem.useTime / 15f)) && _ownedProjectiles.Count < 3)
+                if (ProjectileTime++ > 60 * (Projectile.Owner().HeldItem.useTime / 15f) && _ownedProjectiles.Count < 3)
                 {
                     ProjectileTime = 0;
 
@@ -117,7 +112,7 @@ internal class StarfireTalisman : Talisman
                 }
 
                 if (!Despawning)
-                    Despawning = HandleBasicFunctions<IcemanEmblem>(Projectile, ref Time, 2.25f, false);
+                    Despawning = HandleBasicFunctions<StarfireTalisman>(Projectile, ref Time, 2.25f);
 
                 if (Time % 20 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.KryptonMoss, Projectile.velocity.X, Projectile.velocity.Y);

@@ -9,10 +9,10 @@ internal class DukeToothNecklace : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Blue;
-        Item.damage = 82;
+        Item.damage = 96;
         Item.useTime = 15;
         Item.useAnimation = 15;
-        Item.mana = 12;
+        Item.mana = 8;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<DukePish>();
         Item.shootSpeed = 5;
@@ -63,7 +63,7 @@ internal class DukeToothNecklace : Talisman
             Projectile.rotation = Projectile.velocity.ToRotation();
             Projectile.frame = (int)(Projectile.frameCounter++ / 10f % 4);
 
-            float speedMult = 1 - (Projectile.extraUpdates * 0.25f);
+            float speedMult = 1 - Projectile.extraUpdates * 0.25f;
 
             if (Projectile.velocity.X < 0)
             {
@@ -79,7 +79,7 @@ internal class DukeToothNecklace : Talisman
                 {
                     if (Main.myPlayer == Projectile.owner)
                     {
-                        float maxSpeed = 9 * speedMult;
+                        float maxSpeed = 12 * speedMult;
 
                         Projectile.velocity += Projectile.DirectionTo(Main.MouseWorld) * 0.5f * speedMult;
 
@@ -124,7 +124,7 @@ internal class DukeToothNecklace : Talisman
                 //if (k % 2 == 0)
                 //    continue;
 
-                Vector2 drawPos = (Projectile.oldPos[k] - Main.screenPosition) + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
+                Vector2 drawPos = Projectile.oldPos[k] - Main.screenPosition + drawOrigin + new Vector2(0f, Projectile.gfxOffY);
                 Color color = Projectile.GetAlpha(lightColor) * ((Projectile.oldPos.Length - k) / (float)Projectile.oldPos.Length) * 0.5f;
                 Rectangle src = new(0, 36 * ((Projectile.frame + k) % 4), 54, 34);
                 Main.EntitySpriteDraw(texture, drawPos, src, color, Projectile.rotation, drawOrigin, Projectile.scale, SpriteEffects.None, 0);

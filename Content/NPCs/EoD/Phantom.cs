@@ -62,8 +62,8 @@ public class Phantom : ModProjectile
 
     public override void OnHitPlayer(Player target, Player.HurtInfo info)
     {
-        if (Projectile.timeLeft > 5)
-            Projectile.timeLeft = 5;
+        if (Projectile.timeLeft > 6)
+            Projectile.timeLeft = 6;
 
         if (Main.expertMode)
             target.AddBuff(BuffID.Weak, 60);

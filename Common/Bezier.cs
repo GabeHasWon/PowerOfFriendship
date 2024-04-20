@@ -15,7 +15,7 @@ public static class Bezier
             float factor = i / interations;
             var currentPos = Vector2.Lerp(Vector2.Lerp(start, middle, factor), Vector2.Lerp(middle, end, factor), factor);
             float rot = currentPos.AngleTo(lastPos) - MathHelper.PiOver2;
-            var col = color;
+            var col = Lighting.GetColor(currentPos.ToTileCoordinates(), color);
 
             if (i < 5)
                 col *= i / 5f;
