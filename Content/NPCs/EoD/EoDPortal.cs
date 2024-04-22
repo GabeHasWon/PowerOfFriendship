@@ -55,16 +55,20 @@ class EoDPortal : ModProjectile
             else
                 AttachedNPC = NPC.NewNPC(Projectile.GetSource_FromAI(), (int)Projectile.Center.X, (int)Projectile.Center.Y, attachedType, 0, Projectile.identity);
 
-            if (Main.netMode == NetmodeID.Server)
-                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, (int)AttachedNPC);
+            _spawnedNPC = true;
 
-            _spawnedNPC = Projectile.netUpdate = true;
+            if (Main.netMode == NetmodeID.Server)
+            {
+                NetMessage.SendData(MessageID.SyncNPC, -1, -1, null, (int)AttachedNPC);
+                NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, Projectile.whoAmI);
+            }
         }
 
         if (!_spawnedNPC)
             return;
 
-        if (AttachedNPC == -2 || (!Main.npc[(int)AttachedNPC].active || Main.npc[(int)AttachedNPC].type != attachedType) || MothNotAttached())
+        if (AttachedNPC == -2 || !Main.npc[(int)AttachedNPC].active || Main.npc[(int)AttachedNPC].type != attachedType 
+            || attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.npc[(int)AttachedNPC].ai[0] == 1)
         {
             if (AttachedNPC != -2 && attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.netMode != NetmodeID.Server)
             {
@@ -77,40 +81,39 @@ class EoDPortal : ModProjectile
             }
 
             AttachedNPC = -2;
-
-            if (retractionTime > 121)
-                retractionTime = 121;
-
-            retractionTime--;
+            retractionTime++;
             Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0f, 0.05f);
 
-            if (retractionTime < 0)
+            if (retractionTime > 120)
                 Projectile.Kill();
         }
         else
         {
             retractionTime++;
-
             Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.02f);
 
-            if (AttachedNPC != 0 && !MothNotAttached())
-                (Main.npc[(int)AttachedNPC].ModNPC as DeathsHeadMoth).UpdateFromParent();
+            if (AttachedNPC != 0 && attachedType == ModContent.NPCType<DeathsHeadMoth>() && HasChainedMoth())
+                (Main.npc[(int)AttachedNPC].ModNPC as DeathsHeadMoth).UpdateFromParent(Projectile);
+            else
+                (Main.npc[(int)AttachedNPC].ModNPC as RottenGhoulHanging).UpdateFromParent(Projectile);
         }
     }
 
-    private bool MothNotAttached() => attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.npc[(int)AttachedNPC].ai[0] == 1;
+    private bool HasChainedMoth() => attachedType == ModContent.NPCType<DeathsHeadMoth>() && Main.npc[(int)AttachedNPC].ai[0] == 0;
     public override void DrawBehind(int index, List<int> nt, List<int> behindNPCs, List<int> bp, List<int> op, List<int> ow) => behindNPCs.Add(index);
 
     public override void SendExtraAI(BinaryWriter writer)
     {
         writer.Write(_spawnedNPC);
         writer.Write((short)attachedType);
+        writer.Write(endOfRopeRotation);
     }
 
     public override void ReceiveExtraAI(BinaryReader reader)
     {
         _spawnedNPC = reader.ReadBoolean();
         attachedType = reader.ReadInt16();
+        endOfRopeRotation = reader.ReadSingle();
     }
 
     public override void PostDraw(Color lightColor)

@@ -43,6 +43,7 @@ Projectiles: {
 	Phantom.DisplayName: Phantom
 	BlackHeart.DisplayName: Black Heart
 	KissOfDeathLance.DisplayName: Dark Lance
+	BabyMoth.DisplayName: Baby Moth
 }
 
 DamageClasses.TalismanDamageClass.DisplayName: summon damage
@@ -68,7 +69,7 @@ NPCs: {
 
 	RottenGhoul: {
 		DisplayName: Rotten Ghoul
-		Entry: A rotten, malformed Ghoul used only to kill or die.
+		Entry: A rotten, malformed Ghoul used only to kill or die. Spits out putrid phlegm when hanging.
 	}
 
 	DeathsHeadMoth: {

@@ -56,8 +56,8 @@ class DeathAura : ModProjectile
 
         Time++;
 
-        if (Main.expertMode || Main.npc[(int)EoDOwner].life < Main.npc[(int)EoDOwner].lifeMax)
-            Projectile.timeLeft++;
+        if (Main.expertMode || Main.npc[(int)EoDOwner].life < Main.npc[(int)EoDOwner].lifeMax / 2f)
+            Projectile.timeLeft = 250;
 
         if (Time < FadeInTime)
             Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.5f, 0.01f);

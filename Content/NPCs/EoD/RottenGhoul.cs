@@ -1,5 +1,6 @@
 ﻿using NPCUtils;
 using System;
+using System.Linq;
 using Terraria.Audio;
 using Terraria.GameContent.Bestiary;
 
@@ -7,7 +8,7 @@ namespace PoF.Content.NPCs.EoD;
 
 public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
 {
-    private Projectile Parent => Main.projectile[(int)NPC.ai[0]];
+    private Projectile Parent => Main.projectile.FirstOrDefault(x => x.identity == (int)NPC.ai[0]);
     private ref float Timer => ref NPC.ai[1];
 
     public override void SetStaticDefaults()
@@ -35,9 +36,27 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
         NPC.DeathSound = SoundID.NPCDeath40;
     }
 
+    public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<EmpressOfDeath>());
+
     public override void AI()
     {
-        if (!Parent.active || Parent.type != ModContent.ProjectileType<EoDPortal>())
+        Timer++;
+
+        if (Timer > 20 * 60)
+            NPC.Transform(ModContent.NPCType<RottenGhoul>());
+
+        if (Main.expertMode && Timer % 360 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
+        {
+            NPC.netUpdate = true;
+            NPC.TargetClosest();
+            SpawnSpit(1.1f);
+            SoundEngine.PlaySound(SoundID.NPCDeath9 with { Volume = 1f, PitchRange = (-0.8f, 0.2f) });
+        }
+    }
+
+    internal void UpdateFromParent(Projectile Parent)
+    {
+        if (Parent is null || !Parent.active || Parent.type != ModContent.ProjectileType<EoDPortal>())
         {
             NPC.StrikeInstantKill();
             return;
@@ -47,18 +66,7 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
         NPC.Center = portal.SwingOfRope;
         NPC.rotation = portal.endOfRopeRotation - MathHelper.Pi;
         NPC.direction = NPC.spriteDirection = -Math.Sign(MathF.Cos(Parent.ai[0] * 0.03f));
-
-        Timer++;
-
-        if (Timer > 20 * 60)
-            NPC.Transform(ModContent.NPCType<RottenGhoul>());
-
-        if (Main.expertMode && Timer % 360 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
-        {
-            NPC.TargetClosest();
-            SpawnSpit(1f);
-            SoundEngine.PlaySound(SoundID.NPCDeath9 with { Volume = 1f, PitchRange = (-0.8f, 0.2f) });
-        }
+        NPC.velocity *= 0;
     }
 
     private void SpawnSpit(float speedBoost, float rotation = 0f)
@@ -94,12 +102,6 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
         Timer = 1;
     }
 
-    public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
-    {
-        if (projectile.type == ModContent.ProjectileType<EoDWhip>())
-            modifiers.FinalDamage *= 0.5f;
-    }
-
     public override void OnHitPlayer(Player target, Player.HurtInfo hurtInfo)
     {
         if (Main.expertMode)
@@ -124,6 +126,7 @@ public class RottenGhoul : ModNPC
         AIType = NPCID.DesertGhoul;
     }
 
+    public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<EmpressOfDeath>());
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
 
     public override void HitEffect(NPC.HitInfo hit)

@@ -1,5 +1,6 @@
 ﻿using NPCUtils;
 using System;
+using System.IO;
 using System.Linq;
 using Terraria.GameContent.Bestiary;
 
@@ -7,7 +8,7 @@ namespace PoF.Content.NPCs.EoD;
 
 public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
 {
-    private Projectile Parent => Main.projectile.First(x => x.identity == PortalIdentity);
+    private Projectile Parent => Main.projectile.FirstOrDefault(x => x.identity == PortalIdentity);
     private Player Target => Main.player[NPC.target];
 
     private bool IsChained
@@ -45,13 +46,14 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
         NPC.DeathSound = SoundID.Zombie73;
     }
 
+    public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<EmpressOfDeath>());
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
 
     public override void AI()
     {
         NPC.direction = NPC.spriteDirection = -Math.Sign(Target.Center.X - NPC.Center.X);
 
-        if (IsChained && PortalIdentity == -1 || !Parent.active)
+        if (IsChained && PortalIdentity == -1 || Parent is null || !Parent.active)
             IsChained = false;
 
         if (IsChained)
@@ -82,19 +84,19 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
             else
                 NPC.spriteDirection = -1;
 
-            float maxSpeed = 4 + hitCount;
+            float maxSpeed = 4 + (hitCount * 0.5f);
 
             if (NPC.velocity.LengthSquared() > maxSpeed * maxSpeed)
                 NPC.velocity = Vector2.Normalize(NPC.velocity) * maxSpeed;
         }
     }
 
-    internal void UpdateFromParent()
+    internal void UpdateFromParent(Projectile parent)
     {
-        NPC.rotation = (Parent.ModProjectile as EoDPortal).endOfRopeRotation;
+        NPC.rotation = (parent.ModProjectile as EoDPortal).endOfRopeRotation;
 
-        if (NPC.DistanceSQ(Parent.Center) > ChainDistance * ChainDistance * (Parent.ModProjectile as EoDPortal).ExtendFactor)
-            NPC.velocity += NPC.DirectionTo(Parent.Center) * 2f;
+        if (NPC.DistanceSQ(parent.Center) > ChainDistance * ChainDistance * (parent.ModProjectile as EoDPortal).ExtendFactor)
+            NPC.velocity += NPC.DirectionTo(parent.Center) * 2f;
     }
 
     public override Color? GetAlpha(Color drawColor) => Color.Lerp(drawColor, Lighting.GetColor(NPC.Center.ToTileCoordinates()), MathF.Min(hitCount, 10) / 10f);
@@ -117,12 +119,6 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
         NPC.frame.Y = (int)(NPC.frameCounter / 2 % 4) * frameHeight;
     }
 
-    public override void ModifyHitByProjectile(Projectile projectile, ref NPC.HitModifiers modifiers)
-    {
-        if (projectile.type == ModContent.ProjectileType<EoDWhip>())
-            modifiers.FinalDamage *= 0.5f;
-    }
-
     public override void HitEffect(NPC.HitInfo hit)
     {
         for (int i = 0; i < 3; ++i)
@@ -138,5 +134,17 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
         }
     }
 
-    public void OnHitByWhip(Projectile projectile) => hitCount++;
+    public void OnHitByWhip(Projectile projectile)
+    {
+        hitCount++;
+
+        if (NPC.life <= 0)
+        {
+            NPC.life = NPC.lifeMax;
+            NPC.netUpdate = true;
+        }
+    }
+
+    public override void SendExtraAI(BinaryWriter writer) => writer.Write((byte)hitCount);
+    public override void ReceiveExtraAI(BinaryReader reader) => hitCount = reader.ReadByte();
 }

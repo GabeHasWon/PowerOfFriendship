@@ -31,7 +31,7 @@ public class SpinScythe : ModProjectile
 
     public override void AI()
     {
-        Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.02f);
+        Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, Owner.Opacity, 0.02f);
         Projectile.rotation += 0.2f;
         Projectile.timeLeft++;
 

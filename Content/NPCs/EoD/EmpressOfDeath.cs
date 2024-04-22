@@ -1,15 +1,16 @@
-﻿using log4net.Util;
-using Microsoft.Xna.Framework.Graphics;
-using NPCUtils;
+﻿using NPCUtils;
 using PoF.Content.Items.Blocks;
 using PoF.Content.Items.Magic;
 using PoF.Content.Items.Melee;
+using PoF.Content.Items.Misc;
 using PoF.Content.Items.Ranged;
 using PoF.Content.Items.Talismans;
+using PoF.Content.Tiles;
 using ReLogic.Content;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Terraria.Audio;
 using Terraria.GameContent;
 using Terraria.GameContent.Bestiary;
@@ -71,6 +72,7 @@ public class EmpressOfDeath : ModNPC
     private int targettedAdd = -1;
     private float visualTimer = 0;
     private byte cardinalDir = 0;
+    private float fadeOut = 0;
 
     public override void SetStaticDefaults()
     {
@@ -112,7 +114,7 @@ public class EmpressOfDeath : ModNPC
 
     public override void ModifyNPCLoot(NPCLoot npcLoot)
     {
-        //npcLoot.AddMasterModeRelicAndPet<VinewrathRelicItem, VinewrathPetItem>();
+        npcLoot.AddMasterModeRelicAndPet<EoDRelicItem, DeathsHeadEgg>();
         npcLoot.AddBossBag<EoDBag>();
 
         LeadingConditionRule notExpert = new(new Conditions.NotExpert());
@@ -140,10 +142,16 @@ public class EmpressOfDeath : ModNPC
     {
         Main.GraveyardVisualIntensity = 1;
 
-        if (State == EoDState.Death)
+        if (State is not EoDState.Death and not EoDState.Spawn)
+        {
+            NPC.Opacity = NPC.life / (float)NPC.lifeMax * 0.75f + 0.25f;
+            fadeOut = NPC.Opacity;
+        }
+        else if (State == EoDState.Death)
         {
             NPC.rotation *= 0.99f;
-            NPC.Opacity -= 0.01f;
+            NPC.Opacity = fadeOut;
+            fadeOut -= 0.002f;
             NPC.velocity.Y += 0.05f;
 
             if (NPC.Opacity <= 0)
@@ -182,10 +190,10 @@ public class EmpressOfDeath : ModNPC
                 {
                     SwitchState(DetermineNextState());
 
-                    if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 20 : 14) : 35) && Main.rand.NextBool(3))
+                    if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 20 : 14) : 35) && Main.rand.NextBool(121))
                         SwitchState(EoDState.SummonAdds);
 
-                    //if (portalWhoAmI.Count > 0 && Main.rand.NextBool(3))
+                    //if (portalWhoAmI.Count > 0 && Main.rand.NextBool(1))
                     //    SwitchState(EoDState.WhipAdds);
 
                     if (AuraWho == -1 && (Main.expertMode || Main.rand.NextBool(6)))
@@ -225,7 +233,7 @@ public class EmpressOfDeath : ModNPC
             case EoDState.SummonAdds:
                 NPC.velocity *= 0.95f;
 
-                if (Timer == 1)
+                if (Timer == 1 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     int type = ModContent.ProjectileType<EoDPortal>();
                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 0, 0, Main.myPlayer, -1, Main.rand.NextFloat(350, 500));
@@ -292,26 +300,12 @@ public class EmpressOfDeath : ModNPC
         NPC.velocity *= 0.8f;
 
         if (Timer < 60)
-        {
-            NPC.Center = Vector2.Lerp(NPC.Center, Main.projectile[AuraWho].Center - cardinalDir switch
-            {
-                0 => new Vector2(1200, 0),
-                1 => new Vector2(-1200, 0),
-                2 => new Vector2(0, -1200),
-                _ => new Vector2(0, 1200)
-            }, 0.05f);
-        }
+            NPC.Center = Vector2.Lerp(NPC.Center, CardinalPosition(false), 0.05f);
         else if (Timer < 240)
         {
-            NPC.Center = Vector2.Lerp(NPC.Center, Main.projectile[AuraWho].Center + cardinalDir switch
-            {
-                0 => new Vector2(1200, 0),
-                1 => new Vector2(-1200, 0),
-                2 => new Vector2(0, -1200),
-                _ => new Vector2(0, 1200)
-            }, 0.01f);
+            NPC.Center = Vector2.Lerp(CardinalPosition(false), CardinalPosition(true), (Timer - 60) / 180f);
 
-            if (Timer % 10 == 0)
+            if (Timer % 5 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
             {
                 Vector2 vel = new Vector2(0, 14).RotatedBy(cardinalDir switch
                 {
@@ -328,6 +322,14 @@ public class EmpressOfDeath : ModNPC
         else if (Timer >= 240)
             SwitchState(EoDState.Idle);
     }
+
+    private Vector2 CardinalPosition(bool add) => Main.projectile[AuraWho].Center + cardinalDir switch
+    {
+        0 => new Vector2(1200, 0),
+        1 => new Vector2(-1200, 0),
+        2 => new Vector2(0, -1200),
+        _ => new Vector2(0, 1200)
+    } * (add ? 1 : -1);
 
     private void PullAura()
     {
@@ -365,7 +367,7 @@ public class EmpressOfDeath : ModNPC
     {
         IdleMovement(false);
 
-        if (Timer % 15 == 0)
+        if (Timer % 15 == 0 && Main.netMode != NetmodeID.MultiplayerClient)
         {
             int type = ModContent.ProjectileType<Phantom>();
             Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, Utilities.ToActualDamage(45, 1.5f, 2f), 0, Main.myPlayer);
@@ -394,14 +396,22 @@ public class EmpressOfDeath : ModNPC
     {
         NPC.velocity *= 0.98f;
 
+        if (targettedAdd == -1 && Main.netMode != NetmodeID.MultiplayerClient)
+        {
+            targettedAdd = Main.rand.Next([.. portalWhoAmI]);
+            NPC.netUpdate = true;
+        }
+
         if (targettedAdd == -1)
-            targettedAdd = Main.rand.Next([..portalWhoAmI]);
+            return;
 
         int npcSlot = (int)Main.projectile[targettedAdd].ai[2];
 
         if (npcSlot is (-2) or 0)
         {
-            SwitchState(EoDState.Idle);
+            if (Main.netMode != NetmodeID.MultiplayerClient)
+                SwitchState(EoDState.Idle);
+
             return;
         }
 
@@ -500,6 +510,26 @@ public class EmpressOfDeath : ModNPC
         NPC.netUpdate = true;
     }
 
+    public override void SendExtraAI(BinaryWriter writer)
+    {
+        writer.Write((short)targettedAdd);
+        writer.Write((byte)portalWhoAmI.Count);
+
+        for (int i = 0; i < portalWhoAmI.Count; ++i)
+            writer.Write((short)portalWhoAmI.ElementAt(i));
+    }
+
+    public override void ReceiveExtraAI(BinaryReader reader)
+    {
+        targettedAdd = reader.ReadInt16();
+        int count = reader.ReadByte();
+
+        portalWhoAmI.Clear();
+
+        for (int i = 0; i < count; ++i)
+            portalWhoAmI.Add(reader.ReadInt16());
+    }
+
     public override bool PreDraw(SpriteBatch spriteBatch, Vector2 screenPos, Color drawColor)
     {
         if (NPC.IsABestiaryIconDummy)
@@ -531,7 +561,9 @@ public class EmpressOfDeath : ModNPC
 
     private void DrawWings(Vector2 drawPos, Color color)
     {
-        Main.EntitySpriteDraw(TailWings.Value, drawPos, null, color * NPC.Opacity, NPC.rotation, TailWings.Size() / 2f, NPC.scale, SpriteEffects.None);
+        Point center = NPC.Center.ToTileCoordinates();
+        float bright = Lighting.Brightness(center.X, center.Y);
+        Main.EntitySpriteDraw(TailWings.Value, drawPos, null, color * NPC.Opacity * bright, NPC.rotation, TailWings.Size() / 2f, NPC.scale, SpriteEffects.None);
 
         Effect effect = ModContent.Request<Effect>("PoF/Assets/Effects/EoDWingFlap").Value;
 
@@ -540,12 +572,11 @@ public class EmpressOfDeath : ModNPC
 
         Main.spriteBatch.End();
 
-        Point center = NPC.Center.ToTileCoordinates();
         effect.Parameters["topWing"].SetValue(GetWingOffset(0) * 1f - 0.3f);
         effect.Parameters["bottomWing"].SetValue(GetWingOffset(MathHelper.PiOver4) * 1.5f - 0.45f);
         effect.Parameters["depthFactor"].SetValue(GetWingOffset(MathHelper.PiOver2) * 0.9f);
         effect.Parameters["depthMap"].SetValue(Depth.Value);
-        effect.Parameters["opacity"].SetValue(NPC.Opacity * Lighting.Brightness(center.X, center.Y));
+        effect.Parameters["opacity"].SetValue(NPC.Opacity * bright);
         Main.spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.NonPremultiplied, SamplerState.PointClamp, null, Main.Rasterizer, effect, Main.GameViewMatrix.EffectMatrix);
 
         var wingFrame = Wings.Value.Frame(1, 1, 0, 0, 0, 0);

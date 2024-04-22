@@ -441,3 +441,17 @@ BlackDeath: {
 		'Slow, but insidious.'
 		'''
 }
+
+EoDRelicItem: {
+	DisplayName: Empress of Death Relic
+	Tooltip: ""
+}
+
+DeathsHeadEgg: {
+	DisplayName: Deaths Head Egg
+	Tooltip:
+		'''
+		Summons a baby Death's Head Moth
+		'Don't ask how it works. It's a baby moth, which means a smaller moth. That's normal.'
+		'''
+}
