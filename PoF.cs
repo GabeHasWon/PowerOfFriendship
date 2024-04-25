@@ -20,6 +20,7 @@ public class PoF : Mod
         EquipLoader.AddEquipTexture(this, "PoF/Content/Items/Armor/SpikedGuardian/SpikedGuardianRobe_Legs", EquipType.Legs, null, "SpikedGuardianRobeLegs");
         EquipLoader.AddEquipTexture(this, "PoF/Content/Items/Armor/SpikedGuardian/SpikedGuardianRobeGreen_Legs", EquipType.Legs, null, "SpikedGuardianRobeGreenLegs");
         EquipLoader.AddEquipTexture(this, "PoF/Content/Items/Armor/SpikedGuardian/SpikedGuardianRobePink_Legs", EquipType.Legs, null, "SpikedGuardianRobePinkLegs");
+        EquipLoader.AddEquipTexture(this, "PoF/Content/Items/Armor/SpikedGuardian/Hellrobe_Legs", EquipType.Legs, null, "HellrobeLegs");
 
         NPCUtils.NPCUtils.AutoloadModBannersAndCritters(this);
         NPCUtils.NPCUtils.TryLoadBestiaryHelper();

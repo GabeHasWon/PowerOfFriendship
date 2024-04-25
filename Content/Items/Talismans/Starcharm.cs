@@ -1,4 +1,6 @@
-﻿using Terraria.GameContent;
+﻿using System;
+using Terraria.Audio;
+using Terraria.GameContent;
 
 namespace PoF.Content.Items.Talismans;
 
@@ -22,14 +24,11 @@ internal class Starcharm : Talisman
         Item.value = Item.buyPrice(0, 0, 2);
     }
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient(ItemID.FallenStar, 5)
-            .AddIngredient(ItemID.Chain, 3)
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.FallenStar, 5)
+        .AddIngredient(ItemID.Chain, 3)
+        .AddTile(TileID.WorkBenches)
+        .Register();
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
     public override void Update(ref float gravity, ref float maxFallSpeed) => Lighting.AddLight(Item.Center, new Vector3(0.1f, 0.1f, 0f));
@@ -56,7 +55,6 @@ internal class Starcharm : Talisman
             Projectile.hostile = false;
             Projectile.DamageType = TalismanDamageClass.Self;
             Projectile.Size = new Vector2(34);
-            Projectile.tileCollide = false;
             Projectile.minion = true;
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
@@ -65,7 +63,6 @@ internal class Starcharm : Talisman
         }
 
         public override bool? CanCutTiles() => false;
-        public override bool? CanDamage() => Utilities.CanHitLine(Projectile, Projectile.Owner()) ? null : false;
 
         public override void AI()
         {
@@ -86,11 +83,6 @@ internal class Starcharm : Talisman
                 }
 
                 Despawning = HandleBasicFunctions<Starcharm>(Projectile, ref Time, 1.4f);
-
-                if (Utilities.CanHitLine(Projectile, Projectile.Owner()))
-                    Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
-                else
-                    Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.1f, 0.1f);
 
                 if (Time % 15 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.YellowStarDust, Projectile.velocity.X, Projectile.velocity.Y);
@@ -119,6 +111,23 @@ internal class Starcharm : Talisman
             }
 
             return true;
+        }
+
+        public override bool OnTileCollide(Vector2 oldVelocity)
+        {
+            Collision.HitTiles(Projectile.position, Projectile.velocity, Projectile.width, Projectile.height);
+            SoundEngine.PlaySound(SoundID.Dig, Projectile.position);
+
+            if (Math.Abs(Projectile.velocity.X - oldVelocity.X) > float.Epsilon)
+                Projectile.velocity.X = -oldVelocity.X * 0.95f;
+
+            if (Math.Abs(Projectile.velocity.Y - oldVelocity.Y) > float.Epsilon)
+                Projectile.velocity.Y = -oldVelocity.Y * 0.95f;
+
+            for (int i = 0; i < 12; ++i)
+                Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.YellowStarDust, oldVelocity.X, oldVelocity.Y);
+
+            return false;
         }
     }
 }

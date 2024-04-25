@@ -51,6 +51,7 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
 
     public override void AI()
     {
+        NPC.TargetClosest();
         NPC.direction = NPC.spriteDirection = -Math.Sign(Target.Center.X - NPC.Center.X);
 
         if (IsChained && PortalIdentity == -1 || Parent is null || !Parent.active)
@@ -58,7 +59,6 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
 
         if (IsChained)
         {
-            NPC.TargetClosest();
             NPC.velocity += NPC.DirectionTo(Target.Center) * 1.5f;
 
             if (NPC.velocity.LengthSquared() > 12 * 12)
@@ -72,7 +72,6 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
         }
         else
         {
-            NPC.TargetClosest();
             NPC.velocity += NPC.DirectionTo(Target.Center) * (0.65f + hitCount * 0.25f);
             NPC.rotation = NPC.velocity.ToRotation();
 
@@ -84,7 +83,7 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
             else
                 NPC.spriteDirection = -1;
 
-            float maxSpeed = 4 + (hitCount * 0.5f);
+            float maxSpeed = 4 + hitCount * 0.5f;
 
             if (NPC.velocity.LengthSquared() > maxSpeed * maxSpeed)
                 NPC.velocity = Vector2.Normalize(NPC.velocity) * maxSpeed;

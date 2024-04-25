@@ -159,16 +159,19 @@ public class EmpressOfDeath : ModNPC
                 NPC.life = 0;
                 NPC.checkDead();
 
-                PunchCameraModifier modifier = new(NPC.Center, (Main.rand.NextFloat() * ((float)Math.PI * 2f)).ToRotationVector2(), 15, 3f, 20, 8000, "EmpressOfDeath");
-                Main.instance.CameraModifiers.Add(modifier);
+                if (Main.netMode != NetmodeID.Server)
+                {
+                    PunchCameraModifier modifier = new(NPC.Center, (Main.rand.NextFloat() * ((float)Math.PI * 2f)).ToRotationVector2(), 15, 3f, 20, 8000, "EmpressOfDeath");
+                    Main.instance.CameraModifiers.Add(modifier);
 
-                static float Speed() => Main.rand.NextFloat(8, 16) * Main.rand.NextFloatDirection();
+                    static float Speed() => Main.rand.NextFloat(8, 16) * Main.rand.NextFloatDirection();
 
-                for (int i = 0; i < 80; ++i)
-                    Dust.NewDust(NPC.Center, 1, 1, DustID.Smoke, Speed(), Speed(), 160, default, Main.rand.NextFloat(1, 2f));
+                    for (int i = 0; i < 80; ++i)
+                        Dust.NewDust(NPC.Center, 1, 1, DustID.Smoke, Speed(), Speed(), 160, default, Main.rand.NextFloat(1, 2f));
 
-                for (int i = 0; i < 10; ++i)
-                    Gore.NewGore(NPC.GetSource_Death(), NPC.Center, new(Speed(), Speed()), GoreID.Smoke1 + Main.rand.Next(3));
+                    for (int i = 0; i < 10; ++i)
+                        Gore.NewGore(NPC.GetSource_Death(), NPC.Center, new(Speed(), Speed()), GoreID.Smoke1 + Main.rand.Next(3));
+                }
             }
 
             return;
@@ -176,7 +179,9 @@ public class EmpressOfDeath : ModNPC
 
         Timer++;
         visualTimer++;
-        portalWhoAmI.RemoveWhere(x => !Main.projectile[x].active || Main.projectile[x].type != ModContent.ProjectileType<EoDPortal>());
+
+        if (Main.netMode != NetmodeID.MultiplayerClient)
+            portalWhoAmI.RemoveWhere(x => !Main.projectile[x].active || Main.projectile[x].type != ModContent.ProjectileType<EoDPortal>() || Main.projectile[x].ai[2] == -2);
 
         switch (State)
         {
@@ -190,11 +195,11 @@ public class EmpressOfDeath : ModNPC
                 {
                     SwitchState(DetermineNextState());
 
-                    if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 20 : 14) : 35) && Main.rand.NextBool(121))
+                    if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 20 : 14) : 35) && Main.rand.NextBool(3))
                         SwitchState(EoDState.SummonAdds);
 
-                    //if (portalWhoAmI.Count > 0 && Main.rand.NextBool(1))
-                    //    SwitchState(EoDState.WhipAdds);
+                    if (portalWhoAmI.Count > 0 && Main.rand.NextBool(3))
+                        SwitchState(EoDState.WhipAdds);
 
                     if (AuraWho == -1 && (Main.expertMode || Main.rand.NextBool(6)))
                         SwitchState(EoDState.DeathAura);
@@ -237,7 +242,7 @@ public class EmpressOfDeath : ModNPC
                 {
                     int type = ModContent.ProjectileType<EoDPortal>();
                     int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 0, 0, Main.myPlayer, -1, Main.rand.NextFloat(350, 500));
-                    portalWhoAmI.Add(proj);
+                    portalWhoAmI.Add(Main.projectile[proj].identity);
                 }
 
                 if (Timer > 30)
@@ -278,7 +283,10 @@ public class EmpressOfDeath : ModNPC
                         int damage = Utilities.ToActualDamage(40, 1.4f, 2f);
 
                         for (int i = 0; i < 2; ++i)
-                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, damage, 0, Main.myPlayer, NPC.whoAmI, 0, MathHelper.TwoPi / 2 * i);
+                        {
+                            float rot = MathHelper.TwoPi / 2 * i;
+                            Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, damage, 0, Main.myPlayer, NPC.whoAmI, 0, rot);
+                        }
                     }
                 }
 
@@ -398,14 +406,19 @@ public class EmpressOfDeath : ModNPC
 
         if (targettedAdd == -1 && Main.netMode != NetmodeID.MultiplayerClient)
         {
-            targettedAdd = Main.rand.Next([.. portalWhoAmI]);
+            targettedAdd = Main.rand.Next([..portalWhoAmI]);
             NPC.netUpdate = true;
         }
 
         if (targettedAdd == -1)
             return;
 
-        int npcSlot = (int)Main.projectile[targettedAdd].ai[2];
+        Projectile proj = Main.projectile.First(x => x.identity == targettedAdd);
+
+        if (proj is null)
+            return;
+
+        int npcSlot = (int)proj.ai[2];
 
         if (npcSlot is (-2) or 0)
         {

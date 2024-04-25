@@ -52,7 +52,6 @@ internal class TwoTopTalisman : Talisman
             Projectile.hostile = false;
             Projectile.DamageType = TalismanDamageClass.Self;
             Projectile.Size = new Vector2(34);
-            Projectile.tileCollide = false;
             Projectile.minion = true;
             Projectile.minionSlots = 0;
             Projectile.penetrate = -1;
@@ -82,11 +81,6 @@ internal class TwoTopTalisman : Talisman
 
                 if (Time == 0 && Main.myPlayer == Projectile.owner)
                     SpawnProj(Projectile.GetSource_FromAI(), 1f);
-
-                if (Utilities.CanHitLine(Projectile, Projectile.Owner()))
-                    Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f);
-                else
-                    Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 0.1f, 0.1f);
 
                 if (Time % 15 == 0)
                     Dust.NewDust(Projectile.position, Projectile.width, Projectile.height, DustID.GlowingMushroom, Projectile.velocity.X, Projectile.velocity.Y);
@@ -129,6 +123,8 @@ internal class TwoTopTalisman : Talisman
             if (Main.netMode != NetmodeID.SinglePlayer)
                 NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, proj);
         }
+
+        public override bool OnTileCollide(Vector2 oldVelocity) => false;
     }
 
     public class TwoTopSpores : ModProjectile

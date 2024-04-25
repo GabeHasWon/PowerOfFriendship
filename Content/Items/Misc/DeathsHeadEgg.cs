@@ -1,4 +1,6 @@
-﻿namespace PoF.Content.Items.Misc;
+﻿using PoF.Content.Buffs;
+
+namespace PoF.Content.Items.Misc;
 
 class DeathsHeadEgg : ModItem
 {
@@ -10,6 +12,7 @@ class DeathsHeadEgg : ModItem
         Item.shoot = ModContent.ProjectileType<BabyMoth>();
         Item.shootSpeed = 6;
         Item.rare = ItemRarityID.Purple;
+        Item.buffType = ModContent.BuffType<MothPetBuff>();
     }
 
     public class BabyMoth : ModProjectile
@@ -36,8 +39,10 @@ class DeathsHeadEgg : ModItem
 
         public override void AI()
         {
+            if (Owner.HasBuff<MothPetBuff>())
+                Projectile.timeLeft = 2;
+
             Projectile.rotation = Projectile.velocity.ToRotation();
-            Projectile.timeLeft = 2;
             Projectile.frame = (int)(Projectile.frameCounter++ / 3f) % 2;
 
             if (Projectile.velocity.X != 0)

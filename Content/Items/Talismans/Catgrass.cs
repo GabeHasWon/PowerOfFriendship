@@ -61,8 +61,6 @@ internal class Catgrass : Talisman
 
             if (!Despawning)
             {
-                HandleBasicFunctions<Catgrass>(Projectile, ref Time, 0.45f, false);
-
                 if (Time == owner.HeldItem.useTime / 2)
                 {
                     if (Main.myPlayer == Projectile.owner)
@@ -83,6 +81,9 @@ internal class Catgrass : Talisman
                 }
                 else if (Time > owner.HeldItem.useTime)
                     Time = 0;
+
+                if (!Despawning && HandleBasicFunctions<Catgrass>(Projectile, ref Time, 0.45f, false))
+                    Despawning = true;
             }
             else
             {

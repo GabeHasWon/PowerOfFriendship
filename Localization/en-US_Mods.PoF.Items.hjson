@@ -455,3 +455,103 @@ DeathsHeadEgg: {
 		'Don't ask how it works. It's a baby moth, which means a smaller moth. That's normal.'
 		'''
 }
+
+Hellrobe: {
+	DisplayName: Hellrobe
+	Tooltip:
+		'''
+		+14% summon damage
+		'Burn your own path.'
+		'''
+}
+
+StingerNecklace: {
+	DisplayName: Stinger Bracelet
+	Tooltip:
+		'''
+		+10% whip damage
+		+10% additional whip damage when the target is poisoned
+		'100% Safe Guaranteed'
+		'''
+}
+
+DesertRune: {
+	DisplayName: Desert Rune
+	Tooltip:
+		'''
+		+15% talisman damage
+		'It feels...comforting.'
+		'''
+}
+
+FuriousSpirit: {
+	DisplayName: Furious Spirit
+	Tooltip:
+		'''
+		Killing an enemy will give a 33% increase to whip speed
+		This buff decays over time
+		'The soul thrashes and pushes against the confines it's trapped in, yet...'
+		'''
+}
+
+MeteoriteBattery: {
+	DisplayName: Meteorite Battery
+	Tooltip:
+		'''
+		+8% talisman damage
+		Your conjurations will glow a soft white
+		'It vibrates and pulses slightly, as if constantly overproducing power.'
+		'''
+}
+
+ExtensionCord: {
+	DisplayName: Extension Cord
+	Tooltip:
+		'''
+		+20% whip range
+		'It doesn't NEED to be plugged in...just...it just works, okay? - The Mechanic'
+		'''
+}
+
+RetractionCord: {
+	DisplayName: Retraction Cord
+	Tooltip:
+		'''
+		-60% whip range
+		+40% whip damage
+		'Perhaps the culmination of science, research and knowledge in the smallest package possible.'
+		'''
+}
+
+CrimtaneHandle: {
+	DisplayName: Scarlet Handle
+	Tooltip:
+		'''
+		-15% whip range
+		+10% whip use speed
+		'''
+}
+
+DemoniteHandle: {
+	DisplayName: Demonite Handle
+	Tooltip:
+		'''
+		-15% whip range
+		+15% whip critical strike chance
+		'''
+}
+
+ThornBulb: {
+	DisplayName: Thorn Bulb
+	Tooltip: ""
+}
+
+HeartMemento: {
+	DisplayName: Heart Memento
+	Tooltip: ""
+}
+
+HeartMementoPlat: {
+	DisplayName: Heart Memento Plat
+	Tooltip: ""
+}

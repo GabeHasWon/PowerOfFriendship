@@ -59,11 +59,9 @@ internal class HemophilicHatch : Talisman
             Projectile.penetrate = -1;
             Projectile.usesLocalNPCImmunity = true;
             Projectile.localNPCHitCooldown = 8;
-            Projectile.tileCollide = false;
         }
 
         public override bool? CanCutTiles() => false;
-        public override bool? CanDamage() => Utilities.CanHitLine(Projectile, Owner) ? null : false;
 
         public override void AI()
         {
@@ -99,5 +97,7 @@ internal class HemophilicHatch : Talisman
                     Projectile.Kill();
             }
         }
+
+        public override bool OnTileCollide(Vector2 oldVelocity) => false;
     }
 }

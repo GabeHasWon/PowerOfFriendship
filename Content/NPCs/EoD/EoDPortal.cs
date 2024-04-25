@@ -47,7 +47,7 @@ class EoDPortal : ModProjectile
 
         if (!_spawnedNPC && Main.netMode != NetmodeID.MultiplayerClient)
         {
-            bool isMoth = true;// !Main.rand.NextBool(2);
+            bool isMoth = !Main.rand.NextBool(2);
             attachedType = !isMoth ? ModContent.NPCType<RottenGhoulHanging>() : ModContent.NPCType<DeathsHeadMoth>();
 
             if (isMoth)

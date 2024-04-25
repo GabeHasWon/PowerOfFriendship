@@ -79,3 +79,15 @@ NPCs: {
 }
 
 Tiles.EoDTrophy.MapEntry: Empress of Death Trophy
+
+Buffs: {
+	FuryBuff: {
+		DisplayName: Fury Buff
+		Description: Mods.PoF.Buffs.FuryBuff.Description
+	}
+
+	MothPetBuff: {
+		DisplayName: Moth Pet Buff
+		Description: Mods.PoF.Buffs.MothPetBuff.Description
+	}
+}

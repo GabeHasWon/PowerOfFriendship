@@ -1,4 +1,5 @@
-﻿using PoF.Content.Items.Accessories;
+﻿using NPCUtils;
+using PoF.Content.Items.Accessories;
 using PoF.Content.Items.Talismans;
 using PoF.Content.Items.Whips;
 using Terraria.GameContent.ItemDropRules;
@@ -19,6 +20,8 @@ internal class LootGlobal : GlobalNPC
             AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<RingOnAString>()));
         else if (npc.type == NPCID.DukeFishron)
             AddNotExpertRules(npcLoot, ItemDropRule.Common(ModContent.ItemType<DukeToothNecklace>()));
+        else if (npc.type == NPCID.Hornet)
+            npcLoot.AddCommon<StingerNecklace>(20);
     }
 
     private static void AddNotExpertRules(NPCLoot npcLoot, params IItemDropRule[] rules)
