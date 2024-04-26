@@ -5,6 +5,11 @@ global using Terraria.ModLoader;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
 using Terraria.Graphics.Shaders;
+using System.IO;
+using System.Collections.Generic;
+using Terraria.Localization;
+using PoF.Content.NPCs.EoD;
+using PoF.Common.Globals;
 
 namespace PoF;
 
@@ -25,6 +30,29 @@ public class PoF : Mod
         NPCUtils.NPCUtils.AutoloadModBannersAndCritters(this);
         NPCUtils.NPCUtils.TryLoadBestiaryHelper();
     }
+
+    public override void PostSetupContent()
+    {
+        NetEasy.NetEasy.Register(this);
+
+        if (!ModLoader.TryGetMod("BossChecklist", out Mod bossChecklist))
+            return;
+
+        bossChecklist.Call(
+            "LogBoss",
+            this,
+            nameof(EmpressOfDeath),
+            15.1f,
+            () => ModContent.GetInstance<DownedEoDSystem>().downedEoD,
+            ModContent.NPCType<EmpressOfDeath>(),
+            new Dictionary<string, object>()
+            {
+                ["spawnInfo"] = Language.GetText("Mods.PoF.EoDSpawnInfo")
+            }
+        );
+    }
+
+    public override void HandlePacket(BinaryReader reader, int whoAmI) => NetEasy.NetEasy.HandleModule(reader, whoAmI);
 
     public override void Unload()
     {

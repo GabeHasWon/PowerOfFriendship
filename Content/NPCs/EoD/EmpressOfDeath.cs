@@ -1,4 +1,5 @@
 ﻿using NPCUtils;
+using PoF.Common.Globals;
 using PoF.Content.Items.Blocks;
 using PoF.Content.Items.Magic;
 using PoF.Content.Items.Melee;
@@ -132,7 +133,9 @@ public class EmpressOfDeath : ModNPC
             SwitchState(EoDState.Death);
             return false;
         }
-        
+
+        ModContent.GetInstance<DownedEoDSystem>().downedEoD = true;
+        NetMessage.SendData(MessageID.WorldData);
         return true;
     }
 

@@ -26,13 +26,10 @@ internal class StarfireTalisman : Talisman
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient(ItemID.FragmentStardust, 16)
-            .AddTile(TileID.LunarCraftingStation)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.FragmentStardust, 16)
+        .AddTile(TileID.LunarCraftingStation)
+        .Register();
 
     private class StarfireInvader : ModProjectile
     {

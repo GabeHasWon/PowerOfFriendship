@@ -1,1 +1,22 @@
-Power of Friendship is a pretty cool mod, it does...this. Modify this file with a description of your mod.
+--- Power of Friendship ---
+by GabeHasWon
+commissioned & designed by Moxie
+
+Power of Friendship adds many friends, in the form of the new Summoner subclass, Talismans.
+Talismans allow you to conjure and control various objects, from Frosty the Iceman to Jerry Skelly to a copper shortsword.
+These chase your mouse in various ways, each having their own little gimmick.
+Talismans span throughout the game, with 20 talismans to use and enjoy.
+
+Along with that, the mod adds a variety of accessories for whips and talismans, a few new armor sets for both, and more!
+
+Finally, the mod adds Death herself. Kill a Prismatic Lacewing in a Graveyard to find your end, her grace, the Empress of Darkness.
+Do be careful doing it in the Hallow, however. Who knows what would happen?
+
+-- Socials --
+Supporting me on Patreon will help me continue to make projects like this, Verdant, Peculiar Jewelry, and more!
+If you can throw me some money, I'd greatly appreciate it.
+My Patreon: https://www.patreon.com/gabehaswon
+My YouTube: https://www.youtube.com/@gabehaswon
+
+Report bugs, ask questions, and more in the Discord!
+Discord: https://discord.gg/gVUw3W8ypD

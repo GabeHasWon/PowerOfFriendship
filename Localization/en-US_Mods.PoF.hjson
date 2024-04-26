@@ -37,7 +37,7 @@ Projectiles: {
 	EoDPortal.DisplayName: Deathly Portal
 	SpinScythe.DisplayName: Spin Scythe
 	TelegraphSword.DisplayName: Telegraph Sword
-	EoDWhip.DisplayName: Whip ov Death
+	EoDWhip.DisplayName: Whip of Death
 	DarkDagger.DisplayName: Dark Dagger
 	RottenSpit.DisplayName: Rotten Spit
 	Phantom.DisplayName: Phantom
@@ -61,11 +61,11 @@ SetBonuses: {
 
 NPCs: {
 	EmpressOfDeath: {
-		DisplayName: Empress Of Death
-		Entry: Death. Oversees all that is, wishing for it to not be. She's polite in her efficiency.
+		DisplayName: Empress of Darkness
+		Entry: Death herself. Oversees all that is, wishing for it to not be. She's polite in her efficiency.
 	}
 
-	RottenGhoulHanging.DisplayName: Rotten Ghoul Hanging
+	RottenGhoulHanging.DisplayName: Rotten Ghoul
 
 	RottenGhoul: {
 		DisplayName: Rotten Ghoul
@@ -78,7 +78,8 @@ NPCs: {
 	}
 }
 
-Tiles.EoDTrophy.MapEntry: Empress of Death Trophy
+EoDSpawnInfo: Capture and kill a Prismatic Lacewing while inside of a Graveyard biome.
+Tiles.EoDTrophy.MapEntry: Empress of Darkness Trophy
 
 Buffs: {
 	FuryBuff: {

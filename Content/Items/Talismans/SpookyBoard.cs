@@ -26,15 +26,12 @@ internal class SpookyBoard : Talisman
         Item.noMelee = true;
     }
 
-    public override void AddRecipes()
-    {
-        CreateRecipe()
-            .AddIngredient(ItemID.SpookyWood, 100)
-            .AddIngredient(ItemID.Smolstar)
-            .AddIngredient<Flagellator>()
-            .AddTile(TileID.WorkBenches)
-            .Register();
-    }
+    public override void AddRecipes() => CreateRecipe()
+        .AddIngredient(ItemID.SpookyWood, 100)
+        .AddIngredient(ItemID.Smolstar)
+        .AddIngredient<Flagellator>()
+        .AddTile(TileID.WorkBenches)
+        .Register();
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
@@ -242,7 +239,7 @@ internal class SpookyBoard : Talisman
 
             if (State == 0f)
             {
-                GetMinionSlots(out var index, out var totalIndexesInGroup);
+                GetMinionSlots(out int index, out int totalIndexesInGroup);
                 float rotationBase = (float)Math.PI * 2f / totalIndexesInGroup;
                 float rotationOffset = totalIndexesInGroup * 0.66f;
                 Vector2 vector2 = new Vector2(30f, 6f) / 5f * (totalIndexesInGroup - 1);
@@ -293,7 +290,7 @@ internal class SpookyBoard : Talisman
                     SoundEngine.PlaySound(SoundID.Item1, Projectile.position);
                     for (int i = 0; i < 2; i++)
                     {
-                        Dust dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror,
+                        var dust = Dust.NewDustDirect(Projectile.position, Projectile.width, Projectile.height, DustID.MagicMirror,
                             Projectile.oldVelocity.X * 0.2f, Projectile.oldVelocity.Y * 0.2f, 0, default, 1.4f);
 
                         if (!Main.rand.NextBool(3))

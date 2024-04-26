@@ -1,4 +1,4 @@
 displayName = Power of Friendship
 author = GabeHasWon
-version = 0.1
-dllReferences = NPCUtils
+version = 1.0.0
+dllReferences = NPCUtils, NetEasy_v0.1.8, NetSerializer

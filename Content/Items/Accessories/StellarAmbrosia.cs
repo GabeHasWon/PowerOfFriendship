@@ -1,4 +1,5 @@
 ﻿using PoF.Common.Globals.ProjectileGlobals;
+using PoF.Common.Syncing;
 using PoF.Content.Items.Talismans;
 using System;
 using System.Collections.Generic;
@@ -39,9 +40,14 @@ public class StellarAmbrosia : ModItem
     {
         public override void OnHitNPC(Projectile projectile, NPC target, NPC.HitInfo hit, int damageDone)
         {
-            if (projectile.DamageType.CountsAsClass<TalismanDamageClass>() && projectile.friendly && projectile.TryGetOwner(out var owner) && 
+            if (projectile.DamageType.CountsAsClass<TalismanDamageClass>() && projectile.friendly && projectile.TryGetOwner(out var owner) &&
                 owner.GetModPlayer<StellarPlayer>().equipped && !TalismanGlobal.IsMinorTalismanProjectile.Contains(projectile.type))
-                target.GetGlobalNPC<StellarNPC>().ApplyCell(target, projectile, damageDone);
+            {
+                if (Main.netMode == NetmodeID.SinglePlayer)
+                    target.GetGlobalNPC<StellarNPC>().ApplyCell(target, projectile, damageDone);
+                else
+                    new ApplyAmbrosiaCellModule(target.whoAmI, projectile.identity, damageDone).Send(-1, -1, false);
+            }
         }
     }
 
@@ -85,7 +91,6 @@ public class StellarAmbrosia : ModItem
                 {
                     Host.life -= hitDamage;
                     Host.checkDead();
-
                 }
 
                 if (_fourthSecondTimer++ > 30 && _accDoT >= 1)

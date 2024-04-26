@@ -423,12 +423,12 @@ KissOfDeath: {
 }
 
 EoDTrophyItem: {
-	DisplayName: Empress of Death Trophy
+	DisplayName: Empress of Darkness Trophy
 	Tooltip: ""
 }
 
 EoDBag: {
-	DisplayName: Teasure Bag (Empress of Death)
+	DisplayName: Teasure Bag (Empress of Darkness)
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 }
 
@@ -443,7 +443,7 @@ BlackDeath: {
 }
 
 EoDRelicItem: {
-	DisplayName: Empress of Death Relic
+	DisplayName: Empress of Darkness Relic
 	Tooltip: ""
 }
 
@@ -593,7 +593,7 @@ ShroomiteScope: {
 
 StellarAmbrosia: {
 	DisplayName: Stellar Ambrosia
-	Tooltip: 
+	Tooltip:
 		'''
 		Conjurations apply a Stardust Cell to their victims
 		This cell does an additional 50% damage over time
