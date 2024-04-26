@@ -23,6 +23,7 @@ internal class RelicOfIce : Talisman
         Item.knockBack = 1f;
         Item.Size = new(50, 54);
         Item.value = Item.buyPrice(0, 5);
+        Item.noMelee = true;
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;

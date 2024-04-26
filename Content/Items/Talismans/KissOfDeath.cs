@@ -1,6 +1,8 @@
-﻿using System;
+﻿using PoF.Common.Players;
+using System;
 using Terraria.Audio;
 using Terraria.GameContent;
+using static Humanizer.In;
 
 namespace PoF.Content.Items.Talismans;
 
@@ -21,6 +23,7 @@ internal class KissOfDeath : Talisman
         Item.knockBack = 0.1f;
         Item.value = Item.buyPrice(0, 15, 0, 0);
         Item.Size = new(30, 40);
+        Item.noMelee = true;
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
@@ -74,7 +77,7 @@ internal class KissOfDeath : Talisman
                     Vector2 oldPos = Projectile.Center;
                     Projectile.Center = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.05f);
 
-                    if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<KissOfDeath>())
+                    if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<KissOfDeath>(Projectile.Owner()))
                         Projectile.Center += MovementSpeed();
 
                     Projectile.rotation = (Projectile.Center - oldPos).ToRotation() + MathHelper.PiOver2;
@@ -99,8 +102,10 @@ internal class KissOfDeath : Talisman
             }
         }
 
-        private Vector2 MovementSpeed() => Projectile.DirectionTo(Projectile.Owner().Center) * (Projectile.Distance(Projectile.Owner().Center) - GetRange<KissOfDeath>());
-        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) => modifiers.FinalDamage += MathF.Pow(((Projectile.Center - Projectile.oldPos[0]).Length() - 15) / 12f, 1.75f);
+        private Vector2 MovementSpeed() => Projectile.DirectionTo(Projectile.Owner().Center) * (Projectile.Distance(Projectile.Owner().Center) 
+            - GetRange<KissOfDeath>(Projectile.Owner()));
+        public override void ModifyHitNPC(NPC target, ref NPC.HitModifiers modifiers) 
+            => modifiers.FinalDamage += MathF.Pow(((Projectile.Center - Projectile.oldPos[0]).Length() - 15) / 12f, 1.75f);
 
         public override bool PreDraw(ref Color lightColor)
         {

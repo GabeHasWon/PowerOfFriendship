@@ -22,6 +22,7 @@ internal class IcemanEmblem : Talisman
         Item.width = 40;
         Item.height = 60;
         Item.value = Item.buyPrice(0, 0, 10);
+        Item.noMelee = true;
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;

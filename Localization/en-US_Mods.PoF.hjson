@@ -82,12 +82,12 @@ Tiles.EoDTrophy.MapEntry: Empress of Death Trophy
 
 Buffs: {
 	FuryBuff: {
-		DisplayName: Fury Buff
-		Description: Mods.PoF.Buffs.FuryBuff.Description
+		DisplayName: Fury
+		Description: Whips swing faster
 	}
 
 	MothPetBuff: {
-		DisplayName: Moth Pet Buff
-		Description: Mods.PoF.Buffs.MothPetBuff.Description
+		DisplayName: Death's Head Baby
+		Description: "'Death has never looked so cute!'"
 	}
 }

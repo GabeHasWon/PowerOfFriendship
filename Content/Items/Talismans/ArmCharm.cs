@@ -20,6 +20,7 @@ internal class ArmCharm : Talisman
         Item.width = 38;
         Item.height = 46;
         Item.value = Item.buyPrice(0, 0, 30);
+        Item.noMelee = true;
     }
 
     public override void AddRecipes() => CreateRecipe()

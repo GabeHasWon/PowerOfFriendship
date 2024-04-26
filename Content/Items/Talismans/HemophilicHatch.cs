@@ -24,6 +24,7 @@ internal class HemophilicHatch : Talisman
         Item.width = 40;
         Item.height = 60;
         Item.value = Item.buyPrice(0, 1);
+        Item.noMelee = true;
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
@@ -83,7 +84,7 @@ internal class HemophilicHatch : Talisman
 
                 Despawning = HandleBasicFunctions<HemophilicHatch>(Projectile, ref Time, null);
 
-                if (Projectile.DistanceSQ(Owner.Center) > GetRangeSq<HemophilicHatch>() || !Utilities.CanHitLine(Projectile, Owner))
+                if (Projectile.DistanceSQ(Owner.Center) > GetRangeSq<HemophilicHatch>(Owner) || !Utilities.CanHitLine(Projectile, Owner))
                     Projectile.velocity += Projectile.DirectionTo(Owner.Center) * 1.5f * moveSpeed;
 
                 Projectile.frame = (int)(Time / 5f % 2);

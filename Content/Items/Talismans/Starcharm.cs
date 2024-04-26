@@ -22,6 +22,7 @@ internal class Starcharm : Talisman
         Item.width = 34;
         Item.height = 44;
         Item.value = Item.buyPrice(0, 0, 2);
+        Item.noMelee = true;
     }
 
     public override void AddRecipes() => CreateRecipe()

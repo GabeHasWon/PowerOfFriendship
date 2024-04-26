@@ -19,6 +19,7 @@ internal class DukeToothNecklace : Talisman
         Item.knockBack = 1f;
         Item.Size = new(36);
         Item.value = Item.buyPrice(0, 0, 10);
+        Item.noMelee = true;
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;

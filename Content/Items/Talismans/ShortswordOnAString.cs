@@ -20,6 +20,7 @@ internal class ShortswordOnAString : Talisman
         Item.knockBack = 0.2f;
         Item.Size = new(44, 30);
         Item.value = Item.buyPrice(0, 10);
+        Item.noMelee = true;
     }
 
     public override void AddRecipes()
@@ -38,6 +39,8 @@ internal class ShortswordOnAString : Talisman
 
     private class ShortswordOnAStringProj : ModProjectile
     {
+        private Player Owner => Projectile.Owner();
+
         private bool Despawning
         {
             get => Projectile.ai[0] == 1;
@@ -83,8 +86,8 @@ internal class ShortswordOnAString : Talisman
                     Vector2 oldPos = Projectile.Center;
                     Projectile.Center = Vector2.Lerp(Projectile.Center, Main.MouseWorld, 0.075f);
 
-                    if (Projectile.DistanceSQ(Projectile.Owner().Center) > GetRangeSq<ShortswordOnAString>())
-                        Projectile.Center += Projectile.DirectionTo(Projectile.Owner().Center) * (Projectile.Distance(Projectile.Owner().Center) - GetRange<ShortswordOnAString>());
+                    if (Projectile.DistanceSQ(Owner.Center) > GetRangeSq<ShortswordOnAString>(Owner))
+                        Projectile.Center += Projectile.DirectionTo(Owner.Center) * (Projectile.Distance(Owner.Center) - GetRange<ShortswordOnAString>(Owner));
 
                     Projectile.rotation = (Projectile.Center - oldPos).ToRotation();
                     Rotation = Projectile.rotation;
@@ -98,7 +101,7 @@ internal class ShortswordOnAString : Talisman
             else
             {
                 Projectile.Opacity *= 0.85f;
-                Projectile.Center = Vector2.Lerp(Projectile.Center, Projectile.Owner().Center, 0.1f);
+                Projectile.Center = Vector2.Lerp(Projectile.Center, Owner.Center, 0.1f);
 
                 if (Projectile.Opacity < 0.05f)
                     Projectile.Kill();

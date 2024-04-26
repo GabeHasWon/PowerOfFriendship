@@ -4,35 +4,32 @@ using ReLogic.Content;
 
 namespace PoF.Content.Items.Accessories;
 
-public class HeartMemento : ModItem
+public class LifeMemento : ModItem
 {
     public override void SetDefaults()
     {
         Item.accessory = true;
-        Item.Size = new(32, 42);
-        Item.rare = ItemRarityID.Blue;
-        Item.value = Item.sellPrice(gold: 1);
+        Item.Size = new(36, 50);
+        Item.rare = ItemRarityID.Lime;
+        Item.value = Item.sellPrice(gold: 2);
     }
 
-    public override bool CanAccessoryBeEquippedWith(Item equippedItem, Item incomingItem, Player player) =>
-        incomingItem.ModItem is not HeartMemento || equippedItem.ModItem is not HeartMemento;
-
-    public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<MementoPlayer>().equipped = true;
+    public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<LifeMementoPlayer>().equipped = true;
 
     public override void AddRecipes() => CreateRecipe()
-        .AddIngredient(ItemID.GoldBar, 5)
-        .AddIngredient(ItemID.LifeCrystal, 1)
-        .AddTile(TileID.Anvils)
+        .AddIngredient(ItemID.LifeFruit, 1)
+        .AddIngredient(ItemID.ChlorophyteBar, 8)
+        .AddTile(TileID.MythrilAnvil)
         .Register();
 
-    public class MementoPlayer : ModPlayer
+    public class LifeMementoPlayer : ModPlayer
     {
         public bool equipped = false;
 
         public override void ResetEffects() => equipped = false;
     }
 
-    public class MementoProjectile : GlobalProjectile
+    public class LifeMementoProjectile : GlobalProjectile
     {
         static Asset<Texture2D> _aura;
 
@@ -40,7 +37,7 @@ public class HeartMemento : ModItem
 
         private int _healTime = 0;
         
-        public override void SetStaticDefaults() => _aura = ModContent.Request<Texture2D>("PoF/Content/Items/Accessories/HeartMemento_Circle");
+        public override void SetStaticDefaults() => _aura = ModContent.Request<Texture2D>("PoF/Content/Items/Accessories/LifeMemento_Circle");
         public override void Unload() => _aura = null;
 
         public override bool AppliesToEntity(Projectile proj, bool lateInstantiation)
@@ -48,7 +45,7 @@ public class HeartMemento : ModItem
 
         public override bool PreAI(Projectile projectile)
         {
-            if (Main.player[projectile.owner].GetModPlayer<MementoPlayer>().equipped && _healTime++ > Main.player[projectile.owner].HeldItem.useTime * 2)
+            if (Main.player[projectile.owner].GetModPlayer<LifeMementoPlayer>().equipped && _healTime++ > Main.player[projectile.owner].HeldItem.useTime * 2)
             {
                 DoHealAura(projectile);
                 _healTime = 0;
@@ -61,14 +58,14 @@ public class HeartMemento : ModItem
         {
             foreach (var item in Main.ActivePlayers)
             {
-                if (item.DistanceSQ(projectile.Center) < 120 * 120 && item.statLife < item.statLifeMax2)
-                    item.Heal((int)(projectile.damage * 0.1f) + 1);
+                if (item.DistanceSQ(projectile.Center) < 160 * 160 && item.statLife < item.statLifeMax2)
+                    item.Heal((int)(projectile.damage * 0.2f) + 1);
             }
         }
 
         public override void PostDraw(Projectile projectile, Color lightColor)
         {
-            if (Main.player[projectile.owner].GetModPlayer<MementoPlayer>().equipped)
+            if (Main.player[projectile.owner].GetModPlayer<LifeMementoPlayer>().equipped)
             {
                 var pos = projectile.Center - Main.screenPosition;
                 var color = lightColor * 0.4f * projectile.Opacity;
@@ -76,13 +73,4 @@ public class HeartMemento : ModItem
             }
         }
     }
-}
-
-public class HeartMementoPlat : HeartMemento
-{
-    public override void AddRecipes() => CreateRecipe()
-        .AddIngredient(ItemID.PlatinumBar, 5)
-        .AddIngredient(ItemID.LifeCrystal, 1)
-        .AddTile(TileID.Anvils)
-        .Register();
 }

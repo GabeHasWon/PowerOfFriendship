@@ -15,6 +15,7 @@ internal class Catgrass : Talisman
         Item.damage = 280;
         Item.useTime = Item.useAnimation = MaxFireRate;
         Item.mana = 20;
+        Item.noMelee = true;
         Item.shoot = ModContent.ProjectileType<CatgrassProj>();
         Item.shootSpeed = 5;
         Item.Size = new(42, 52);
@@ -34,6 +35,8 @@ internal class Catgrass : Talisman
         }
 
         private ref float Time => ref Projectile.ai[1];
+
+        public override void SetStaticDefaults() => TalismanGlobal.IsMinorTalismanProjectile.Add(Type); // This is the "Main" one but should be invisible during gameplay in all ways
 
         public override void SetDefaults()
         {
@@ -105,8 +108,6 @@ internal class Catgrass : Talisman
             get => Projectile.ai[0] == 1;
             set => Projectile.ai[0] = value ? 1 : 0;
         }
-
-        public override void SetStaticDefaults() => TalismanGlobal.IsMinorTalismanProjectile.Add(Type);
 
         public override void SetDefaults()
         {

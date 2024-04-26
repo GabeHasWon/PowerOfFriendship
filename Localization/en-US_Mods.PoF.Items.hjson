@@ -318,7 +318,7 @@ StarfireTalisman: {
 	DisplayName: Starfire Talisman
 	Tooltip:
 		'''
-		Summons a baby Flow Invader to fight for You
+		Summons a baby Flow Invader to fight for you
 		The baby will spawn even smaller Flow Invaders, which can be stacked or sent towards a nearby enemy
 		'I can't tell if it's cute, or if it's just doing something to my brain. Fun!'
 		'''
@@ -519,7 +519,7 @@ RetractionCord: {
 		'''
 		-60% whip range
 		+40% whip damage
-		'Perhaps the culmination of science, research and knowledge in the smallest package possible.'
+		'Perhaps the only true culmination of science, research and knowledge - in the smallest package possible.'
 		'''
 }
 
@@ -529,6 +529,7 @@ CrimtaneHandle: {
 		'''
 		-15% whip range
 		+10% whip use speed
+		'Nothing like a rugged handle!'
 		'''
 }
 
@@ -538,20 +539,64 @@ DemoniteHandle: {
 		'''
 		-15% whip range
 		+15% whip critical strike chance
+		'Nothing like a mushy handle!'
 		'''
 }
 
 ThornBulb: {
 	DisplayName: Thorn Bulb
-	Tooltip: ""
+	Tooltip:
+		'''
+		Conjurations are surrounded by a large, thorny aura
+		The aura gives players within it 25 additional defense and the Thorns buff
+		'A curious mix of soft and sharp.'
+		'''
 }
 
 HeartMemento: {
 	DisplayName: Heart Memento
-	Tooltip: ""
+	Tooltip:
+		'''
+		Conjurations are surrounded by a healing aura
+		The aura heals players within it for 1/10th of the talisman's damage
+		The healing rate scales with the use speed of the talisman
+		'Nostalgic, despite it being hand-crafted by you.'
+		'''
 }
 
 HeartMementoPlat: {
-	DisplayName: Heart Memento Plat
-	Tooltip: ""
+	DisplayName: "{$HeartMemento.DisplayName}"
+	Tooltip: "{$HeartMemento.Tooltip}"
+}
+
+LifeMemento: {
+	DisplayName: Life Memento
+	Tooltip:
+		'''
+		Conjurations are surrounded by a healing aura
+		The aura heals players within it for 1/5th of the talisman's damage
+		The healing rate scales with the use speed of the talisman
+		'Comforting, because it was hand-crafted by you.'
+		'''
+}
+
+ShroomiteScope: {
+	DisplayName: Shroomite Scope
+	Tooltip:
+		'''
+		+40% conjuration range
+		Right click to scope
+		Disable the vanity on this slot to disable scoping functionality
+		'Focuses energy on your conjurations, at a range.'
+		'''
+}
+
+StellarAmbrosia: {
+	DisplayName: Stellar Ambrosia
+	Tooltip: 
+		'''
+		Conjurations apply a Stardust Cell to their victims
+		This cell does an additional 50% damage over time
+		'Smells delicious, for the brave!'
+		'''
 }

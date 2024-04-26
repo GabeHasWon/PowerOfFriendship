@@ -1,5 +1,6 @@
 ﻿using PoF.Common.Players;
 using ReLogic.Content;
+using System;
 using System.Collections.Generic;
 using Terraria.Localization;
 
@@ -33,6 +34,7 @@ internal abstract class Talisman : ModItem
         Item.channel = true;
         Item.autoReuse = false;
         Item.noUseGraphic = true;
+        Item.noMelee = true;
 
         Defaults();
     }
@@ -51,8 +53,24 @@ internal abstract class Talisman : ModItem
     }
 
     public static Item GetTalisman<T>() where T : Talisman => ContentSamples.ItemsByType[ModContent.ItemType<T>()];
-    public static float GetRange<T>() where T : Talisman => (ContentSamples.ItemsByType[ModContent.ItemType<T>()].ModItem as T).RealRange;
-    public static float GetRangeSq<T>() where T : Talisman => (ContentSamples.ItemsByType[ModContent.ItemType<T>()].ModItem as T).SquaredRange;
+    internal static float GetRange<T>() where T : Talisman => (ContentSamples.ItemsByType[ModContent.ItemType<T>()].ModItem as T).RealRange;
+    internal static float GetRangeSq<T>() where T : Talisman => (ContentSamples.ItemsByType[ModContent.ItemType<T>()].ModItem as T).SquaredRange;
+
+    /// <summary>
+    /// Gets the real range for the given talisman, including range buffs.
+    /// </summary>
+    /// <typeparam name="T">Talisman to be referencing.</typeparam>
+    /// <param name="player">Player to reference.</param>
+    /// <returns>The range, in pixels, that the given talisman can reach.</returns>
+    public static float GetRange<T>(Player player) where T : Talisman => GetRange<T>() * player.GetModPlayer<TalismanPlayer>().rangeMultiplier;
+
+    /// <summary>
+    /// Gets the real squared range for the given talisman, including range buffs.
+    /// </summary>
+    /// <typeparam name="T">Talisman to be referencing.</typeparam>
+    /// <param name="player">Player to reference.</param>
+    /// <returns>The squared range, in pixels, that the given talisman can reach.</returns>
+    public static float GetRangeSq<T>(Player player) where T : Talisman => GetRangeSq<T>() * MathF.Pow(player.GetModPlayer<TalismanPlayer>().rangeMultiplier, 2);
 
     public static bool PayMana(Projectile proj)
     {
@@ -82,7 +100,7 @@ internal abstract class Talisman : ModItem
         projectile.Owner().SetDummyItemTime(2);
         projectile.timeLeft++;
 
-        if (returnVelocity.HasValue && projectile.DistanceSQ(projectile.Owner().Center) > GetRangeSq<T>())
+        if (returnVelocity.HasValue && projectile.DistanceSQ(projectile.Owner().Center) > GetRangeSq<T>(projectile.Owner()))
             projectile.velocity += projectile.DirectionTo(projectile.Owner().Center) * 1.2f;
 
         if (time++ > projectile.Owner().HeldItem.useTime && autoPayMana)

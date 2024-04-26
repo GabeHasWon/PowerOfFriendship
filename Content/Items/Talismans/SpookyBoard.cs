@@ -23,6 +23,7 @@ internal class SpookyBoard : Talisman
         Item.shoot = ModContent.ProjectileType<SpookySummoner>();
         Item.shootSpeed = 5;
         Item.value = Item.buyPrice(0, 0, 30);
+        Item.noMelee = true;
     }
 
     public override void AddRecipes()

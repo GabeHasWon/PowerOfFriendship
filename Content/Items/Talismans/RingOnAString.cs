@@ -22,6 +22,7 @@ internal class RingOnAString : Talisman
         Item.knockBack = 1f;
         Item.Size = new(44, 40);
         Item.value = Item.buyPrice(0, 10);
+        Item.noMelee = true;
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;

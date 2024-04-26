@@ -5,8 +5,13 @@ namespace PoF.Common.Players;
 internal class TalismanPlayer : ModPlayer
 {
     public Talisman heldTalisman = null;
+    public float rangeMultiplier = 1f;
 
-    public override void ResetEffects() => heldTalisman = null;
+    public override void ResetEffects()
+    {
+        heldTalisman = null;
+        rangeMultiplier = 1f;
+    }
 }
 
 internal class TalismanLayer : PlayerDrawLayer

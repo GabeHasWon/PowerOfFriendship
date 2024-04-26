@@ -28,6 +28,7 @@ internal class ForlornEffigy : Talisman
         Item.knockBack = 1f;
         Item.Size = new(28, 32);
         Item.value = Item.buyPrice(0, 10);
+        Item.noMelee = true;
     }
 
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
