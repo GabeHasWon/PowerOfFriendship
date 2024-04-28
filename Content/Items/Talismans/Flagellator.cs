@@ -11,9 +11,9 @@ internal class Flagellator : Talisman
     protected override void Defaults()
     {
         Item.rare = ItemRarityID.Purple;
-        Item.damage = 78;
-        Item.useTime = 18;
-        Item.useAnimation = 18;
+        Item.damage = 70;
+        Item.useTime = 23;
+        Item.useAnimation = 23;
         Item.mana = 6;
         Item.UseSound = SoundID.Item1;
         Item.shoot = ModContent.ProjectileType<FlagellatorHandle>();
@@ -81,7 +81,8 @@ internal class Flagellator : Talisman
                     {
                         var src = Projectile.GetSource_FromAI();
                         int type = ModContent.ProjectileType<FlagellatorWhip>();
-                        WhipWhoAmI = Projectile.NewProjectile(src, Projectile.Center + vel, vel, type, Projectile.damage, 0, Projectile.owner, ai2: Projectile.whoAmI);
+                        int damage = (int)Projectile.Owner().GetDamage(DamageClass.SummonMeleeSpeed).ApplyTo(Projectile.damage);
+                        WhipWhoAmI = Projectile.NewProjectile(src, Projectile.Center + vel, vel, type, damage, 0, Projectile.owner, ai2: Projectile.whoAmI);
 
                         if (Main.netMode == NetmodeID.MultiplayerClient)
                             NetMessage.SendData(MessageID.SyncProjectile, -1, -1, null, (int)WhipWhoAmI);
@@ -93,6 +94,8 @@ internal class Flagellator : Talisman
 
                     if (!paid)
                         Despawning = true;
+
+                    invalidWhip = false;
                 }
 
                 if (invalidWhip)

@@ -27,6 +27,7 @@ internal class HemophilicHatch : Talisman
         Item.noMelee = true;
     }
 
+    public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback) => position.Y -= 10;
     public override bool CanUseItem(Player player) => player.ownedProjectileCounts[Item.shoot] <= 0;
 
     public override void AddRecipes() => CreateRecipe()

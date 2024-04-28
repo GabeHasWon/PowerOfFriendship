@@ -75,11 +75,12 @@ internal abstract class Talisman : ModItem
     public static bool PayMana(Projectile proj)
     {
         Player plr = proj.Owner();
-        bool paidMana = plr.CheckMana(plr.HeldItem.mana, true);
+        bool paidMana = plr.CheckMana(plr.HeldItem.mana, true, false);
         plr.manaRegenDelay = (int)plr.maxRegenDelay;
 
         if (Main.myPlayer == proj.owner)
             NetMessage.SendData(MessageID.PlayerMana, -1, -1, null, Main.myPlayer);
+
         return paidMana;
     }
 

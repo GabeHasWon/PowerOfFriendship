@@ -1,6 +1,6 @@
 ﻿using PoF.Content.NPCs.EoD;
 
-namespace PoF.Common.Globals.ItemGlobals;
+namespace PoF.Common.Globals.NPCGlobals;
 
 internal class SpawnEoDGlobal : GlobalNPC
 {
