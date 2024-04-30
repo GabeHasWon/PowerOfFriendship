@@ -198,7 +198,7 @@ public class EmpressOfDeath : ModNPC
                 {
                     SwitchState(DetermineNextState());
 
-                    if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 20 : 14) : 35) && Main.rand.NextBool(3))
+                    if (portalWhoAmI.Count < (!Main.masterMode ? (Main.expertMode ? 20 : 14) : 35) && Main.rand.NextBool(1))
                         SwitchState(EoDState.SummonAdds);
 
                     if (portalWhoAmI.Count > 0 && Main.rand.NextBool(3))
@@ -244,7 +244,7 @@ public class EmpressOfDeath : ModNPC
                 if (Timer == 1 && Main.netMode != NetmodeID.MultiplayerClient)
                 {
                     int type = ModContent.ProjectileType<EoDPortal>();
-                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 0, 0, Main.myPlayer, -1, Main.rand.NextFloat(350, 500));
+                    int proj = Projectile.NewProjectile(NPC.GetSource_FromAI(), NPC.Center, Vector2.Zero, type, 0, 0, Main.myPlayer, 0, Main.rand.NextFloat(350, 500), -1);
                     portalWhoAmI.Add(Main.projectile[proj].identity);
                 }
 

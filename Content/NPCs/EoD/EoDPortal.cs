@@ -47,7 +47,7 @@ class EoDPortal : ModProjectile
 
         if (!_spawnedNPC && Main.netMode != NetmodeID.MultiplayerClient)
         {
-            bool isMoth = !Main.rand.NextBool(2);
+            bool isMoth = Main.rand.NextBool(2);
             attachedType = !isMoth ? ModContent.NPCType<RottenGhoulHanging>() : ModContent.NPCType<DeathsHeadMoth>();
 
             if (isMoth)
@@ -92,9 +92,12 @@ class EoDPortal : ModProjectile
             retractionTime++;
             Projectile.Opacity = MathHelper.Lerp(Projectile.Opacity, 1f, 0.02f);
 
-            if (AttachedNPC != 0 && attachedType == ModContent.NPCType<DeathsHeadMoth>() && HasChainedMoth())
+            if (AttachedNPC == -1)
+                return; // wtf
+
+            if (attachedType == ModContent.NPCType<DeathsHeadMoth>() && HasChainedMoth())
                 (Main.npc[(int)AttachedNPC].ModNPC as DeathsHeadMoth).UpdateFromParent(Projectile);
-            else
+            else if (attachedType == ModContent.NPCType<RottenGhoulHanging>())
                 (Main.npc[(int)AttachedNPC].ModNPC as RottenGhoulHanging).UpdateFromParent(Projectile);
         }
     }
