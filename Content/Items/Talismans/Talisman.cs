@@ -93,12 +93,12 @@ internal abstract class Talisman : ModItem
     /// <param name="returnVelocity"></param>
     /// <param name="autoPayMana"></param>
     /// <returns>Whether the projectile should start despawning.</returns>
-    public static bool HandleBasicFunctions<T>(Projectile projectile, ref float time, float? returnVelocity, bool autoPayMana = true) where T : Talisman
+    public static bool HandleBasicFunctions<T>(Projectile projectile, ref float time, float? returnVelocity, bool autoPayMana = true, int dummyTime = 2) where T : Talisman
     {
         bool paidMana = true;
 
         projectile.netUpdate = true;
-        projectile.Owner().SetDummyItemTime(2);
+        projectile.Owner().SetDummyItemTime(dummyTime);
         projectile.timeLeft++;
 
         if (returnVelocity.HasValue && projectile.DistanceSQ(projectile.Owner().Center) > GetRangeSq<T>(projectile.Owner()))

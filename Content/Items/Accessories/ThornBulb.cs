@@ -1,7 +1,6 @@
 ﻿using PoF.Common.Globals.ProjectileGlobals;
 using PoF.Content.Items.Talismans;
 using ReLogic.Content;
-using Terraria;
 
 namespace PoF.Content.Items.Accessories;
 
@@ -52,9 +51,9 @@ public class ThornBulb : ModItem
         {
             foreach (var item in Main.ActivePlayers)
             {
-                if (item.DistanceSQ(projectile.Center) < 210 * 210)
+                if (item.DistanceSQ(projectile.Center) < 180 * 180)
                 {
-                    item.statDefense += 25;
+                    item.statDefense += 5;
                     item.AddBuff(BuffID.Thorns, 2);
                 }
             }
@@ -66,7 +65,7 @@ public class ThornBulb : ModItem
             {
                 var pos = projectile.Center - Main.screenPosition;
                 var color = lightColor * 0.5f * projectile.Opacity;
-                Main.spriteBatch.Draw(_aura.Value, pos, null, color, Main.GameUpdateCount * 0.05f, _aura.Value.Size() / 2f, 1.75f, SpriteEffects.None, 0);
+                Main.spriteBatch.Draw(_aura.Value, pos, null, color, Main.GameUpdateCount * 0.05f, _aura.Value.Size() / 2f, 1.5f, SpriteEffects.None, 0);
             }
         }
     }

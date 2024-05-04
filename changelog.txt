@@ -1,0 +1,2 @@
+- Reduced Thorn Bulb defense buff (+25 down to +5) and aura radius (210px to 180px)
+- Fixed Unholy Amulet spamming hard when being spawned in a tile, added end lag

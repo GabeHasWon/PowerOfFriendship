@@ -132,7 +132,7 @@ internal class UnholyAmulet : Talisman
                         Projectile.velocity = Projectile.velocity.SafeNormalize() * MinSpeed;
                 }
 
-                Despawning = HandleBasicFunctions<UnholyAmulet>(Projectile, ref Time, 1.2f);
+                Despawning = HandleBasicFunctions<UnholyAmulet>(Projectile, ref Time, 1.2f, dummyTime: (int)(Projectile.Owner().HeldItem.useTime * 1.5f));
 
                 Projectile.Opacity = Utilities.CanHitLine(Projectile, Projectile.Owner())
                     ? MathHelper.Lerp(Projectile.Opacity, 1f, 0.1f)
