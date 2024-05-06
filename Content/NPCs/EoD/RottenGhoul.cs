@@ -127,7 +127,12 @@ public class RottenGhoul : ModNPC
     }
 
     public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<EmpressOfDeath>());
-    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+    {
+        bestiaryEntry.AddInfo(this, "Graveyard");
+        bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[ModContent.NPCType<EmpressOfDeath>()], true);
+    }
 
     public override void HitEffect(NPC.HitInfo hit)
     {

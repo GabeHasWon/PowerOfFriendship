@@ -11,7 +11,7 @@ class BandOfCommitment : ModItem
         Item.reuseDelay = 20;
         Item.shoot = ModContent.ProjectileType<BlackHeart>();
         Item.shootSpeed = 14;
-        Item.rare = ItemRarityID.Purple;
+        Item.rare = ItemRarityID.Yellow;
     }
 
     public override void ModifyShootStats(Player player, ref Vector2 position, ref Vector2 velocity, ref int type, ref int damage, ref float knockback)

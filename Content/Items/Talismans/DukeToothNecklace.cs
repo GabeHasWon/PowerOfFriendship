@@ -8,7 +8,7 @@ internal class DukeToothNecklace : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Yellow;
         Item.damage = 96;
         Item.useTime = 15;
         Item.useAnimation = 15;

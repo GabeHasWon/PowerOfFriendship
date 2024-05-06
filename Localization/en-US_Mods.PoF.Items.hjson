@@ -207,7 +207,7 @@ ToothTalisman: {
 }
 
 ShortswordOnAString: {
-	DisplayName: Shortsword On A String
+	DisplayName: Shortsword on a String
 	Tooltip:
 		'''
 		Conjures a special Copper Shortsword to fight for you
@@ -257,7 +257,7 @@ SpookyBoard: {
 }
 
 RingOnAString: {
-	DisplayName: Ring On A String
+	DisplayName: Ring on a String
 	Tooltip:
 		'''
 		Conjures an ethereal Ring to fight for you
@@ -428,7 +428,7 @@ EoDTrophyItem: {
 }
 
 EoDBag: {
-	DisplayName: Teasure Bag (Empress of Darkness)
+	DisplayName: Treasure Bag (Empress of Darkness)
 	Tooltip: "{$CommonItemTooltip.RightClickToOpen}"
 }
 
@@ -448,7 +448,7 @@ EoDRelicItem: {
 }
 
 DeathsHeadEgg: {
-	DisplayName: Deaths Head Egg
+	DisplayName: Death's Head Egg
 	Tooltip:
 		'''
 		Summons a baby Death's Head Moth

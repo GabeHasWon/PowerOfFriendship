@@ -9,7 +9,7 @@ public class DaisyChain : ModItem
     {
         Item.accessory = true;
         Item.Size = new(30, 36);
-        Item.rare = ItemRarityID.Cyan;
+        Item.rare = ItemRarityID.Lime;
         Item.value = Item.sellPrice(gold: 2);
     }
 

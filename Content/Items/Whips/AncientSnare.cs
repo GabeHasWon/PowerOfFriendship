@@ -5,7 +5,7 @@ public class AncientSnare : ModItem
     public override void SetDefaults()
     {
         Item.DefaultToWhip(ModContent.ProjectileType<AncientSnareProj>(), 184, 6, 4, 30);
-        Item.rare = ItemRarityID.LightPurple;
+        Item.rare = ItemRarityID.Lime;
         Item.value = Item.buyPrice(0, 3);
     }
 

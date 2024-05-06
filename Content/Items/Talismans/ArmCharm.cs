@@ -9,7 +9,7 @@ internal class ArmCharm : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Green;
         Item.damage = 28;
         Item.useTime = 15;
         Item.useAnimation = 15;

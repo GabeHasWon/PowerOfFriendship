@@ -12,7 +12,7 @@ internal class RelicOfIce : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.LightPurple;
+        Item.rare = ItemRarityID.LightRed;
         Item.damage = 24;
         Item.useTime = 16;
         Item.useAnimation = 16;

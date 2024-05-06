@@ -11,8 +11,14 @@ class DeathsHeadEgg : ModItem
         Item.useAnimation = 20;
         Item.shoot = ModContent.ProjectileType<BabyMoth>();
         Item.shootSpeed = 6;
-        Item.rare = ItemRarityID.Purple;
-        Item.buffType = ModContent.BuffType<MothPetBuff>();
+        Item.rare = ItemRarityID.Master;
+        Item.master = true;
+    }
+
+    public override bool? UseItem(Player player)
+    {
+        player.AddBuff(ModContent.BuffType<MothPetBuff>(), 2);
+        return null;
     }
 
     public class BabyMoth : ModProjectile

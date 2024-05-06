@@ -20,6 +20,7 @@ using Terraria.Graphics.CameraModifiers;
 
 namespace PoF.Content.NPCs.EoD;
 
+[AutoloadBossHead]
 public class EmpressOfDeath : ModNPC
 {
     public enum EoDState : byte

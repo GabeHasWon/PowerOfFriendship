@@ -11,7 +11,7 @@ public class UnholyCrossNecklace : ModItem
     {
         Item.accessory = true;
         Item.Size = new(26, 36);
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.LightRed;
         Item.value = Item.sellPrice(gold: 3);
     }
 

@@ -7,7 +7,7 @@ public class StingerNecklace : ModItem
     {
         Item.accessory = true;
         Item.Size = new(30, 36);
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(copper: 80);
     }
 

@@ -9,8 +9,9 @@ public class DarkOrb : ModItem
     {
         Item.accessory = true;
         Item.Size = new(36);
-        Item.rare = ItemRarityID.Purple;
+        Item.rare = ItemRarityID.Expert;
         Item.value = Item.sellPrice(gold: 2);
+        Item.expert = true;
     }
 
     public override void UpdateAccessory(Player player, bool hideVisual) => player.GetModPlayer<OrbPlayer>().equipped = true;

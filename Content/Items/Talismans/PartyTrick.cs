@@ -10,7 +10,7 @@ internal class PartyTrick : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.LightRed;
         Item.damage = 42;
         Item.useTime = 16;
         Item.useAnimation = 16;

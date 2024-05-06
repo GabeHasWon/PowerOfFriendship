@@ -1,8 +1,5 @@
-﻿using PoF.Common.Players;
-using System;
-using Terraria.Audio;
+﻿using System;
 using Terraria.GameContent;
-using static Humanizer.In;
 
 namespace PoF.Content.Items.Talismans;
 
@@ -12,7 +9,7 @@ internal class KissOfDeath : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Yellow;
         Item.damage = 16;
         Item.useTime = 16;
         Item.useAnimation = 16;

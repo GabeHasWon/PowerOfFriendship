@@ -6,7 +6,7 @@ public class CrystalSkull : ModItem
     {
         Item.accessory = true;
         Item.Size = new(30, 36);
-        Item.rare = ItemRarityID.Cyan;
+        Item.rare = ItemRarityID.Blue;
         Item.value = Item.sellPrice(gold: 5);
     }
 

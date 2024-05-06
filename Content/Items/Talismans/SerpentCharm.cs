@@ -12,7 +12,7 @@ internal class SerpentCharm : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Lime;
         Item.damage = 90;
         Item.useTime = 13;
         Item.useAnimation = 13;

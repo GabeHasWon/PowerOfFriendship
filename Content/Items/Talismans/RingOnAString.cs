@@ -11,7 +11,7 @@ internal class RingOnAString : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Purple;
+        Item.rare = ItemRarityID.Yellow;
         Item.damage = 36;
         Item.useTime = 30;
         Item.useAnimation = 30;

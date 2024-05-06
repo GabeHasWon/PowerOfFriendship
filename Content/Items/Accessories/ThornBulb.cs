@@ -10,7 +10,7 @@ public class ThornBulb : ModItem
     {
         Item.accessory = true;
         Item.Size = new(32, 34);
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Orange;
         Item.value = Item.sellPrice(silver: 5);
     }
 

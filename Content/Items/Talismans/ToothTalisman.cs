@@ -18,7 +18,7 @@ internal class ToothTalisman : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.LightRed;
         Item.damage = 42;
         Item.useTime = 13;
         Item.useAnimation = 13;

@@ -47,7 +47,12 @@ public class PoF : Mod
             ModContent.NPCType<EmpressOfDeath>(),
             new Dictionary<string, object>()
             {
-                ["spawnInfo"] = Language.GetText("Mods.PoF.EoDSpawnInfo")
+                ["spawnInfo"] = Language.GetText("Mods.PoF.EoDSpawnInfo"),
+                ["customPortrait"] = (SpriteBatch spriteBatch, Rectangle rect, Color color) => {
+                    Texture2D texture = ModContent.Request<Texture2D>("PoF/Content/NPCs/EoD/EmpressOfDeath_Checklist").Value;
+                    var centered = new Vector2(rect.X + rect.Width / 2 - texture.Width / 2, rect.Y + rect.Height / 2 - texture.Height / 2);
+                    spriteBatch.Draw(texture, centered, color);
+                }
             }
         );
     }

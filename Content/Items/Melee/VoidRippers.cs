@@ -7,5 +7,6 @@ class VoidRippers : ModItem
         Item.CloneDefaults(ItemID.FetidBaghnakhs);
         Item.damage = 134;
         Item.useTime = Item.useAnimation = 6;
+        Item.rare = ItemRarityID.Yellow;
     }
 }

@@ -11,7 +11,7 @@ public class Hellmask : ModItem
         Item.width = 32;
         Item.height = 26;
         Item.value = Item.buyPrice(0, 2);
-        Item.rare = ItemRarityID.LightRed;
+        Item.rare = ItemRarityID.Orange;
         Item.defense = 7;
     }
 

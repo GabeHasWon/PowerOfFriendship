@@ -8,7 +8,7 @@ public class Hellrobe : ModItem
         Item.width = 38;
         Item.height = 30;
         Item.value = Item.buyPrice(0, 2);
-        Item.rare = ItemRarityID.LightRed;
+        Item.rare = ItemRarityID.Orange;
         Item.defense = 9;
     }
 

@@ -10,7 +10,7 @@ internal class Flagellator : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Purple;
+        Item.rare = ItemRarityID.Pink;
         Item.damage = 70;
         Item.useTime = 23;
         Item.useAnimation = 23;

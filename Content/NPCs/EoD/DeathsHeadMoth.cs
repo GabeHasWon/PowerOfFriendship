@@ -1,4 +1,6 @@
-﻿using NPCUtils;
+﻿using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json.Linq;
+using NPCUtils;
 using System;
 using System.IO;
 using System.Linq;
@@ -47,7 +49,12 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
     }
 
     public override bool CheckActive() => !NPC.AnyNPCs(ModContent.NPCType<EmpressOfDeath>());
-    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");
+
+    public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry)
+    {
+        bestiaryEntry.AddInfo(this, "Graveyard");
+        bestiaryEntry.UIInfoProvider = new CommonEnemyUICollectionInfoProvider(ContentSamples.NpcBestiaryCreditIdsByNpcNetIds[ModContent.NPCType<EmpressOfDeath>()], true);
+    }
 
     public override void AI()
     {

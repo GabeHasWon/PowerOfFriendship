@@ -15,7 +15,7 @@ public class BlackDeath : ModItem
         Item.knockBack = 4;
         Item.channel = true;
         Item.value = Item.buyPrice(0, 10, 0, 0);
-        Item.rare = ItemRarityID.Pink;
+        Item.rare = ItemRarityID.Yellow;
         Item.autoReuse = true;
         Item.shoot = ProjectileID.TorchGod;
         Item.shootSpeed = 10f;

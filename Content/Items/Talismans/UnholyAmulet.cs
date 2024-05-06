@@ -21,7 +21,7 @@ internal class UnholyAmulet : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Orange;
         Item.damage = 32;
         Item.useTime = 16;
         Item.useAnimation = 16;
@@ -38,7 +38,7 @@ internal class UnholyAmulet : Talisman
     public override void AddRecipes()
     {
         CreateRecipe()
-            .AddIngredient(ItemID.Hellstone, 20)
+            .AddIngredient(ItemID.HellstoneBar, 20)
             .AddTile(TileID.Anvils)
             .Register();
     }

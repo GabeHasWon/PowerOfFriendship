@@ -7,7 +7,7 @@ public class RetractionCord : ModItem
     {
         Item.accessory = true;
         Item.Size = new(30, 34);
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Green;
         Item.value = Item.sellPrice(silver: 20);
     }
 

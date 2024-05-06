@@ -8,7 +8,7 @@ public class TheStinger : ModItem
     public override void SetDefaults()
     {
         Item.DefaultToWhip(ModContent.ProjectileType<TheStingerProj>(), 24, 2, 4, 25);
-        Item.rare = ItemRarityID.Green;
+        Item.rare = ItemRarityID.Orange;
         Item.value = Item.buyPrice(0, 0, 50);
     }
 

@@ -8,7 +8,7 @@ public class FuriousSpirit : ModItem
     {
         Item.accessory = true;
         Item.Size = new(24, 44);
-        Item.rare = ItemRarityID.Purple;
+        Item.rare = ItemRarityID.Yellow;
         Item.value = Item.sellPrice(gold: 4);
     }
 

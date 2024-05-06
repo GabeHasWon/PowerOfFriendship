@@ -1,2 +1,9 @@
-- Reduced Thorn Bulb defense buff (+25 down to +5) and aura radius (210px to 180px)
-- Fixed Unholy Amulet spamming hard when being spawned in a tile, added end lag
+- Updated rarities for almost every item in the mod
+- Changed Ring on a String and Shortsword on a String's capitalization
+- Fixed typo in Empress of Darkness's treasure bag
+- Fixed Unholy Amulet being crafted with Hellstone Ore and not Hellstone Bars
+- Fixed Death's Head Egg not being used properly
+- Fixed Death's Head Egg buff not working properly
+- Fixed Empress of Darkness adds not completing their bestiary entries when EoD is defeated
+- Fixed EoD missing map icon, boss bar
+- Fixed EoD Boss Checklist sprite not having wings

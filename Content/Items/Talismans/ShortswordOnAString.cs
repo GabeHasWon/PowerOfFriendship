@@ -9,7 +9,7 @@ internal class ShortswordOnAString : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Purple;
+        Item.rare = ItemRarityID.LightPurple;
         Item.damage = 60;
         Item.useTime = 16;
         Item.useAnimation = 16;

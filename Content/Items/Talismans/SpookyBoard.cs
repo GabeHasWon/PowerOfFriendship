@@ -14,7 +14,7 @@ internal class SpookyBoard : Talisman
     protected override void Defaults()
     {
         Item.Size = new(54, 22);
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Yellow;
         Item.damage = 92;
         Item.useTime = 16;
         Item.useAnimation = 16;

@@ -10,7 +10,7 @@ internal class StarfireTalisman : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Red;
         Item.damage = 150;
         Item.useTime = 15;
         Item.useAnimation = 15;

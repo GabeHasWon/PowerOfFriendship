@@ -14,7 +14,7 @@ public class SpikedGuardianMask : ModItem
         Item.width = 32;
         Item.height = 26;
         Item.value = Item.buyPrice(0, 2);
-        Item.rare = ItemRarityID.LightRed;
+        Item.rare = ItemRarityID.Green;
         Item.defense = 5;
     }
 

@@ -11,7 +11,7 @@ internal class Catgrass : Talisman
 
     protected override void Defaults()
     {
-        Item.rare = ItemRarityID.Blue;
+        Item.rare = ItemRarityID.Lime;
         Item.damage = 280;
         Item.useTime = Item.useAnimation = MaxFireRate;
         Item.mana = 20;

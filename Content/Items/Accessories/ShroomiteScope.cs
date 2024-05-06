@@ -8,7 +8,7 @@ public class ShroomiteScope : ModItem
     {
         Item.accessory = true;
         Item.Size = new(32, 16);
-        Item.rare = ItemRarityID.Red;
+        Item.rare = ItemRarityID.Yellow;
         Item.value = Item.sellPrice(gold: 3);
     }
 
