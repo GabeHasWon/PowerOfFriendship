@@ -36,8 +36,8 @@ public class DeathsHeadMoth : ModNPC, IStruckByWhipNPC
         NPC.width = 26;
         NPC.height = 18;
         NPC.damage = 45;
-        NPC.defense = 20;
-        NPC.lifeMax = 200;
+        NPC.defense = 25;
+        NPC.lifeMax = 400;
         NPC.noGravity = true;
         NPC.noTileCollide = true;
         NPC.dontTakeDamage = false;

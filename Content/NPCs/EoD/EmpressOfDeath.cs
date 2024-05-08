@@ -95,8 +95,8 @@ public class EmpressOfDeath : ModNPC
         NPC.width = 298;
         NPC.height = 256;
         NPC.damage = 0;
-        NPC.defense = 35;
-        NPC.lifeMax = 60000;
+        NPC.defense = 50;
+        NPC.lifeMax = 65000;
         NPC.noGravity = true;
         NPC.noTileCollide = true;
         NPC.dontTakeDamage = false;
@@ -109,6 +109,12 @@ public class EmpressOfDeath : ModNPC
         NPC.boss = true;
 
         Music = MusicID.Boss5;
+    }
+
+    public override void ApplyDifficultyAndPlayerScaling(int numPlayers, float balance, float bossAdjustment)
+    {
+        NPC.lifeMax = (int)(NPC.lifeMax * 0.7f * balance * bossAdjustment);
+        NPC.damage = (int)(NPC.damage * 1.15f);
     }
 
     public override void SetBestiary(BestiaryDatabase database, BestiaryEntry bestiaryEntry) => bestiaryEntry.AddInfo(this, "Graveyard");

@@ -25,7 +25,7 @@ public class RottenGhoulHanging : ModNPC, IStruckByWhipNPC
         NPC.height = 48;
         NPC.damage = 50;
         NPC.defense = 20;
-        NPC.lifeMax = 400;
+        NPC.lifeMax = 600;
         NPC.noGravity = true;
         NPC.noTileCollide = true;
         NPC.dontTakeDamage = false;
@@ -118,7 +118,7 @@ public class RottenGhoul : ModNPC
         NPC.CloneDefaults(NPCID.DesertGhoul);
         NPC.damage = 80;
         NPC.defense = 30;
-        NPC.lifeMax = 250;
+        NPC.lifeMax = 350;
         NPC.noGravity = false;
         NPC.knockBackResist = 0.4f;
 

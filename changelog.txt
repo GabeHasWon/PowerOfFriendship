@@ -1,9 +1,4 @@
-- Updated rarities for almost every item in the mod
-- Changed Ring on a String and Shortsword on a String's capitalization
-- Fixed typo in Empress of Darkness's treasure bag
-- Fixed Unholy Amulet being crafted with Hellstone Ore and not Hellstone Bars
-- Fixed Death's Head Egg not being used properly
-- Fixed Death's Head Egg buff not working properly
-- Fixed Empress of Darkness adds not completing their bestiary entries when EoD is defeated
-- Fixed EoD missing map icon, boss bar
-- Fixed EoD Boss Checklist sprite not having wings
+- Added 25 defense, 15,000 life to Empress of Darkness
+- Doubled the max life of Death's Head Moths, +5 defense
+- Boosted Rotten Ghoul's health by 50%, +10 defense
+- Added mode scaling to Empress of Darkness
