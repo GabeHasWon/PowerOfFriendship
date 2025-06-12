@@ -1,4 +1,3 @@
-- Added 25 defense, 15,000 life to Empress of Darkness
-- Doubled the max life of Death's Head Moths, +5 defense
-- Boosted Rotten Ghoul's health by 50%, +10 defense
-- Added mode scaling to Empress of Darkness
+v1.0.0.4
+- Fixed Thorny Bulb saying it grants 25 defense instead of the actual 5
+- Updated Hellmask set bonus to be more clear, reduced size of Hellmask description

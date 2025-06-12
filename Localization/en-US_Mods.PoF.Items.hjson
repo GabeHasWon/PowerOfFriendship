@@ -383,7 +383,6 @@ Hellmask: {
 	Tooltip:
 		'''
 		+12% all summon damage
-		Skulls spawned by the set bonus are set aflame for additional damage, speed and flair
 		'Power courses through you.'
 		'''
 }
@@ -548,7 +547,7 @@ ThornBulb: {
 	Tooltip:
 		'''
 		Conjurations are surrounded by a large, thorny aura
-		The aura gives players within it 25 additional defense and the Thorns buff
+		The aura gives players within it 5 additional defense and the Thorns buff
 		'A curious mix of soft and sharp.'
 		'''
 }

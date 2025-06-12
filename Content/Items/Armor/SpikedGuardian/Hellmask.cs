@@ -21,7 +21,7 @@ public class Hellmask : ModItem
 
     public override void UpdateArmorSet(Player player)
     {
-        player.setBonus = Language.GetTextValue("Mods.PoF.SetBonuses.Dungeon");
+        player.setBonus = Language.GetTextValue("Mods.PoF.SetBonuses.Hell");
         player.GetModPlayer<GuardianPlayer>().hasSet = true;
         player.GetModPlayer<GuardianPlayer>().hellMask = true;
     }

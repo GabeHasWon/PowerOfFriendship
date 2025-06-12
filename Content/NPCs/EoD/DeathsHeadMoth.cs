@@ -1,6 +1,4 @@
-﻿using Microsoft.Xna.Framework.Input;
-using Newtonsoft.Json.Linq;
-using NPCUtils;
+﻿using NPCUtils;
 using System;
 using System.IO;
 using System.Linq;

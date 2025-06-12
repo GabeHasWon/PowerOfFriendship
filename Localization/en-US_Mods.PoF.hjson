@@ -55,7 +55,12 @@ SetBonuses: {
 	Dungeon:
 		'''
 		Defeating an enemy spawns a ghastly skull in its place
-		The skull does 20 damage and benefits from summon boosts
+		The skull does 26 damage and benefits from summon boosts
+		'''
+	Hell:
+		'''
+		Defeating an enemy spawns a ghastly flaming skull in its place
+		The flaming skull moves much faster than normal skulls, does 32 damage and benefits from summon boosts
 		'''
 }
 
