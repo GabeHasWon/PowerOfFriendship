@@ -1,3 +1,2 @@
-v1.0.0.4
-- Fixed Thorny Bulb saying it grants 25 defense instead of the actual 5
-- Updated Hellmask set bonus to be more clear, reduced size of Hellmask description
+v1.0.0.5
+- Updated NPCUtils issue, should fix some issues with unloading

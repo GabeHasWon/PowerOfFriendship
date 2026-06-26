@@ -4,6 +4,7 @@ global using Terraria.DataStructures;
 global using Terraria.ModLoader;
 global using Microsoft.Xna.Framework;
 global using Microsoft.Xna.Framework.Graphics;
+
 using Terraria.Graphics.Shaders;
 using System.IO;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ public class PoF : Mod
         EquipLoader.AddEquipTexture(this, "PoF/Content/Items/Armor/SpikedGuardian/Hellrobe_Legs", EquipType.Legs, null, "HellrobeLegs");
 
         NPCUtils.NPCUtils.AutoloadModBannersAndCritters(this);
-        NPCUtils.NPCUtils.TryLoadBestiaryHelper();
+        NPCUtils.NPCUtils.TryLoadBestiaryHelper(this);
     }
 
     public override void PostSetupContent()
@@ -58,10 +59,4 @@ public class PoF : Mod
     }
 
     public override void HandlePacket(BinaryReader reader, int whoAmI) => NetEasy.NetEasy.HandleModule(reader, whoAmI);
-
-    public override void Unload()
-    {
-        NPCUtils.NPCUtils.UnloadMod(this);
-        NPCUtils.NPCUtils.UnloadBestiaryHelper();
-    }
 }
